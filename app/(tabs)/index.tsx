@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const index = () => {
   const [location, setLocation] = useState(null);
@@ -129,9 +130,35 @@ const index = () => {
 
     try {
       const response = await fetch(url, options);
-      const result = await response.json();
-      setCity(result);
-      console.log(result);
+      if (response.ok) {
+        const result = await response.json();
+        setCity(result);
+        console.log(result);
+
+        // Store the city data to AsyncStorage
+        const jsonValue = await AsyncStorage.getItem("cities");
+
+        let cities = [];
+
+        if (jsonValue != null) {
+          cities = JSON.parse(jsonValue);
+        } else {
+          cities = [];
+        }
+
+        // Add the new Todo to the existing list (or to the empty array)
+        cities.push(result);
+
+        //back object array to json string
+        const updatedJsonValue = JSON.stringify(cities);
+        // Save the updated list back to AsyncStorage
+        await AsyncStorage.setItem("cities", updatedJsonValue);
+
+        const returned = await AsyncStorage.getItem("cities");
+        console.log("retuend Item", returned);
+      } else {
+        console.log(response.status);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -182,7 +209,7 @@ const index = () => {
                 />
               </View>
 
-              <View>
+              {/* <View>
                 <View style={styles.temp}>
                   <Text style={styles.tempShown}>{city.current.temp_c}°C</Text>
                   <Text style={styles.text}>{city.current.condition.text}</Text>
@@ -203,7 +230,7 @@ const index = () => {
 
                 <Text style={{ fontSize: 30 }}>Test</Text>
 
-                {/* 24 hours forcast  */}
+               
 
                 <Text style={{ fontSize: 24 }}>24 hour</Text>
 
@@ -250,7 +277,7 @@ const index = () => {
                     {city.current.wind_kph} kph
                   </Text>
                 </View>
-              </View>
+              </View> */}
             </View>
           </ImageBackground>
         )}
