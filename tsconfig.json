@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "app/(tabs)/index.tsx", "app/_layout.tsx", "app/(tabs)/explore.tsx", "app/(tabs)/_layout.tsx", "app/(modals)/testing.jsx"  ]
 }
