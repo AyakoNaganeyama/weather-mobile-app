@@ -17,106 +17,108 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const index = () => {
   const [location, setLocation] = useState(null);
+  const [currentCity, setCurrentCity] = useState(null);
   const [city, setCity] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [cityText, setCityText] = useState("");
   const [todayCast, setTodayCast] = useState([]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     // Ask for permission to access location
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
-  //     if (status !== "granted") {
-  //       setErrorMsg("Permission to access location was denied");
-  //       return;
-  //     }
+  useEffect(() => {
+    (async () => {
+      // Ask for permission to access location
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
 
-  //     // Get the current location
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     setLocation(location);
+      // Get the current location
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
 
-  //     let reverseGeocode = await Location.reverseGeocodeAsync({
-  //       latitude: location.coords.latitude, // Fixed the variable name
-  //       longitude: location.coords.longitude,
-  //     });
+      let reverseGeocode = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude, // Fixed the variable name
+        longitude: location.coords.longitude,
+      });
 
-  //     if (reverseGeocode.length > 0) {
-  //       // Set the city name
-  //       let cityName = reverseGeocode[0].city;
-  //       // const today = new Date().toISOString().split('T')[0];
+      if (reverseGeocode.length > 0) {
+        // Set the city name
+        let cityName = reverseGeocode[0].city;
+        // const today = new Date().toISOString().split('T')[0];
 
-  //       async function getWeather() {
-  //         const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityName}&days=3`;
+        async function getWeather() {
+          const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityName}&days=3`;
 
-  //         // `https://weatherapi-com.p.rapidapi.com/current.json?q=${cityName}`;
-  //         const options = {
-  //           method: "GET",
-  //           headers: {
-  //             "x-rapidapi-key":
-  //               "b5ab53305emsh4d78561239fb906p1da757jsne5442cea8267",
-  //             "x-rapidapi-host": "weatherapi-com.p.rapidapi.com",
-  //           },
-  //         };
+          // `https://weatherapi-com.p.rapidapi.com/current.json?q=${cityName}`;
+          const options = {
+            method: "GET",
+            headers: {
+              "x-rapidapi-key":
+                "b5ab53305emsh4d78561239fb906p1da757jsne5442cea8267",
+              "x-rapidapi-host": "weatherapi-com.p.rapidapi.com",
+            },
+          };
 
-  //         try {
-  //           const response = await fetch(url, options);
-  //           const result = await response.json();
-  //           setCity(result);
+          try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            setCurrentCity(result);
+            console.log("Current", result);
 
-  //           //for 7 day forcast
+            //for 7 day forcast
 
-  //           const currentEpoch = Math.floor(Date.now() / 1000); // Date.now()
-  //           const forecastHours = result.forecast.forecastday[0].hour; // 24 hours forcast
+            const currentEpoch = Math.floor(Date.now() / 1000); // Date.now()
+            const forecastHours = result.forecast.forecastday[0].hour; // 24 hours forcast
 
-  //           let forcast24 = [];
+            let forcast24 = [];
 
-  //           // Define a range for comparison (e.g., within the same hour)
-  //           let index = 0;
+            // Define a range for comparison (e.g., within the same hour)
+            let index = 0;
 
-  //           const hourInSeconds = 3600; // 1 hour in seconds
+            const hourInSeconds = 3600; // 1 hour in seconds
 
-  //           for (let i = 0; i < forecastHours.length; i++) {
-  //             let hour = forecastHours[i];
+            for (let i = 0; i < forecastHours.length; i++) {
+              let hour = forecastHours[i];
 
-  //             // Check if the hour time is within a 1-hour range of the current time
-  //             if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
-  //               console.log("Matching hour found:", hour);
+              // Check if the hour time is within a 1-hour range of the current time
+              if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
+                console.log("Matching hour found:", hour);
 
-  //               index = i; // Store the index of the matched hour
-  //               break; // Break out of the loop once a match is found
-  //             }
-  //           }
+                index = i; // Store the index of the matched hour
+                break; // Break out of the loop once a match is found
+              }
+            }
 
-  //           console.log("Matched hour index:", index);
+            console.log("Matched hour index:", index);
 
-  //           for (let j = index; j < forecastHours.length; j++) {
-  //             forcast24.push(forecastHours[j]);
-  //           }
+            for (let j = index; j < forecastHours.length; j++) {
+              forcast24.push(forecastHours[j]);
+            }
 
-  //           let tomorrowForcast = 24 - forcast24.length;
-  //           console.log(forcast24.length, tomorrowForcast);
+            let tomorrowForcast = 24 - forcast24.length;
+            console.log(forcast24.length, tomorrowForcast);
 
-  //           if (tomorrowForcast > 0) {
-  //             for (let i = 0; i < tomorrowForcast; i++) {
-  //               forcast24.push(result.forecast.forecastday[1].hour[i]);
-  //             }
-  //           }
+            if (tomorrowForcast > 0) {
+              for (let i = 0; i < tomorrowForcast; i++) {
+                forcast24.push(result.forecast.forecastday[1].hour[i]);
+              }
+            }
 
-  //           forcast24.forEach((hour) => {
-  //             console.log(`Time: ${hour.time}, Temperature: ${hour.temp_c}°C`);
-  //           });
-  //           setTodayCast(forcast24);
+            forcast24.forEach((hour) => {
+              console.log(`Time: ${hour.time}, Temperature: ${hour.temp_c}°C`);
+            });
+            setTodayCast(forcast24);
 
-  //           console.log(result);
-  //         } catch (error) {
-  //           console.error(error);
-  //         }
-  //       }
+            console.log(result);
+          } catch (error) {
+            console.error(error);
+          }
+        }
 
-  //       getWeather();
-  //     }
-  //   })();
-  // }, []);
+        getWeather();
+      }
+    })();
+  }, []);
 
   const handleSearch = async () => {
     const url = `https://weatherapi-com.p.rapidapi.com/current.json?q=${cityText}`;
@@ -156,6 +158,7 @@ const index = () => {
 
         const returned = await AsyncStorage.getItem("cities");
         console.log("retuend Item", returned);
+        setCurrentCity(null);
       } else {
         console.log(response.status);
       }
@@ -180,7 +183,6 @@ const index = () => {
             placeholderTextColor="gray"
             style={styles.input}
           />
-
           <TouchableOpacity
             onPress={handleSearch}
             disabled={cityText === ""}
@@ -189,6 +191,7 @@ const index = () => {
             <Text style={styles.buttonText}>Search</Text>
           </TouchableOpacity>
         </View>
+
         {city && (
           <ImageBackground
             source={{
@@ -201,83 +204,96 @@ const index = () => {
             <View style={styles.con2}>
               <View style={styles.header}>
                 <Text style={styles.heading}>{city.location.name}</Text>
-                <Feather
-                  name="settings"
-                  size={24}
-                  color="white"
-                  style={{ color: "#fff", fontWeight: "800" }}
-                />
+                <Feather name="settings" size={24} color="white" />
+              </View>
+            </View>
+          </ImageBackground>
+        )}
+
+        {errorMsg && <Text>{errorMsg}</Text>}
+
+        {currentCity && (
+          <ImageBackground
+            source={{
+              uri: currentCity.current.is_day
+                ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+            }}
+            style={styles.backgroundImage}
+          >
+            <View>
+              <View style={styles.temp}>
+                <Text style={styles.tempShown}>
+                  {currentCity.current.temp_c}°C
+                </Text>
+                <Text style={styles.tempShown}>
+                  {currentCity.location.name}
+                </Text>
+                <Text style={styles.text}>
+                  {currentCity.current.condition.text}
+                </Text>
+                <Text>Test</Text>
+                <Text style={styles.text}>
+                  {currentCity.forecast.forecastday[0].date}
+                </Text>
+                <Text style={styles.text}>
+                  {currentCity.forecast.forecastday[0].day.maxtemp_c}
+                </Text>
+                <Text style={styles.text}>
+                  day2{currentCity.forecast.forecastday[1].date}
+                </Text>
+                <Text style={styles.text}>
+                  day3{currentCity.forecast.forecastday[1].day.maxtemp_c}
+                </Text>
               </View>
 
-              {/* <View>
-                <View style={styles.temp}>
-                  <Text style={styles.tempShown}>{city.current.temp_c}°C</Text>
-                  <Text style={styles.text}>{city.current.condition.text}</Text>
-                  <Text>Test</Text>
-                  <Text style={styles.text}>
-                    {city.forecast.forecastday[0].date}
-                  </Text>
-                  <Text style={styles.text}>
-                    {city.forecast.forecastday[0].day.maxtemp_c}
-                  </Text>
-                  <Text style={styles.text}>
-                    day2{city.forecast.forecastday[1].date}
-                  </Text>
-                  <Text style={styles.text}>
-                    day3{city.forecast.forecastday[1].day.maxtemp_c}
-                  </Text>
-                </View>
+              <Text style={{ fontSize: 30 }}>Test</Text>
 
-                <Text style={{ fontSize: 30 }}>Test</Text>
+              <Text style={{ fontSize: 24 }}>24 hour</Text>
 
-               
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  alignContent: "center",
+                  gap: 20,
+                  paddingHorizontal: 16,
+                }}
+              >
+                {todayCast.map((i, ind) => (
+                  <TouchableOpacity key={ind}>
+                    <Text>{i.time}</Text>
+                    <Text>{i.temp_c}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
 
-                <Text style={{ fontSize: 24 }}>24 hour</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  alignContent: "center",
+                  gap: 20,
+                  paddingHorizontal: 16,
+                }}
+              >
+                {currentCity.forecast.forecastday.map((item, index) => (
+                  <TouchableOpacity key={index}>
+                    <Text>{item.date}</Text>
+                    <Text>{item.day.maxtemp_c}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
 
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    alignContent: "center",
-                    gap: 20,
-                    paddingHorizontal: 16,
-                  }}
-                >
-                  {todayCast.map((i, ind) => (
-                    <TouchableOpacity key={ind}>
-                      <Text>{i.time}</Text>
-                      <Text>{i.temp_c}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    alignContent: "center",
-                    gap: 20,
-                    paddingHorizontal: 16,
-                  }}
-                >
-                  {city.forecast.forecastday.map((item, index) => (
-                    <TouchableOpacity key={index}>
-                      <Text>{item.date}</Text>
-                      <Text>{item.day.maxtemp_c}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-
-                <View style={styles.more}>
-                  <Text style={styles.text}>
-                    Feels like {city.current.feelslike_c}°C
-                  </Text>
-                  <Text style={styles.text}>
-                    <Feather name="wind" size={24} color="white" />{" "}
-                    {city.current.wind_kph} kph
-                  </Text>
-                </View>
-              </View> */}
+              <View style={styles.more}>
+                <Text style={styles.text}>
+                  Feels like {currentCity.current.feelslike_c}°C
+                </Text>
+                <Text style={styles.text}>
+                  <Feather name="wind" size={24} color="white" />{" "}
+                  {currentCity.current.wind_kph} kph
+                </Text>
+              </View>
             </View>
           </ImageBackground>
         )}
