@@ -170,6 +170,74 @@ const index = () => {
     }
   };
 
+  const getImage = (conditionText: string, isDay: number) => {
+    // lowercase the condition
+    const lowerCaseCondition = conditionText.toLowerCase();
+
+    // Choose images based on the condition and time of day
+
+    if (isDay) {
+      if (
+        lowerCaseCondition.includes("sunny") ||
+        lowerCaseCondition.includes("clear")
+      ) {
+        return require("../img/noon-sunny.webp"); // Daytime sunny image
+      } else if (
+        lowerCaseCondition.includes("cloudy") ||
+        lowerCaseCondition.includes("overcast")
+      ) {
+        return require("../img/noon-cloudy.jpg"); // Noon cloudy
+      } else if (
+        lowerCaseCondition.includes("rain") ||
+        lowerCaseCondition.includes("drizzle")
+      ) {
+        return require("../img/noon-rain.jpg"); // Noon rain
+      } else {
+        return require("../img/noon-sunny.webp"); // Default
+      }
+    } else {
+      if (
+        lowerCaseCondition.includes("sunny") ||
+        lowerCaseCondition.includes("clear")
+      ) {
+        return require("../img/night-sunny.jpeg"); // night sunny
+      } else if (
+        lowerCaseCondition.includes("cloudy") ||
+        lowerCaseCondition.includes("overcast")
+      ) {
+        return require("../img/night-cloudy.jpg"); // Night cloudy
+      } else if (
+        lowerCaseCondition.includes("rain") ||
+        lowerCaseCondition.includes("drizzle")
+      ) {
+        return require("../img/night-rain.jpg"); // Night rain
+      } else {
+        return require("../img/night-sunny.jpeg"); //default
+      }
+    }
+
+    // if (lowerCaseCondition.includes("sunny")) {
+    //   if (isDay) {
+
+    //     return require("../img/weather-noon-good.webp"); // Daytime sunny image
+    //   } else {
+    //     return require("../img/weather-night-good.jpeg"); // Nighttime sunny image
+    //   }
+    // } else if (
+    //   lowerCaseCondition.includes("cloudy") ||
+    //   lowerCaseCondition.includes("overcast")
+    // ) {
+    //   return require("../img/weather-cloudy.jpg"); // Cloudy or overcast image
+    // } else if (
+    //   lowerCaseCondition.includes("rain") ||
+    //   lowerCaseCondition.includes("drizzle")
+    // ) {
+    //   return require("../img/weather-noon-rain.jpg"); // Rainy image
+    // }
+
+    // Default image if no match
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -196,12 +264,15 @@ const index = () => {
         </View>
 
         {city && (
+          // <ImageBackground
+          //   source={{
+          //     uri: city.current.is_day
+          //       ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+          //       : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          //   }}
+
           <ImageBackground
-            source={{
-              uri: city.current.is_day
-                ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-            }}
+            source={getImage(city.current.condition.text, city.current.is_day)}
             style={styles.backgroundImage}
           >
             <View style={styles.con2}>
