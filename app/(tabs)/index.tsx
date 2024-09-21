@@ -205,8 +205,50 @@ const index = () => {
             style={styles.backgroundImage}
           >
             <View style={styles.con2}>
-              <View style={styles.header}>
+              <View>
                 <Text style={styles.heading}>{city.location.name}</Text>
+                <Text>Region: {city.location.region || "N/A"}</Text>
+                <Text>Country: {city.location.country}</Text>
+                <Text>Latitude: {city.location.lat}</Text>
+                <Text>Longitude: {city.location.lon}</Text>
+                <Text>Timezone: {city.location.tz_id}</Text>
+                <Text>Local Time: {city.location.localtime}</Text>
+
+                <Text style={{ marginTop: 20, fontWeight: "bold" }}>
+                  Current Weather:
+                </Text>
+                <Text>
+                  Temperature: {city.current.temp_c}°C / {city.current.temp_f}°F
+                </Text>
+                <Text>Condition: {city.current.condition.text}</Text>
+                <Text>
+                  Wind: {city.current.wind_kph} kph / {city.current.wind_mph}{" "}
+                  mph
+                </Text>
+                <Text>Wind Direction: {city.current.wind_dir}</Text>
+                <Text>
+                  Pressure: {city.current.pressure_mb} mb /{" "}
+                  {city.current.pressure_in} in
+                </Text>
+                <Text>
+                  Precipitation: {city.current.precip_mm} mm /{" "}
+                  {city.current.precip_in} in
+                </Text>
+                <Text>Humidity: {city.current.humidity}%</Text>
+                <Text>Cloud Cover: {city.current.cloud}%</Text>
+                <Text>
+                  Feels Like: {city.current.feelslike_c}°C /{" "}
+                  {city.current.feelslike_f}°F
+                </Text>
+                <Text>
+                  Visibility: {city.current.vis_km} km /{" "}
+                  {city.current.vis_miles} miles
+                </Text>
+                <Text>UV Index: {city.current.uv}</Text>
+                <Text>
+                  Gust Speed: {city.current.gust_kph} kph /{" "}
+                  {city.current.gust_mph} mph
+                </Text>
                 <Feather name="settings" size={24} color="white" />
               </View>
             </View>
