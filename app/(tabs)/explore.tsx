@@ -2,9 +2,11 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link } from "expo-router";
+import useCityStore from "../stores/cityStore";
 
 const Explore = () => {
   const [cities, setCities] = useState([]);
+  const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
 
   useEffect(() => {
     (async () => {
@@ -23,7 +25,7 @@ const Explore = () => {
         console.error("Failed to load cities from AsyncStorage:", error);
       }
     })();
-  }, []);
+  }, [storedCity]);
 
   return (
     <View>

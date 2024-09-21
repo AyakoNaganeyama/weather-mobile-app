@@ -14,6 +14,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import useCityStore from "../stores/cityStore";
 
 const index = () => {
   const [location, setLocation] = useState(null);
@@ -22,6 +23,7 @@ const index = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [cityText, setCityText] = useState("");
   const [todayCast, setTodayCast] = useState([]);
+  const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
 
   useEffect(() => {
     (async () => {
@@ -158,6 +160,7 @@ const index = () => {
 
         const returned = await AsyncStorage.getItem("cities");
         console.log("retuend Item", returned);
+        setStoredCity(result);
         setCurrentCity(null);
       } else {
         console.log(response.status);
