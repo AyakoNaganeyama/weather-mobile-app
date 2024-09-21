@@ -11,7 +11,7 @@ const Explore = () => {
   useEffect(() => {
     (async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem("cities");
+        const jsonValue = await AsyncStorage.getItem("cities2");
 
         let storedCities = [];
 

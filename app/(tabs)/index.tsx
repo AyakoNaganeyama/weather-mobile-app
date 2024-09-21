@@ -140,7 +140,7 @@ const index = () => {
         console.log(result);
 
         // Store the city data to AsyncStorage
-        const jsonValue = await AsyncStorage.getItem("cities");
+        const jsonValue = await AsyncStorage.getItem("cities2");
 
         let cities = [];
 
@@ -156,9 +156,9 @@ const index = () => {
         //back object array to json string
         const updatedJsonValue = JSON.stringify(cities);
         // Save the updated list back to AsyncStorage
-        await AsyncStorage.setItem("cities", updatedJsonValue);
+        await AsyncStorage.setItem("cities2", updatedJsonValue);
 
-        const returned = await AsyncStorage.getItem("cities");
+        const returned = await AsyncStorage.getItem("cities2");
         console.log("retuend Item", returned);
         setStoredCity(result);
         setCurrentCity(null);
