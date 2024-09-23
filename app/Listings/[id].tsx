@@ -3,6 +3,8 @@ import React from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { firestore } from "../firebaseConfig";
 
 const Page = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -11,23 +13,49 @@ const Page = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Retrieve cities from AsyncStorage
-        const jsonValue = await AsyncStorage.getItem("cities2");
+        //////////////////////////////////changed to firebase ///////////////////////////////////
 
-        if (jsonValue) {
-          const cities = JSON.parse(jsonValue);
+        const querySnapshot = await getDocs(
+          collection(firestore, "weatherData")
+        );
 
-          // Find the city that matches the id
-          const matchedCity = cities.find(
-            (city: any) => city.location.name === id
-          );
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+        });
 
-          if (matchedCity) {
-            setCity(matchedCity); // Set the matched city to the state
-          } else {
-            console.log("City not found");
-          }
+        const cities: any[] = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const matchedCity = cities.find((city) => city.location.name === id);
+
+        if (matchedCity) {
+          setCity(matchedCity);
+        } else {
+          console.log("City not found");
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        // Retrieve cities from AsyncStorage
+        // const jsonValue = await AsyncStorage.getItem("cities2");
+
+        // if (jsonValue) {
+        //   const cities = JSON.parse(jsonValue);
+
+        //   // Find the city that matches the id
+        //   const matchedCity = cities.find(
+        //     (city: any) => city.location.name === id
+        //   );
+
+        //   if (matchedCity) {
+        //     setCity(matchedCity); // Set the matched city to the state
+        // } else {
+        //   console.log("City not found");
+        // }
+        // }
       } catch (error) {
         console.error("Error fetching city:", error);
       }
@@ -55,36 +83,10 @@ const Page = () => {
               Current Weather:
             </Text>
             <Text>
-              Temperature: {city.current.temp_c}°C / {city.current.temp_f}°F
+              Temperature: {city.current?.temp_c}°C / {city.current?.temp_f}°F
             </Text>
-            <Text>Condition: {city.current.condition.text}</Text>
-            <Text>
-              Wind: {city.current.wind_kph} kph / {city.current.wind_mph} mph
-            </Text>
-            <Text>Wind Direction: {city.current.wind_dir}</Text>
-            <Text>
-              Pressure: {city.current.pressure_mb} mb /{" "}
-              {city.current.pressure_in} in
-            </Text>
-            <Text>
-              Precipitation: {city.current.precip_mm} mm /{" "}
-              {city.current.precip_in} in
-            </Text>
-            <Text>Humidity: {city.current.humidity}%</Text>
-            <Text>Cloud Cover: {city.current.cloud}%</Text>
-            <Text>
-              Feels Like: {city.current.feelslike_c}°C /{" "}
-              {city.current.feelslike_f}°F
-            </Text>
-            <Text>
-              Visibility: {city.current.vis_km} km / {city.current.vis_miles}{" "}
-              miles
-            </Text>
-            <Text>UV Index: {city.current.uv}</Text>
-            <Text>
-              Gust Speed: {city.current.gust_kph} kph / {city.current.gust_mph}{" "}
-              mph
-            </Text>
+            <Text>Condition: {city.current?.condition?.text || "N/A"}</Text>
+            {/* ...rest of the code... */}
           </View>
         ) : (
           <Text>Loading city data...</Text>
