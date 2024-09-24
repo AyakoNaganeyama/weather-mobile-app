@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Share,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
