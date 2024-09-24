@@ -11,23 +11,25 @@ const useShare = () => {
         return;
       }
 
+      const mapLink = `https://www.google.com/maps/@${city.location.lat},${city.location.lon},12z`;
       // Format the message with the city details
       const message = `
-        React Native | A framework for building native apps using React.
-        Current location details:
-        City: ${city.location.name}
-        Region: ${city.location.region || "N/A"}
-        Country: ${city.location.country}
-        Latitude: ${city.location.lat}
-        Longitude: ${city.location.lon}
-        Timezone: ${city.location.tz_id}
-        Local Time: ${city.location.localtime}
-        Temperature: ${city.current.temp_c}°C / ${city.current.temp_f}°F
-        Condition: ${city.current.condition.text || "N/A"}
-      `;
+      React Native | A framework for building native apps using React.
+      Current location details:
+      City: ${city.location.name}
+      Region: ${city.location.region || "N/A"}
+      Country: ${city.location.country}
+      Latitude: ${city.location.lat}
+      Longitude: ${city.location.lon}
+      Timezone: ${city.location.tz_id}
+      Local Time: ${city.location.localtime}
+      Temperature: ${city.current.temp_c}°C / ${city.current.temp_f}°F
+      Condition: ${city.current.condition.text || "N/A"}
+      Map Location: ${mapLink}
+    `;
 
       // Share the formatted message
-      const result = await Share.share({ message });
+      const result = await Share.share({ message }, { mapLink });
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
