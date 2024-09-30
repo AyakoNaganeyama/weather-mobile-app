@@ -19,7 +19,7 @@ import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
 import { Firestore } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
@@ -178,58 +178,76 @@ const useHandleSearch = () => {
 
         setTodayCast(forcast24);
 
-        // Store the weather and forecast data into Firestore
-        const weatherData = {
-          location: {
-            name: result.location.name,
-            region: result.location.region,
-            country: result.location.country,
-            lat: result.location.lat,
-            lon: result.location.lon,
-            tz_id: result.location.tz_id,
-            localtime_epoch: result.location.localtime_epoch,
-            localtime: result.location.localtime,
-          },
-          current: {
-            last_updated_epoch: result.current.last_updated_epoch,
-            last_updated: result.current.last_updated,
-            temp_c: result.current.temp_c,
-            temp_f: result.current.temp_f,
-            is_day: result.current.is_day,
-            wind_mph: result.current.wind_mph,
-            wind_kph: result.current.wind_kph,
-            wind_degree: result.current.wind_degree,
-            wind_dir: result.current.wind_dir,
-            pressure_mb: result.current.pressure_mb,
-            pressure_in: result.current.pressure_in,
-            precip_mm: result.current.precip_mm,
-            precip_in: result.current.precip_in,
-            humidity: result.current.humidity,
-            cloud: result.current.cloud,
-            feelslike_c: result.current.feelslike_c,
-            feelslike_f: result.current.feelslike_f,
-            windchill_c: result.current.windchill_c,
-            windchill_f: result.current.windchill_f,
-            heatindex_c: result.current.heatindex_c,
-            heatindex_f: result.current.heatindex_f,
-            dewpoint_c: result.current.dewpoint_c,
-            dewpoint_f: result.current.dewpoint_f,
-            vis_km: result.current.vis_km,
-            vis_miles: result.current.vis_miles,
-            uv: result.current.uv,
-            gust_mph: result.current.gust_mph,
-            gust_kph: result.current.gust_kph,
-          },
-          forecast: result.forecast,
-        };
+        const cityName = result.location.name;
+        const countryName = result.location.country;
 
-        const docRef = await addDoc(
-          collection(firestore, "weatherData2"),
-          weatherData
+        const weatherDataRef = collection(firestore, "weatherData2");
+
+        // Create a query with multiple where conditions
+        const q = query(
+          weatherDataRef,
+          where("location.name", "==", cityName),
+          where("location.country", "==", countryName)
         );
-        console.log("Document written with ID: ", docRef.id);
 
-        setStoredCity(result);
+        // Execute the query and get the results
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          // Store the weather and forecast data into Firestore
+          const weatherData = {
+            location: {
+              name: result.location.name,
+              region: result.location.region,
+              country: result.location.country,
+              lat: result.location.lat,
+              lon: result.location.lon,
+              tz_id: result.location.tz_id,
+              localtime_epoch: result.location.localtime_epoch,
+              localtime: result.location.localtime,
+            },
+            current: {
+              last_updated_epoch: result.current.last_updated_epoch,
+              last_updated: result.current.last_updated,
+              temp_c: result.current.temp_c,
+              temp_f: result.current.temp_f,
+              is_day: result.current.is_day,
+              wind_mph: result.current.wind_mph,
+              wind_kph: result.current.wind_kph,
+              wind_degree: result.current.wind_degree,
+              wind_dir: result.current.wind_dir,
+              pressure_mb: result.current.pressure_mb,
+              pressure_in: result.current.pressure_in,
+              precip_mm: result.current.precip_mm,
+              precip_in: result.current.precip_in,
+              humidity: result.current.humidity,
+              cloud: result.current.cloud,
+              feelslike_c: result.current.feelslike_c,
+              feelslike_f: result.current.feelslike_f,
+              windchill_c: result.current.windchill_c,
+              windchill_f: result.current.windchill_f,
+              heatindex_c: result.current.heatindex_c,
+              heatindex_f: result.current.heatindex_f,
+              dewpoint_c: result.current.dewpoint_c,
+              dewpoint_f: result.current.dewpoint_f,
+              vis_km: result.current.vis_km,
+              vis_miles: result.current.vis_miles,
+              uv: result.current.uv,
+              gust_mph: result.current.gust_mph,
+              gust_kph: result.current.gust_kph,
+            },
+            forecast: result.forecast,
+          };
+
+          const docRef = await addDoc(
+            collection(firestore, "weatherData2"),
+            weatherData
+          );
+          console.log("Document written with ID: ", docRef.id);
+          setStoredCity(result);
+        } else {
+          console.log("city already exists");
+        }
       } else {
         console.log(response.status);
       }
