@@ -64,71 +64,6 @@ const index = () => {
           </TouchableOpacity>
         </View>
 
-        {city && (
-          // <ImageBackground
-          //   source={{
-          //     uri: city.current.is_day
-          //       ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          //       : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-          //   }}
-
-          <ImageBackground
-            source={getImage(city.current.condition.text, city.current.is_day)}
-            style={styles.backgroundImage}
-          >
-            <View style={styles.con2}>
-              <View>
-                <Text style={styles.heading}>{city.location.name}</Text>
-                <Text>Region: {city.location.region || "N/A"}</Text>
-                <Text>Country: {city.location.country}</Text>
-                <Text>Latitude: {city.location.lat}</Text>
-                <Text>Longitude: {city.location.lon}</Text>
-                <Text>Timezone: {city.location.tz_id}</Text>
-                <Text>Local Time: {city.location.localtime}</Text>
-
-                <Text style={{ marginTop: 20, fontWeight: "bold" }}>
-                  Current Weather:
-                </Text>
-                <Text>
-                  Temperature: {city.current.temp_c}°C / {city.current.temp_f}°F
-                </Text>
-                <Text>Condition: {city.current.condition.text}</Text>
-                <Text>
-                  Wind: {city.current.wind_kph} kph / {city.current.wind_mph}{" "}
-                  mph
-                </Text>
-                <Text>Wind Direction: {city.current.wind_dir}</Text>
-                <Text>
-                  Pressure: {city.current.pressure_mb} mb /{" "}
-                  {city.current.pressure_in} in
-                </Text>
-                <Text>
-                  Precipitation: {city.current.precip_mm} mm /{" "}
-                  {city.current.precip_in} in
-                </Text>
-                <Text>Humidity: {city.current.humidity}%</Text>
-                <Text>Cloud Cover: {city.current.cloud}%</Text>
-                <Text>
-                  Feels Like: {city.current.feelslike_c}°C /{" "}
-                  {city.current.feelslike_f}°F
-                </Text>
-                <Text>
-                  Visibility: {city.current.vis_km} km /{" "}
-                  {city.current.vis_miles} miles
-                </Text>
-                <Text>UV Index: {city.current.uv}</Text>
-                <Text>
-                  Gust Speed: {city.current.gust_kph} kph /{" "}
-                  {city.current.gust_mph} mph
-                </Text>
-                <Feather name="settings" size={24} color="white" />
-              </View>
-            </View>
-          </ImageBackground>
-        )}
-
-        {errorMsg && <Text>{errorMsg}</Text>}
-
         {currentCity && (
           <ImageBackground
             source={{
@@ -296,5 +231,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  infoText: {
+    color: "#fff",
+    fontSize: 16,
+    marginBottom: 5,
   },
 });

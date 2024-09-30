@@ -131,7 +131,7 @@ const useHandleSearch = () => {
   };
 
   const handleSearch = async () => {
-    const url = `https://weatherapi-com.p.rapidapi.com/current.json?q=${cityText}`;
+    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityText}&days=3`; // Change to forecast API with 3 days
     const options = {
       method: "GET",
       headers: {
@@ -144,11 +144,41 @@ const useHandleSearch = () => {
       const response = await fetch(url, options);
       if (response.ok) {
         const result = await response.json();
-        setCity(result);
+        setCurrentCity(result);
         console.log(result);
 
-        //change to firebase ///////////////////////////////////////////////////
+        // Parse the forecast data similarly to initialSearch
+        const forecastHours = result.forecast.forecastday[0].hour;
+        const currentEpoch = Math.floor(Date.now() / 1000);
 
+        let forcast24 = [];
+        let index = 0;
+        const hourInSeconds = 3600;
+
+        // Find the matching hour based on current time
+        for (let i = 0; i < forecastHours.length; i++) {
+          let hour = forecastHours[i];
+          if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
+            index = i;
+            break;
+          }
+        }
+
+        // Populate forecast data for the next 24 hours
+        for (let j = index; j < forecastHours.length; j++) {
+          forcast24.push(forecastHours[j]);
+        }
+
+        let tomorrowForcast = 24 - forcast24.length;
+        if (tomorrowForcast > 0) {
+          for (let i = 0; i < tomorrowForcast; i++) {
+            forcast24.push(result.forecast.forecastday[1].hour[i]);
+          }
+        }
+
+        setTodayCast(forcast24);
+
+        // Store the weather and forecast data into Firestore
         const weatherData = {
           location: {
             name: result.location.name,
@@ -190,38 +220,16 @@ const useHandleSearch = () => {
             gust_mph: result.current.gust_mph,
             gust_kph: result.current.gust_kph,
           },
+          forecast: result.forecast,
         };
 
         const docRef = await addDoc(
-          collection(firestore, "weatherData"),
+          collection(firestore, "weatherData2"),
           weatherData
         );
         console.log("Document written with ID: ", docRef.id);
-        ///////////////////////////////////////////////////////////////////////
 
-        // Store the city data to AsyncStorage
-        // const jsonValue = await AsyncStorage.getItem("cities2");
-
-        // let cities = [];
-
-        // if (jsonValue != null) {
-        //   cities = JSON.parse(jsonValue);
-        // } else {
-        //   cities = [];
-        // }
-
-        // Add the new Todo to the existing list (or to the empty array)
-        // cities.push(result);
-
-        //back object array to json string
-        // const updatedJsonValue = JSON.stringify(cities);
-        // Save the updated list back to AsyncStorage
-        // await AsyncStorage.setItem("cities2", updatedJsonValue);
-
-        // const returned = await AsyncStorage.getItem("cities2");
-        // console.log("retuend Item", returned);
         setStoredCity(result);
-        setCurrentCity(null);
       } else {
         console.log(response.status);
       }
