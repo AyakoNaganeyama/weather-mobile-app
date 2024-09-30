@@ -14,6 +14,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import useShare from "../hooks/useShare";
+import { Link } from "expo-router";
 
 const Page = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -67,8 +68,12 @@ const Page = () => {
           <Text>ID: {id}</Text>
           {city ? (
             <View style={{ marginTop: 20 }}>
-              <Text>City: {city.location.name}</Text>
-              <Text>Region: {city.location.region || "N/A"}</Text>
+              <Link href={`/(modals)/${city.location?.name}`}>
+                <Text>City: {city.location.name}</Text>
+              </Link>
+              <Link href={`/(modals)/${city.location.region || "N/A"}`}>
+                <Text>Region: {city.location.region || "N/A"}</Text>
+              </Link>
               <Text>Country: {city.location.country}</Text>
               <Text>Latitude: {city.location.lat}</Text>
               <Text>Longitude: {city.location.lon}</Text>
