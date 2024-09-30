@@ -23,6 +23,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { Firestore } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
+import { WeatherData } from "../types/forcastType";
 
 const useHandleSearch = () => {
   const [city, setCity] = useState(null);
