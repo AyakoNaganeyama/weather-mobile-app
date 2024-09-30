@@ -8,6 +8,7 @@ const Layout = () => {
     <Tabs>
       <Tabs.Screen name="index"></Tabs.Screen>
       <Tabs.Screen name="explore"></Tabs.Screen>
+      <Tabs.Screen name="test"></Tabs.Screen>
     </Tabs>
   );
 };
