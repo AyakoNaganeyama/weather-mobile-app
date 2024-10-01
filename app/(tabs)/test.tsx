@@ -9,8 +9,8 @@ const SearchCity = () => {
     console.log(city);
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
+    <View style={styles.container2}>
+      <View style={styles.searchContainer2}>
         <GooglePlacesAutocomplete
           placeholder="Search City"
           fetchDetails={true}
@@ -25,13 +25,13 @@ const SearchCity = () => {
             types: "(cities)",
           }}
           textInputProps={{
-            style: styles.input, // Style for the input field
+            style: styles.input2, // Style for the input field
           }}
         />
 
         {/* Search Button */}
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.buttonText}>Search</Text>
+        <TouchableOpacity style={styles.searchButton2} onPress={handleSearch}>
+          <Text style={styles.buttonText2}>Search</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -39,16 +39,16 @@ const SearchCity = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container2: {
     flex: 1,
     padding: 10,
     justifyContent: "center", // Center vertically
   },
-  searchContainer: {
+  searchContainer2: {
     flexDirection: "row", // Align input and button in a row
     alignItems: "center",
   },
-  input: {
+  input2: {
     flex: 1,
     height: 40,
     borderColor: "gray",
@@ -56,14 +56,14 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderRadius: 5,
   },
-  searchButton: {
+  searchButton2: {
     backgroundColor: "#007AFF",
     paddingVertical: 10,
     paddingHorizontal: 15,
     marginLeft: 10,
     borderRadius: 5,
   },
-  buttonText: {
+  buttonText2: {
     color: "white",
     fontSize: 16,
   },

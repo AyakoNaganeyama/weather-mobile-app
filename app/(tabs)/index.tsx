@@ -10,7 +10,9 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView,
   Share,
+  Platform,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
@@ -21,6 +23,7 @@ import { Firestore } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import useHandleSearch from "../hooks/useHandleSearch";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const index = () => {
   const {
@@ -41,116 +44,136 @@ const index = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust for iOS or Android
+      >
         <View>
           <Link href={"/(modals)/testing"}>Testing</Link>
           <Link href={"/Listings/1337"}>ID </Link>
         </View>
 
-        <View style={styles.inputHead}>
-          <TextInput
-            placeholder="Search City"
-            onChangeText={(text) => setCityText(text)}
-            value={cityText} // Display the city name being typed
-            placeholderTextColor="gray"
-            style={styles.input}
-          />
-          <TouchableOpacity
-            onPress={handleSearch} // Call the hook's search function
-            disabled={cityText === ""}
-            style={[styles.AddButton, cityText === "" && styles.buttonDisabled]}
-          >
-            <Text style={styles.buttonText}>Search</Text>
-          </TouchableOpacity>
+        <View style={styles.container2}>
+          <View style={styles.searchContainer2}>
+            <GooglePlacesAutocomplete
+              placeholder="Search City"
+              fetchDetails={true}
+              onPress={(data, details = null) => {
+                // Extract and log the city name
+                const cityName = data.description;
+                setCityText(cityName);
+              }}
+              query={{
+                key: "AIzaSyAMn-oW3pnCbuyRFnGmLX8a0NNEnWOPuhM",
+                language: "en",
+                types: "(cities)",
+              }}
+              textInputProps={{
+                style: styles.input2, // Style for the input field
+              }}
+            />
+            <TouchableOpacity
+              onPress={handleSearch} // Call the hook's search function
+              disabled={cityText === ""}
+              style={[
+                styles.AddButton,
+                cityText === "" && styles.buttonDisabled,
+              ]}
+            >
+              <Text style={styles.buttonText}>Search</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {currentCity && (
-          <ImageBackground
-            source={{
-              uri: currentCity.current.is_day
-                ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-            }}
-            style={styles.backgroundImage}
-          >
-            <View>
-              <View style={styles.temp}>
-                <Text style={styles.tempShown}>
-                  {currentCity.current.temp_c}°C
-                </Text>
-                <Text style={styles.tempShown}>
-                  {currentCity.location.name}
-                </Text>
-                <Text style={styles.text}>
-                  {currentCity.current.condition.text}
-                </Text>
-                <Text>Test</Text>
-                <Text style={styles.text}>
-                  {currentCity.forecast.forecastday[0].date}
-                </Text>
-                <Text style={styles.text}>
-                  {currentCity.forecast.forecastday[0].day.maxtemp_c}
-                </Text>
-                <Text style={styles.text}>
-                  day2{currentCity.forecast.forecastday[1].date}
-                </Text>
-                <Text style={styles.text}>
-                  day3{currentCity.forecast.forecastday[1].day.maxtemp_c}
-                </Text>
+          <ScrollView>
+            <ImageBackground
+              source={{
+                uri: currentCity.current.is_day
+                  ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                  : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              }}
+              style={styles.backgroundImage}
+            >
+              <View>
+                <View style={styles.temp}>
+                  <Text style={styles.tempShown}>
+                    {currentCity.current.temp_c}°C
+                  </Text>
+                  <Text style={styles.tempShown}>
+                    {currentCity.location.name}
+                  </Text>
+                  <Text style={styles.text}>
+                    {currentCity.current.condition.text}
+                  </Text>
+                  <Text>Test</Text>
+                  <Text style={styles.text}>
+                    {currentCity.forecast.forecastday[0].date}
+                  </Text>
+                  <Text style={styles.text}>
+                    {currentCity.forecast.forecastday[0].day.maxtemp_c}
+                  </Text>
+                  <Text style={styles.text}>
+                    day2{currentCity.forecast.forecastday[1].date}
+                  </Text>
+                  <Text style={styles.text}>
+                    day3{currentCity.forecast.forecastday[1].day.maxtemp_c}
+                  </Text>
+                </View>
+
+                <Text style={{ fontSize: 30 }}>Test</Text>
+
+                <Text style={{ fontSize: 24 }}>24 hour</Text>
+
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    alignContent: "center",
+                    gap: 20,
+                    paddingHorizontal: 16,
+                  }}
+                >
+                  {todayCast.map((i, ind) => (
+                    <TouchableOpacity key={ind}>
+                      <Text>{i.time}</Text>
+                      <Text>{i.temp_c}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    alignContent: "center",
+                    gap: 20,
+                    paddingHorizontal: 16,
+                  }}
+                >
+                  {currentCity.forecast.forecastday.map((item, index) => (
+                    <TouchableOpacity key={index}>
+                      <Text>{item.date}</Text>
+                      <Text>{item.day.maxtemp_c}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+
+                <View style={styles.more}>
+                  <Text style={styles.text}>
+                    Feels like {currentCity.current.feelslike_c}°C
+                  </Text>
+                  <Text style={styles.text}>
+                    <Feather name="wind" size={24} color="white" />{" "}
+                    {currentCity.current.wind_kph} kph
+                  </Text>
+                </View>
               </View>
-
-              <Text style={{ fontSize: 30 }}>Test</Text>
-
-              <Text style={{ fontSize: 24 }}>24 hour</Text>
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  alignContent: "center",
-                  gap: 20,
-                  paddingHorizontal: 16,
-                }}
-              >
-                {todayCast.map((i, ind) => (
-                  <TouchableOpacity key={ind}>
-                    <Text>{i.time}</Text>
-                    <Text>{i.temp_c}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  alignContent: "center",
-                  gap: 20,
-                  paddingHorizontal: 16,
-                }}
-              >
-                {currentCity.forecast.forecastday.map((item, index) => (
-                  <TouchableOpacity key={index}>
-                    <Text>{item.date}</Text>
-                    <Text>{item.day.maxtemp_c}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-
-              <View style={styles.more}>
-                <Text style={styles.text}>
-                  Feels like {currentCity.current.feelslike_c}°C
-                </Text>
-                <Text style={styles.text}>
-                  <Feather name="wind" size={24} color="white" />{" "}
-                  {currentCity.current.wind_kph} kph
-                </Text>
-              </View>
-            </View>
-          </ImageBackground>
+            </ImageBackground>
+          </ScrollView>
         )}
         {errorMsg && <Text>{errorMsg}</Text>}
-      </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -236,5 +259,31 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     marginBottom: 5,
+  },
+  container2: {
+    padding: 10,
+  },
+  searchContainer2: {
+    flexDirection: "row", // Align input and button in a row
+    alignItems: "center",
+  },
+  input2: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingLeft: 10,
+    borderRadius: 5,
+  },
+  searchButton2: {
+    backgroundColor: "#007AFF",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginLeft: 10,
+    borderRadius: 5,
+  },
+  buttonText2: {
+    color: "white",
+    fontSize: 16,
   },
 });
