@@ -5,7 +5,7 @@ import useCityStore from "../stores/cityStore";
 import { getDocs, collection } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { WeatherData } from "../types/forcastType";
-import useDeteleCity from "../hooks/useDeteleCity";
+import useDeteleCity from "../hooks/useHandleCityList";
 
 const Explore = () => {
   // Use WeatherData[]
