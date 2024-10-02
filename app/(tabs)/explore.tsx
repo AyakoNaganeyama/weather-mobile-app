@@ -1,14 +1,16 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import useCityStore from "../stores/cityStore";
 import { getDocs, collection } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
-import { WeatherData } from "../types/forcastType"; // Make sure the path is correct for your types
+import { WeatherData } from "../types/forcastType";
+import useDeteleCity from "../hooks/useDeteleCity";
 
 const Explore = () => {
-  // Use WeatherData[] for better typing
+  // Use WeatherData[]
   const [cities, setCities] = useState<WeatherData[]>([]);
+  const { handleDelete } = useDeteleCity();
 
   // Zustand store usage
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
@@ -38,13 +40,23 @@ const Explore = () => {
     <View>
       {cities.length > 0 ? (
         cities
-          .filter((city) => city.location) // Only include cities with a valid location
+          .filter((city) => city.location)
           .map((city, index) => (
-            <Link href={`/Listings/${city.location.name}`} key={index}>
-              <Text>
-                {city.location.name} - {city.location.country}
-              </Text>
-            </Link>
+            <View key={index}>
+              <Link href={`/Listings/${city.location.name}`}>
+                <Text>
+                  {city.location.name} - {city.location.country}
+                </Text>
+              </Link>
+              <TouchableOpacity
+                onPress={() =>
+                  handleDelete(city.location.name, city.location.country)
+                }
+                style={{ marginLeft: 10 }}
+              >
+                <Text>Delete</Text>
+              </TouchableOpacity>
+            </View>
           ))
       ) : (
         <Text>No cities found.</Text>
