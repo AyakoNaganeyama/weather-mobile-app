@@ -5,35 +5,19 @@ import useCityStore from "../stores/cityStore";
 import { getDocs, collection } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { WeatherData } from "../types/forcastType";
-import useDeteleCity from "../hooks/useHandleCityList";
+
+import useHandleCityList from "../hooks/useHandleCityList";
 
 const Explore = () => {
   // Use WeatherData[]
-  const [cities, setCities] = useState<WeatherData[]>([]);
-  const { handleDelete } = useDeteleCity();
+
+  const { handleDelete, cities, fetchCityList } = useHandleCityList();
 
   // Zustand store usage
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
 
   useEffect(() => {
-    (async () => {
-      try {
-        // Fetching data from Firebase Firestore
-        const weatherDataRef = collection(firestore, "weatherData2");
-        const querySnapshot = await getDocs(weatherDataRef);
-
-        // Convert `querySnapshot` to an array of objects, ensuring it's typed correctly
-        const storedCities: WeatherData[] = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-        })) as WeatherData[];
-
-        // Update state with the fetched cities
-        setCities(storedCities);
-        console.log("Stored cities from Firestore:", storedCities);
-      } catch (error) {
-        console.error("Failed to load cities from Firestore:", error);
-      }
-    })();
+    fetchCityList();
   }, [storedCity]);
 
   return (
