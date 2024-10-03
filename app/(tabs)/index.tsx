@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Share,
   Platform,
+  Button,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
@@ -35,6 +36,7 @@ const index = () => {
     errorMsg,
     handleSearch,
     setCityText,
+    addSearchedCityToList,
   } = useHandleSearch();
 
   const { getImage } = useGetImage();
@@ -96,6 +98,12 @@ const index = () => {
               style={styles.backgroundImage}
             >
               <View>
+                <TouchableOpacity
+                  style={styles.AddButton}
+                  onPress={addSearchedCityToList}
+                >
+                  <Text style={styles.buttonText}>Add City</Text>
+                </TouchableOpacity>
                 <View style={styles.temp}>
                   <Text style={styles.tempShown}>
                     {currentCity.current.temp_c}°C
