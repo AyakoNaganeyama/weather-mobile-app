@@ -28,7 +28,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 const index = () => {
   const {
     initialSearch,
-    city,
+
     currentCity,
     cityText,
     todayCast,

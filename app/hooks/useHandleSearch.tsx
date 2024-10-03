@@ -26,10 +26,9 @@ import useGetImage from "../hooks/useGetImage";
 import { WeatherData } from "../types/forcastType";
 
 const useHandleSearch = () => {
-  const [city, setCity] = useState(null);
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
   const [location, setLocation] = useState(null);
-  const [currentCity, setCurrentCity] = useState(null);
+  const [currentCity, setCurrentCity] = useState<WeatherData | null>(null);
 
   const [errorMsg, setErrorMsg] = useState(null);
   const [cityText, setCityText] = useState("");
@@ -258,7 +257,7 @@ const useHandleSearch = () => {
 
   return {
     initialSearch,
-    city,
+
     currentCity,
     cityText,
     todayCast,
