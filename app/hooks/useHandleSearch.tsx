@@ -24,15 +24,20 @@ import { Firestore } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import { WeatherData } from "../types/forcastType";
+import useBooleanStore from "../stores/isSearched";
 
 const useHandleSearch = () => {
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
   const [location, setLocation] = useState(null);
   const [currentCity, setCurrentCity] = useState<WeatherData | null>(null);
+  const [searchedCity, setSearchedCity] = useState<WeatherData | null>(null);
 
   const [errorMsg, setErrorMsg] = useState(null);
   const [cityText, setCityText] = useState("");
   const [todayCast, setTodayCast] = useState([]);
+  const [todayCast2, setTodayCast2] = useState([]);
+  const [isS, setIsS] = useState(false);
+  const { isActive, setTrue, setFalse } = useBooleanStore();
 
   const initialSearch = async () => {
     // Ask for permission to access location
@@ -143,121 +148,96 @@ const useHandleSearch = () => {
       const response = await fetch(url, options);
       if (response.ok) {
         const result = await response.json();
-        setCurrentCity(result);
-        console.log(result);
-
-        // Parse the forecast data similarly to initialSearch
-        const forecastHours = result.forecast.forecastday[0].hour;
-        const currentEpoch = Math.floor(Date.now() / 1000);
-
-        let forcast24 = [];
-        let index = 0;
-        const hourInSeconds = 3600;
-
-        // Find the matching hour based on current time
-        for (let i = 0; i < forecastHours.length; i++) {
-          let hour = forecastHours[i];
-          if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
-            index = i;
-            break;
-          }
-        }
-
-        // Populate forecast data for the next 24 hours
-        for (let j = index; j < forecastHours.length; j++) {
-          forcast24.push(forecastHours[j]);
-        }
-
-        let tomorrowForcast = 24 - forcast24.length;
-        if (tomorrowForcast > 0) {
-          for (let i = 0; i < tomorrowForcast; i++) {
-            forcast24.push(result.forecast.forecastday[1].hour[i]);
-          }
-        }
-
-        setTodayCast(forcast24);
+        console.log("Search result: ", result); // Log the result
+        setSearchedCity(result);
+        setFalse();
       } else {
-        console.log(response.status);
+        console.log("Error: ", response.status);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Fetch error: ", error);
     }
   };
 
-  const addSearchedCityToList = async () => {
+  // Log the updated todayCast2 in a separate useEffect
+
+  const addSearchedCityToList = async (data: WeatherData) => {
     try {
-      const cityName = currentCity?.location.name;
-      const countryName = currentCity?.location.country;
+      if (data) {
+        const cityName = data?.location.name;
+        const countryName = data?.location.country;
 
-      const weatherDataRef = collection(firestore, "weatherData2");
+        const weatherDataRef = collection(firestore, "weatherData2");
 
-      // Create a query with multiple where conditions
-      const q = query(
-        weatherDataRef,
-        where("location.name", "==", cityName),
-        where("location.country", "==", countryName)
-      );
-
-      // Execute the query and get the results
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        // Store the weather and forecast data into Firestore
-        const weatherData = {
-          location: {
-            name: currentCity?.location.name,
-            region: currentCity?.location.region,
-            country: currentCity?.location.country,
-            lat: currentCity?.location.lat,
-            lon: currentCity?.location.lon,
-            tz_id: currentCity?.location.tz_id,
-            localtime_epoch: currentCity?.location.localtime_epoch,
-            localtime: currentCity?.location.localtime,
-          },
-          current: {
-            last_updated_epoch: currentCity?.current?.last_updated_epoch,
-            last_updated: currentCity?.current?.last_updated,
-            temp_c: currentCity?.current?.temp_c,
-            temp_f: currentCity?.current?.temp_f,
-            is_day: currentCity?.current?.is_day,
-            wind_mph: currentCity?.current?.wind_mph,
-            wind_kph: currentCity?.current?.wind_kph,
-            wind_degree: currentCity?.current?.wind_degree,
-            wind_dir: currentCity?.current?.wind_dir,
-            pressure_mb: currentCity?.current?.pressure_mb,
-            pressure_in: currentCity?.current?.pressure_in,
-            precip_mm: currentCity?.current?.precip_mm,
-            precip_in: currentCity?.current?.precip_in,
-            humidity: currentCity?.current?.humidity,
-            cloud: currentCity?.current?.cloud,
-            feelslike_c: currentCity?.current?.feelslike_c,
-            feelslike_f: currentCity?.current?.feelslike_f,
-            windchill_c: currentCity?.current?.windchill_c,
-            windchill_f: currentCity?.current?.windchill_f,
-            heatindex_c: currentCity?.current?.heatindex_c,
-            heatindex_f: currentCity?.current?.heatindex_f,
-            dewpoint_c: currentCity?.current?.dewpoint_c,
-            dewpoint_f: currentCity?.current?.dewpoint_f,
-            vis_km: currentCity?.current?.vis_km,
-            vis_miles: currentCity?.current?.vis_miles,
-            uv: currentCity?.current?.uv,
-            gust_mph: currentCity?.current?.gust_mph,
-            gust_kph: currentCity?.current?.gust_kph,
-          },
-          forecast: currentCity?.forecast,
-        };
-
-        const docRef = await addDoc(
-          collection(firestore, "weatherData2"),
-          weatherData
+        // Create a query with multiple where conditions
+        const q = query(
+          weatherDataRef,
+          where("location.name", "==", cityName),
+          where("location.country", "==", countryName)
         );
-        console.log("Document written with ID: ", docRef.id);
 
-        if (currentCity) {
-          setStoredCity(currentCity);
+        // Execute the query and get the results
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          // Store the weather and forecast data into Firestore
+          const weatherData = {
+            location: {
+              name: data?.location.name,
+              region: data?.location.region,
+              country: data?.location.country,
+              lat: data?.location.lat,
+              lon: data?.location.lon,
+              tz_id: data?.location.tz_id,
+              localtime_epoch: data?.location.localtime_epoch,
+              localtime: data?.location.localtime,
+            },
+            current: {
+              last_updated_epoch: data?.current?.last_updated_epoch,
+              last_updated: data?.current?.last_updated,
+              temp_c: data?.current?.temp_c,
+              temp_f: data?.current?.temp_f,
+              is_day: data?.current?.is_day,
+              wind_mph: data?.current?.wind_mph,
+              wind_kph: data?.current?.wind_kph,
+              wind_degree: data?.current?.wind_degree,
+              wind_dir: data?.current?.wind_dir,
+              pressure_mb: data?.current?.pressure_mb,
+              pressure_in: data?.current?.pressure_in,
+              precip_mm: data?.current?.precip_mm,
+              precip_in: data?.current?.precip_in,
+              humidity: data?.current?.humidity,
+              cloud: data?.current?.cloud,
+              feelslike_c: data?.current?.feelslike_c,
+              feelslike_f: data?.current?.feelslike_f,
+              windchill_c: data?.current?.windchill_c,
+              windchill_f: data?.current?.windchill_f,
+              heatindex_c: data?.current?.heatindex_c,
+              heatindex_f: data?.current?.heatindex_f,
+              dewpoint_c: data?.current?.dewpoint_c,
+              dewpoint_f: data?.current?.dewpoint_f,
+              vis_km: data?.current?.vis_km,
+              vis_miles: data?.current?.vis_miles,
+              uv: data?.current?.uv,
+              gust_mph: data?.current?.gust_mph,
+              gust_kph: data?.current?.gust_kph,
+            },
+            forecast: data?.forecast,
+          };
+
+          const docRef = await addDoc(
+            collection(firestore, "weatherData2"),
+            weatherData
+          );
+          console.log("Document written with ID: ", docRef.id);
+
+          // Reset searchedCity after the city is added
+
+          setStoredCity(data);
+          setTrue();
+        } else {
+          console.log("City already exists");
         }
-      } else {
-        console.log("city already exists");
       }
     } catch (e) {
       console.log(e);
@@ -274,6 +254,9 @@ const useHandleSearch = () => {
     handleSearch,
     setCityText, // So users can type the city name
     addSearchedCityToList,
+    searchedCity,
+    todayCast2,
+    setSearchedCity,
   };
 };
 

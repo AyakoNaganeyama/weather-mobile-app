@@ -55,38 +55,6 @@ const index = () => {
           <Link href={"/Listings/1337"}>ID </Link>
         </View>
 
-        <View style={styles.container2}>
-          <View style={styles.searchContainer2}>
-            <GooglePlacesAutocomplete
-              placeholder="Search City"
-              fetchDetails={true}
-              onPress={(data, details = null) => {
-                // Extract and log the city name
-                const cityName = data.description;
-                setCityText(cityName);
-              }}
-              query={{
-                key: "AIzaSyAMn-oW3pnCbuyRFnGmLX8a0NNEnWOPuhM",
-                language: "en",
-                types: "(cities)",
-              }}
-              textInputProps={{
-                style: styles.input2, // Style for the input field
-              }}
-            />
-            <TouchableOpacity
-              onPress={handleSearch} // Call the hook's search function
-              disabled={cityText === ""}
-              style={[
-                styles.AddButton,
-                cityText === "" && styles.buttonDisabled,
-              ]}
-            >
-              <Text style={styles.buttonText}>Search</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
         {currentCity && (
           <ScrollView>
             <ImageBackground
@@ -98,12 +66,6 @@ const index = () => {
               style={styles.backgroundImage}
             >
               <View>
-                <TouchableOpacity
-                  style={styles.AddButton}
-                  onPress={addSearchedCityToList}
-                >
-                  <Text style={styles.buttonText}>Add City</Text>
-                </TouchableOpacity>
                 <View style={styles.temp}>
                   <Text style={styles.tempShown}>
                     {currentCity.current.temp_c}°C
