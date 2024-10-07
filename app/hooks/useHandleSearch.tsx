@@ -135,6 +135,7 @@ const useHandleSearch = () => {
   };
 
   const handleSearch = async () => {
+    console.log("city text", cityText);
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityText}&days=3`; // Change to forecast API with 3 days
     const options = {
       method: "GET",

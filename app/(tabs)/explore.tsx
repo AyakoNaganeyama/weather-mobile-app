@@ -72,7 +72,9 @@ const Explore = () => {
           .filter((city) => city.location)
           .map((city, index) => (
             <View key={index}>
-              <Link href={`/Listings/${city.location.name}`}>
+              <Link
+                href={`/Listings/${city.location.lat},${city.location.lon}`}
+              >
                 <Text>
                   {city.location.name} - {city.location.country}
                 </Text>
