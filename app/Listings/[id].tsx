@@ -148,6 +148,9 @@ const Page = () => {
                 </Text>
               </View>
             </View>
+            <View style={{ marginTop: 50 }}>
+              <Button onPress={() => onShare(city)} title="Share" />
+            </View>
           </ImageBackground>
         </ScrollView>
       )}
