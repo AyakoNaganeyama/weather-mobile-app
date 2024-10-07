@@ -5,28 +5,30 @@ import {
   ImageBackground,
   StyleSheet,
   Button,
+  TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import useShare from "../hooks/useShare";
-import { Link } from "expo-router";
 
 const Page = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams();
   const { getImage } = useGetImage();
   const { onShare } = useShare();
 
   const [city, setCity] = useState(null);
+  const [todayCast, setTodayCast] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Construct the URL with the provided id
-        const url = `https://weatherapi-com.p.rapidapi.com/current.json?q=${id}`;
+        console.log("city id with lon and rat", id);
+        const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${id}&days=3`; // 3-day forecast API
         const options = {
           method: "GET",
           headers: {
@@ -39,72 +41,149 @@ const Page = () => {
         const response = await fetch(url, options);
         if (response.ok) {
           const result = await response.json();
-          setCity(result); // Set the city state with the fetched data
-          console.log(result); // Optional: log the result for debugging
+          setCity(result);
+
+          const currentEpoch = Math.floor(Date.now() / 1000); // Current time in seconds
+          const forecastHours = result.forecast.forecastday[0].hour;
+
+          let forcast24 = [];
+          let index = 0;
+          const hourInSeconds = 3600; // 1 hour in seconds
+
+          for (let i = 0; i < forecastHours.length; i++) {
+            let hour = forecastHours[i];
+            if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
+              index = i;
+              break;
+            }
+          }
+
+          for (let j = index; j < forecastHours.length; j++) {
+            forcast24.push(forecastHours[j]);
+          }
+
+          let tomorrowForcast = 24 - forcast24.length;
+          if (tomorrowForcast > 0) {
+            for (let i = 0; i < tomorrowForcast; i++) {
+              forcast24.push(result.forecast.forecastday[1].hour[i]);
+            }
+          }
+
+          setTodayCast(forcast24);
         } else {
-          console.error(
-            `Error fetching city: ${response.status} ${response.statusText}`
-          );
+          console.log("Failed to fetch weather data. Please try again later.");
         }
       } catch (error) {
-        console.error("Error fetching city:", error);
+        console.log("Fetch error: ", error);
       }
     };
 
     fetchData();
   }, [id]);
 
-  console.log(id);
   return (
-    <ScrollView>
-      <ImageBackground
-        source={getImage(
-          city?.current?.condition?.text || "Unknown",
-          city?.current?.is_day ?? 0 // Use 0 (night) as a default if is_day is undefined
-        )}
-        style={styles.backgroundImage}
-      >
-        <View style={{ padding: 20 }}>
-          <Text>ID: {id}</Text>
-          {city ? (
-            <View style={{ marginTop: 20 }}>
-              <Link href={`/(modals)/${city.location?.name}`}>
-                <Text>City: {city.location.name}</Text>
-              </Link>
-              <Link href={`/(modals)/${city.location.region || "N/A"}`}>
-                <Text>Region: {city.location.region || "N/A"}</Text>
-              </Link>
-              <Text>Country: {city.location.country}</Text>
-              <Text>Latitude: {city.location.lat}</Text>
-              <Text>Longitude: {city.location.lon}</Text>
-              <Text>Timezone: {city.location.tz_id}</Text>
-              <Text>Local Time: {city.location.localtime}</Text>
+    <>
+      {city && (
+        <ScrollView>
+          <ImageBackground
+            source={getImage(
+              city?.current?.condition?.text || "Unknown",
+              city?.current?.is_day ?? 0
+            )}
+            style={styles.backgroundImage}
+          >
+            <View>
+              <View style={styles.temp}>
+                <Text style={styles.tempShown}>{city.current.temp_c}°C</Text>
+                <Text style={styles.tempShown}>{city.location.name}</Text>
+                <Text style={styles.text}>{city.current.condition.text}</Text>
+                <Text style={styles.text}>
+                  {city.forecast.forecastday[0].date}
+                </Text>
+                <Text style={styles.text}>
+                  Max Temp: {city.forecast.forecastday[0].day.maxtemp_c}°C
+                </Text>
+                <Text style={styles.text}>
+                  Day 2: {city.forecast.forecastday[1].date}
+                </Text>
+                <Text style={styles.text}>
+                  Day 3 Max Temp: {city.forecast.forecastday[1].day.maxtemp_c}°C
+                </Text>
+              </View>
 
-              <Text style={{ marginTop: 20, fontWeight: "bold" }}>
-                Current Weather:
-              </Text>
-              <Text>
-                Temperature: {city.current?.temp_c}°C / {city.current?.temp_f}°F
-              </Text>
-              <Text>Condition: {city.current?.condition?.text || "N/A"}</Text>
-              {/* ...rest of the code... */}
+              <Text style={{ fontSize: 24 }}>24-hour Forecast</Text>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContent}
+              >
+                {todayCast.map((i, ind) => (
+                  <TouchableOpacity key={ind}>
+                    <Text>{i.time}</Text>
+                    <Text>{i.temp_c}°C</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContent}
+              >
+                {city.forecast.forecastday.map((item, index) => (
+                  <TouchableOpacity key={index}>
+                    <Text>{item.date}</Text>
+                    <Text>Max Temp: {item.day.maxtemp_c}°C</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+
+              <View style={styles.more}>
+                <Text style={styles.text}>
+                  Feels like {city.current.feelslike_c}°C
+                </Text>
+                <Text style={styles.text}>
+                  Wind: {city.current.wind_kph} kph
+                </Text>
+              </View>
             </View>
-          ) : (
-            <Text>Loading city data...</Text>
-          )}
-        </View>
-      </ImageBackground>
-      <View style={{ marginTop: 50 }}>
-        <Button onPress={() => onShare(city)} title="Share" />
-      </View>
-    </ScrollView>
+          </ImageBackground>
+        </ScrollView>
+      )}
+      {errorMsg && <Text>{errorMsg}</Text>}
+    </>
   );
 };
 
 export default Page;
+
 const styles = StyleSheet.create({
   backgroundImage: {
     width: "100%",
     flex: 1,
+  },
+  tempShown: {
+    fontSize: 150,
+    fontWeight: "800",
+    color: "#fff",
+  },
+  temp: {
+    alignItems: "center",
+  },
+  text: {
+    color: "#fff",
+  },
+  scrollContent: {
+    alignContent: "center",
+    gap: 20,
+    paddingHorizontal: 16,
+  },
+  more: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 32,
+    marginTop: 32,
   },
 });
