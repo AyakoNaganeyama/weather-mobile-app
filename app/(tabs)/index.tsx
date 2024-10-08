@@ -14,6 +14,7 @@ import {
   Share,
   Platform,
   Button,
+  Dimensions,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
@@ -37,6 +38,7 @@ const index = () => {
     handleSearch,
     setCityText,
     addSearchedCityToList,
+    formatted,
   } = useHandleSearch();
 
   const { getImage } = useGetImage();
@@ -50,29 +52,36 @@ const index = () => {
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust for iOS or Android
       >
-        <View>
-          <Link href={"/(modals)/testing"}>Testing</Link>
-          <Link href={"/Listings/1337"}>ID </Link>
-        </View>
-
         {currentCity && (
           <ScrollView>
             <ImageBackground
-              source={{
-                uri: currentCity.current.is_day
-                  ? "https://images.pexels.com/photos/96622/pexels-photo-96622.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                  : "https://images.pexels.com/photos/1257860/pexels-photo-1257860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-              }}
+              source={getImage(
+                currentCity?.current?.condition?.text || "Unknown",
+                currentCity?.current?.is_day ?? 0
+              )}
               style={styles.backgroundImage}
             >
-              <View>
+              <View style={styles.container}>
+                <Text style={styles.heading}>{currentCity.location.name}</Text>
                 <View style={styles.temp}>
                   <Text style={styles.tempShown}>
                     {currentCity.current.temp_c}°C
                   </Text>
-                  <Text style={styles.tempShown}>
-                    {currentCity.location.name}
+
+                  <Text style={styles.currentCond}>
+                    {currentCity.current.condition.text}
                   </Text>
+
+                  <View style={styles.more}>
+                    <Text style={styles.text}>
+                      Feels like {currentCity.current.feelslike_c}°C
+                    </Text>
+                    <Text style={styles.text}>
+                      <Feather name="wind" size={24} color="white" />{" "}
+                      {currentCity.current.wind_kph} kph
+                    </Text>
+                  </View>
+
                   <Text style={styles.text}>
                     {currentCity.current.condition.text}
                   </Text>
@@ -95,22 +104,39 @@ const index = () => {
 
                 <Text style={{ fontSize: 24 }}>24 hour</Text>
 
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    alignContent: "center",
-                    gap: 20,
-                    paddingHorizontal: 16,
+                <View
+                  style={{
+                    backgroundColor: "rgba(0,0,0, 0.5)",
+
+                    padding: 10,
+                    borderRadius: 15,
+                    marginHorizontal: 20,
                   }}
                 >
-                  {todayCast.map((i, ind) => (
-                    <TouchableOpacity key={ind}>
-                      <Text>{i.time}</Text>
-                      <Text>{i.temp_c}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      alignContent: "center",
+                      gap: 20,
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    {todayCast.map((i, ind) =>
+                      ind === 0 ? (
+                        <TouchableOpacity key={ind} style={styles.info}>
+                          <Text style={styles.text}>Now</Text>
+                          <Text style={styles.text}>{i.temp_c}</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity key={ind} style={styles.info}>
+                          <Text style={styles.text}>{i.time_epoch}</Text>
+                          <Text style={styles.text}>{i.temp_c}</Text>
+                        </TouchableOpacity>
+                      )
+                    )}
+                  </ScrollView>
+                </View>
 
                 <ScrollView
                   horizontal
@@ -128,16 +154,6 @@ const index = () => {
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
-
-                <View style={styles.more}>
-                  <Text style={styles.text}>
-                    Feels like {currentCity.current.feelslike_c}°C
-                  </Text>
-                  <Text style={styles.text}>
-                    <Feather name="wind" size={24} color="white" />{" "}
-                    {currentCity.current.wind_kph} kph
-                  </Text>
-                </View>
               </View>
             </ImageBackground>
           </ScrollView>
@@ -153,7 +169,14 @@ export default index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 20,
+    marginBottom: 20,
   },
+  currentCond: {
+    color: "#fff",
+    fontSize: 30,
+  },
+
   backgroundImage: {
     width: "100%",
     flex: 1,
@@ -165,11 +188,11 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: "#fff",
-    fontWeight: "800",
-    fontSize: 30,
+    fontSize: 60,
+    textAlign: "center",
   },
   tempShown: {
-    fontSize: 150,
+    fontSize: 100,
     fontWeight: 800,
     color: "#fff",
   },
@@ -255,5 +278,12 @@ const styles = StyleSheet.create({
   buttonText2: {
     color: "white",
     fontSize: 16,
+  },
+  info: {
+    width: Dimensions.get("screen").width / 5,
+
+    padding: 10,
+    borderRadius: 15,
+    justifyContent: "center",
   },
 });

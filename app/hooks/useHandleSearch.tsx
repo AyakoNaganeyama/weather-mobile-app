@@ -26,6 +26,14 @@ import useGetImage from "../hooks/useGetImage";
 import { WeatherData } from "../types/forcastType";
 import useBooleanStore from "../stores/isSearched";
 
+interface HourForecast {
+  time_epoch: number | string; // Accepts both number and string for time_epoch
+  time: string; // The time in the "YYYY-MM-DD HH:MM" format
+  temp_c: number; // Temperature in Celsius
+  temp_f: number; // Temperature in Fahrenheit
+  is_day: number; // 1 for daytime, 0 for nighttime
+}
+
 const useHandleSearch = () => {
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
   const [location, setLocation] = useState(null);
@@ -35,6 +43,7 @@ const useHandleSearch = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [cityText, setCityText] = useState("");
   const [todayCast, setTodayCast] = useState([]);
+  const [formatted, setFormatted] = useState([]);
   const [todayCast2, setTodayCast2] = useState([]);
   const [isS, setIsS] = useState(false);
   const { isActive, setTrue, setFalse } = useBooleanStore();
@@ -122,7 +131,10 @@ const useHandleSearch = () => {
           forcast24.forEach((hour) => {
             console.log(`Time: ${hour.time}, Temperature: ${hour.temp_c}°C`);
           });
-          setTodayCast(forcast24);
+
+          let formatted = convertHours(forcast24);
+
+          setTodayCast(formatted);
 
           console.log(result);
         } catch (error) {
@@ -132,6 +144,29 @@ const useHandleSearch = () => {
 
       getWeather();
     }
+  };
+
+  const convertHours = (forecasts: HourForecast[]): HourForecast[] => {
+    // Helper function to convert epoch to 12-hour AM/PM format
+    const convertEpochTo12Hour = (epoch: number): string => {
+      const date = new Date(epoch * 1000); // Convert from seconds to milliseconds
+      let hours = date.getHours(); // Get the hour in 24-hour format
+      const minutes = date.getMinutes(); // Get the minutes
+      const ampm = hours >= 12 ? "PM" : "AM"; // Determine AM or PM
+      hours = hours % 12; // Convert to 12-hour format
+      hours = hours ? hours : 12; // If hours is 0 (midnight), make it 12
+
+      // Format minutes with leading zero if needed
+      const minutesStr = minutes < 10 ? "0" + minutes : minutes;
+
+      return `${hours}:${minutesStr} ${ampm}`;
+    };
+
+    // Return a new array with converted `time_epoch`
+    return forecasts.map((forecast) => ({
+      ...forecast, // Keep all the other properties the same
+      time_epoch: convertEpochTo12Hour(forecast.time_epoch as number), // Convert `time_epoch` to 12-hour AM/PM format
+    }));
   };
 
   const handleSearch = async () => {
@@ -258,6 +293,7 @@ const useHandleSearch = () => {
     searchedCity,
     todayCast2,
     setSearchedCity,
+    formatted,
   };
 };
 

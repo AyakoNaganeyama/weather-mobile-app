@@ -6,7 +6,7 @@ const Layout = () => {
   return (
     //
     <Tabs>
-      <Tabs.Screen name="index"></Tabs.Screen>
+      <Tabs.Screen name="index" options={{ headerShown: false }}></Tabs.Screen>
       <Tabs.Screen name="explore"></Tabs.Screen>
     </Tabs>
   );
