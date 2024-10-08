@@ -15,6 +15,7 @@ import {
   Platform,
   Button,
   Dimensions,
+  Image,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
@@ -126,12 +127,22 @@ const index = () => {
                       ind === 0 ? (
                         <TouchableOpacity key={ind} style={styles.info}>
                           <Text style={styles.text}>Now</Text>
-                          <Text style={styles.text}>{i.temp_c}</Text>
+
+                          {/* Display the condition icon */}
+                          <Image
+                            source={{ uri: `https:${i.condition.icon}` }}
+                            style={{ width: 50, height: 50 }} // Adjust size as needed
+                          />
+                          <Text style={styles.text}>{i.temp_c}°C</Text>
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity key={ind} style={styles.info}>
                           <Text style={styles.text}>{i.time_epoch}</Text>
-                          <Text style={styles.text}>{i.temp_c}</Text>
+                          <Image
+                            source={{ uri: `https:${i.condition.icon}` }}
+                            style={{ width: 50, height: 50 }} // Adjust size as needed
+                          />
+                          <Text style={styles.text}>{i.temp_c}°C</Text>
                         </TouchableOpacity>
                       )
                     )}
@@ -285,5 +296,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
 });

@@ -27,11 +27,44 @@ import { WeatherData } from "../types/forcastType";
 import useBooleanStore from "../stores/isSearched";
 
 interface HourForecast {
-  time_epoch: number | string; // Accepts both number and string for time_epoch
+  time_epoch: number | string; // time_epoch will be converted to string
   time: string; // The time in the "YYYY-MM-DD HH:MM" format
-  temp_c: number; // Temperature in Celsius
-  temp_f: number; // Temperature in Fahrenheit
-  is_day: number; // 1 for daytime, 0 for nighttime
+  temp_c: number;
+  temp_f: number;
+  is_day: number;
+  condition: {
+    text: string;
+    icon: string;
+    code: number;
+  };
+  wind_mph: number;
+  wind_kph: number;
+  wind_degree: number;
+  wind_dir: string;
+  pressure_mb: number;
+  pressure_in: number;
+  precip_mm: number;
+  precip_in: number;
+  snow_cm: number;
+  humidity: number;
+  cloud: number;
+  feelslike_c: number;
+  feelslike_f: number;
+  windchill_c: number;
+  windchill_f: number;
+  heatindex_c: number;
+  heatindex_f: number;
+  dewpoint_c: number;
+  dewpoint_f: number;
+  will_it_rain: number;
+  chance_of_rain: number;
+  will_it_snow: number;
+  chance_of_snow: number;
+  vis_km: number;
+  vis_miles: number;
+  gust_mph: number;
+  gust_kph: number;
+  uv: number;
 }
 
 const useHandleSearch = () => {
@@ -162,9 +195,9 @@ const useHandleSearch = () => {
       return `${hours}:${minutesStr} ${ampm}`;
     };
 
-    // Return a new array with converted `time_epoch`
+    // Return a new array with only `time_epoch` converted
     return forecasts.map((forecast) => ({
-      ...forecast, // Keep all the other properties the same
+      ...forecast, // Keep all other properties the same
       time_epoch: convertEpochTo12Hour(forecast.time_epoch as number), // Convert `time_epoch` to 12-hour AM/PM format
     }));
   };
