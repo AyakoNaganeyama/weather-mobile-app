@@ -11,9 +11,11 @@ import {
   where,
 } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
+import useIsExist from "../stores/isExist";
 
 const useHandleCityList = () => {
   const [cities, setCities] = useState<WeatherData[]>([]);
+  const { isExist, setTrue2, setFalse2 } = useIsExist(); // for hiding and showing add city button
   const handleDelete = async (city: string, country: string) => {
     const q = query(
       collection(firestore, "weatherData2"),

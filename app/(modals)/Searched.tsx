@@ -13,6 +13,7 @@ import useHandleSearch from "../hooks/useHandleSearch";
 import Entypo from "@expo/vector-icons/Entypo";
 import useBooleanStore from "../stores/isSearched";
 import useGetImage from "../hooks/useGetImage";
+import useIsExist from "../stores/isExist";
 const { getImage } = useGetImage();
 
 interface SearchedProps {
@@ -24,6 +25,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 
   const [cast, setCast] = useState([]); // to store 24 hour cast
   const { isActive, setTrue, setFalse } = useBooleanStore(); // to hide or show city list page
+  const { isExist, setTrue2, setFalse2 } = useIsExist();
 
   useEffect(() => {
     if (data && data.forecast && data.forecast.forecastday[0]) {
@@ -87,13 +89,14 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
             <TouchableOpacity onPress={() => hidePage()}>
               <Entypo name="cross" size={24} color="black" />
             </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.AddButton}
-              onPress={() => addSearchedCityToList(data)}
-            >
-              <Text style={styles.buttonText}>Add City</Text>
-            </TouchableOpacity>
+            {!isExist && (
+              <TouchableOpacity
+                style={styles.AddButton}
+                onPress={() => addSearchedCityToList(data)}
+              >
+                <Text style={styles.buttonText}>Add City</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Current Weather Display */}

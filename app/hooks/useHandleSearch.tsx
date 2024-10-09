@@ -25,6 +25,7 @@ import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import { WeatherData } from "../types/forcastType";
 import useBooleanStore from "../stores/isSearched";
+import useIsExist from "../stores/isExist";
 
 interface HourForecast {
   time_epoch: number | string; // time_epoch will be converted to string
@@ -80,6 +81,7 @@ const useHandleSearch = () => {
   const [todayCast2, setTodayCast2] = useState([]);
   const [isS, setIsS] = useState(false);
   const { isActive, setTrue, setFalse } = useBooleanStore();
+  const { isExist, setTrue2, setFalse2 } = useIsExist(); // for hiding and showing add city button
 
   const initialSearch = async () => {
     // Ask for permission to access location
@@ -219,6 +221,7 @@ const useHandleSearch = () => {
         const result = await response.json();
         console.log("Search result: ", result); // Log the result
         setSearchedCity(result);
+        checkIfCityAlreadyExists(result);
         setFalse();
       } else {
         console.log("Error: ", response.status);
@@ -310,6 +313,35 @@ const useHandleSearch = () => {
       }
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const checkIfCityAlreadyExists = async (result: WeatherData) => {
+    try {
+      const lat = result?.location.lat;
+      const lon = result?.location.lon;
+
+      const weatherDataRef = collection(firestore, "weatherData2");
+
+      // Create a query with multiple where conditions
+      const q = query(
+        weatherDataRef,
+        where("location.lat", "==", lat),
+        where("location.lon", "==", lon)
+      );
+
+      // Execute the query and get the results
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        setFalse2();
+        console.log(isExist);
+      } else {
+        setTrue2();
+        console.log(isExist);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
