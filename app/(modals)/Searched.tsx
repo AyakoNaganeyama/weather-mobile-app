@@ -6,9 +6,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { WeatherData } from "../types/forcastType"; // Adjust the path accordingly
-import { Feather } from "@expo/vector-icons"; // Make sure Feather is installed: expo install @expo/vector-icons
+import { WeatherData } from "../types/forcastType";
+import { Feather } from "@expo/vector-icons";
 import useHandleSearch from "../hooks/useHandleSearch";
+import Entypo from "@expo/vector-icons/Entypo";
 
 interface SearchedProps {
   data: WeatherData; // Accept the data as props
@@ -53,18 +54,25 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
         setCast(forcast24); // Updates the state
       }
     }
-  }, [data]); // Add 'data' as a dependency
+  }, [data]);
 
   return (
     <ScrollView>
       <View>
         {/* Add City Button */}
-        <TouchableOpacity
-          style={styles.AddButton}
-          onPress={() => addSearchedCityToList(data)} // Corrected here
-        >
-          <Text style={styles.buttonText}>Add City</Text>
-        </TouchableOpacity>
+
+        <View style={{ justifyContent: "space-between" }}>
+          <TouchableOpacity
+            style={styles.AddButton}
+            onPress={() => addSearchedCityToList(data)}
+          >
+            <Text style={styles.buttonText}>Add City</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+            <Entypo name="cross" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
         {/* Current Weather Display */}
         <View style={styles.temp}>
