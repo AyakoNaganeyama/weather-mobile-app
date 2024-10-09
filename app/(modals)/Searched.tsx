@@ -4,21 +4,26 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { WeatherData } from "../types/forcastType";
 import { Feather } from "@expo/vector-icons";
 import useHandleSearch from "../hooks/useHandleSearch";
 import Entypo from "@expo/vector-icons/Entypo";
+import useBooleanStore from "../stores/isSearched";
+import useGetImage from "../hooks/useGetImage";
+const { getImage } = useGetImage();
 
 interface SearchedProps {
   data: WeatherData; // Accept the data as props
 }
 
 const Searched: React.FC<SearchedProps> = ({ data }) => {
-  const { todayCast2, addSearchedCityToList } = useHandleSearch();
+  const { todayCast2, addSearchedCityToList } = useHandleSearch(); // to call function for adding weather data to fire store
 
-  const [cast, setCast] = useState([]);
+  const [cast, setCast] = useState([]); // to store 24 hour cast
+  const { isActive, setTrue, setFalse } = useBooleanStore(); // to hide or show city list page
 
   useEffect(() => {
     if (data && data.forecast && data.forecast.forecastday[0]) {
@@ -56,95 +61,113 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
     }
   }, [data]);
 
+  const hidePage = () => {
+    setTrue();
+  };
+
   return (
     <ScrollView>
-      <View>
-        {/* Add City Button */}
+      <ImageBackground
+        source={getImage(
+          data?.current?.condition?.text || "Unknown",
+          data?.current?.is_day ?? 0
+        )}
+        style={styles.backgroundImage}
+      >
+        <View style={{ marginHorizontal: 10 }}>
+          {/* Add City Button */}
 
-        <View style={{ justifyContent: "space-between" }}>
-          <TouchableOpacity
-            style={styles.AddButton}
-            onPress={() => addSearchedCityToList(data)}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            <Text style={styles.buttonText}>Add City</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <Entypo name="cross" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Current Weather Display */}
-        <View style={styles.temp}>
-          <Text style={styles.tempShown}>{data.current.temp_c}°C</Text>
-          <Text style={styles.tempShown}>{data.location.name}</Text>
-          <Text style={styles.text}>{data.current.condition.text}</Text>
-          <Text style={styles.text}>{data.forecast.forecastday[0].date}</Text>
-          <Text style={styles.text}>
-            Max Temp: {data.forecast.forecastday[0].day.maxtemp_c}°C
-          </Text>
-          <Text style={styles.text}>
-            Day 2: {data.forecast.forecastday[1].date} - Max Temp:{" "}
-            {data.forecast.forecastday[1].day.maxtemp_c}°C
-          </Text>
-          <Text style={styles.text}>
-            Day 3: {data.forecast.forecastday[2].date} - Max Temp:{" "}
-            {data.forecast.forecastday[2].day.maxtemp_c}°C
-          </Text>
-        </View>
-
-        {/* 24 Hour Forecast ScrollView */}
-        <Text style={{ fontSize: 24 }}>24-hour forecast</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            alignContent: "center",
-            gap: 20,
-            paddingHorizontal: 16,
-          }}
-        >
-          {cast.length > 0 ? (
-            cast.map((i, ind) => (
-              <TouchableOpacity key={ind}>
-                <Text>{i.time}</Text>
-                <Text>{i.temp_c}°C</Text>
-              </TouchableOpacity>
-            ))
-          ) : (
-            <Text>No forecast available.</Text>
-          )}
-        </ScrollView>
-
-        {/* 3 Day Forecast ScrollView */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            alignContent: "center",
-            gap: 20,
-            paddingHorizontal: 16,
-          }}
-        >
-          {data.forecast.forecastday.map((item, index) => (
-            <TouchableOpacity key={index}>
-              <Text>{item.date}</Text>
-              <Text>{item.day.maxtemp_c}°C</Text>
+            <TouchableOpacity onPress={() => hidePage()}>
+              <Entypo name="cross" size={24} color="black" />
             </TouchableOpacity>
-          ))}
-        </ScrollView>
 
-        {/* Additional Weather Info */}
-        <View style={styles.more}>
-          <Text style={styles.text}>
-            Feels like {data.current.feelslike_c}°C
-          </Text>
-          <Text style={styles.text}>
-            <Feather name="wind" size={24} color="white" />{" "}
-            {data.current.wind_kph} kph
-          </Text>
+            <TouchableOpacity
+              style={styles.AddButton}
+              onPress={() => addSearchedCityToList(data)}
+            >
+              <Text style={styles.buttonText}>Add City</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Current Weather Display */}
+          <View style={styles.temp}>
+            <Text style={styles.tempShown}>{data.current.temp_c}°C</Text>
+            <Text style={styles.tempShown}>{data.location.name}</Text>
+            <Text style={styles.text}>{data.current.condition.text}</Text>
+            <Text style={styles.text}>{data.forecast.forecastday[0].date}</Text>
+            <Text style={styles.text}>
+              Max Temp: {data.forecast.forecastday[0].day.maxtemp_c}°C
+            </Text>
+            <Text style={styles.text}>
+              Day 2: {data.forecast.forecastday[1].date} - Max Temp:{" "}
+              {data.forecast.forecastday[1].day.maxtemp_c}°C
+            </Text>
+            <Text style={styles.text}>
+              Day 3: {data.forecast.forecastday[2].date} - Max Temp:{" "}
+              {data.forecast.forecastday[2].day.maxtemp_c}°C
+            </Text>
+          </View>
+
+          {/* 24 Hour Forecast ScrollView */}
+          <Text style={{ fontSize: 24 }}>24-hour forecast</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignContent: "center",
+              gap: 20,
+              paddingHorizontal: 16,
+            }}
+          >
+            {cast.length > 0 ? (
+              cast.map((i, ind) => (
+                <TouchableOpacity key={ind}>
+                  <Text>{i.time}</Text>
+                  <Text>{i.temp_c}°C</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text>No forecast available.</Text>
+            )}
+          </ScrollView>
+
+          {/* 3 Day Forecast ScrollView */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignContent: "center",
+              gap: 20,
+              paddingHorizontal: 16,
+            }}
+          >
+            {data.forecast.forecastday.map((item, index) => (
+              <TouchableOpacity key={index}>
+                <Text>{item.date}</Text>
+                <Text>{item.day.maxtemp_c}°C</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* Additional Weather Info */}
+          <View style={styles.more}>
+            <Text style={styles.text}>
+              Feels like {data.current.feelslike_c}°C
+            </Text>
+            <Text style={styles.text}>
+              <Feather name="wind" size={24} color="white" />{" "}
+              {data.current.wind_kph} kph
+            </Text>
+          </View>
         </View>
-      </View>
+      </ImageBackground>
     </ScrollView>
   );
 };
@@ -157,8 +180,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
   },
   buttonText: {
     color: "white",
@@ -182,5 +203,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 32,
     marginTop: 32,
+  },
+  backgroundImage: {
+    width: "100%",
+    flex: 1,
   },
 });
