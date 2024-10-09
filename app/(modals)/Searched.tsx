@@ -15,13 +15,14 @@ import useBooleanStore from "../stores/isSearched";
 import useGetImage from "../hooks/useGetImage";
 import useIsExist from "../stores/isExist";
 const { getImage } = useGetImage();
+import useHandleCityList from "../hooks/useHandleCityList";
 
 interface SearchedProps {
   data: WeatherData; // Accept the data as props
 }
 
 const Searched: React.FC<SearchedProps> = ({ data }) => {
-  const { todayCast2, addSearchedCityToList } = useHandleSearch(); // to call function for adding weather data to fire store
+  const { addSearchedCityToList } = useHandleCityList();
 
   const [cast, setCast] = useState([]); // to store 24 hour cast
   const { isActive, setTrue, setFalse } = useBooleanStore(); // to hide or show city list page
