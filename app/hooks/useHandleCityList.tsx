@@ -22,6 +22,8 @@ const useHandleCityList = () => {
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
   const { isActive, setTrue, setFalse } = useBooleanStore();
 
+  //CRUD for firebase (don't think need update so did not add update)
+
   const handleDelete = async (city: string, country: string) => {
     const q = query(
       collection(firestore, "weatherData2"),

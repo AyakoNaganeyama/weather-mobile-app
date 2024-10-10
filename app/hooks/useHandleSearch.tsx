@@ -26,6 +26,7 @@ import useGetImage from "../hooks/useGetImage";
 import { WeatherData } from "../types/forcastType";
 import useBooleanStore from "../stores/isSearched";
 import useIsExist from "../stores/isExist";
+import useHandleCityList from "./useHandleCityList";
 
 interface HourForecast {
   time_epoch: number | string; // time_epoch will be converted to string
@@ -82,6 +83,8 @@ const useHandleSearch = () => {
   const [isS, setIsS] = useState(false);
   const { isActive, setTrue, setFalse } = useBooleanStore();
   const { isExist, setTrue2, setFalse2 } = useIsExist(); // for hiding and showing add city button
+  const { handleDelete, cities, fetchCityList, addSearchedCityToList } =
+    useHandleCityList();
 
   const initialSearch = async () => {
     // Ask for permission to access location
@@ -121,6 +124,7 @@ const useHandleSearch = () => {
         try {
           const response = await fetch(url, options);
           const result = await response.json();
+          addSearchedCityToList(result);
           setCurrentCity(result);
           console.log("Current", result);
 

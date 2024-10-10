@@ -17,6 +17,8 @@ import useIsExist from "../stores/isExist";
 const { getImage } = useGetImage();
 import useHandleCityList from "../hooks/useHandleCityList";
 
+// this page shows searched city's weather
+
 interface SearchedProps {
   data: WeatherData; // Accept the data as props
 }
