@@ -27,6 +27,7 @@ import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import useHandleSearch from "../hooks/useHandleSearch";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 const index = () => {
   const {
@@ -38,82 +39,95 @@ const index = () => {
     errorMsg,
     handleSearch,
     setCityText,
-    addSearchedCityToList,
+
     formatted,
   } = useHandleSearch();
 
   const { getImage } = useGetImage();
   useEffect(() => {
-    initialSearch();
+    initialSearch().then(() => {
+      setLoading(false);
+    });
   }, []);
 
+  const coverttoDay = (d: any) => {
+    const date = new Date(d);
+    const options: Intl.DateTimeFormatOptions = { weekday: "long" }; // Correct type for 'weekday'
+    const dayOfWeek = date.toLocaleDateString("en-US", options);
+    return dayOfWeek;
+  };
+  const [loading, setLoading] = useState(true);
+  if (loading) {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"} // Adjust for iOS or Android
-      >
-        {currentCity && (
-          <ScrollView>
-            <ImageBackground
-              source={getImage(
-                currentCity?.current?.condition?.text || "Unknown",
-                currentCity?.current?.is_day ?? 0
-              )}
-              style={styles.backgroundImage}
-            >
+    <ImageBackground
+      source={getImage(
+        currentCity?.current?.condition?.text || "Unknown",
+        currentCity?.current?.is_day ?? 0
+      )}
+      style={styles.backgroundImage}
+    >
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          {currentCity && (
+            <ScrollView>
               <View style={styles.container}>
-                <Text style={styles.heading}>{currentCity.location.name}</Text>
-                <View style={styles.temp}>
-                  <Text style={styles.tempShown}>
-                    {currentCity.current.temp_c}°C
-                  </Text>
-
-                  <Text style={styles.currentCond}>
-                    {currentCity.current.condition.text}
-                  </Text>
-
-                  <View style={styles.more}>
-                    <Text style={styles.text}>
-                      Feels like {currentCity.current.feelslike_c}°C
-                    </Text>
-                    <Text style={styles.text}>
-                      <Feather name="wind" size={24} color="white" />{" "}
-                      {currentCity.current.wind_kph} kph
-                    </Text>
-                  </View>
-
-                  <Text style={styles.text}>
-                    {currentCity.current.condition.text}
-                  </Text>
-                  <Text>Test</Text>
-                  <Text style={styles.text}>
-                    {currentCity.forecast.forecastday[0].date}
-                  </Text>
-                  <Text style={styles.text}>
-                    {currentCity.forecast.forecastday[0].day.maxtemp_c}
-                  </Text>
-                  <Text style={styles.text}>
-                    day2{currentCity.forecast.forecastday[1].date}
-                  </Text>
-                  <Text style={styles.text}>
-                    day3{currentCity.forecast.forecastday[1].day.maxtemp_c}
-                  </Text>
-                </View>
-
-                <Text style={{ fontSize: 30 }}>Test</Text>
-
-                <Text style={{ fontSize: 24 }}>24 hour</Text>
-
                 <View
                   style={{
-                    backgroundColor: "rgba(0,0,0, 0.5)",
+                    backgroundColor: "rgba(0,0,0, 0.7)",
 
                     padding: 10,
                     borderRadius: 15,
                     marginHorizontal: 20,
+                    marginBottom: 20,
                   }}
                 >
+                  <View style={styles.main}>
+                    <Text style={styles.heading}>
+                      {currentCity.location.name}
+                    </Text>
+                    <View style={styles.temp}>
+                      <Text style={styles.tempShown}>
+                        {currentCity.current.temp_c}°C
+                      </Text>
+
+                      <Text style={styles.currentCond}>
+                        {currentCity.current.condition.text}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    backgroundColor: "rgba(0,0,0, 0.7)",
+
+                    padding: 10,
+                    borderRadius: 15,
+                    marginHorizontal: 20,
+                    marginBottom: 20,
+                  }}
+                >
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+
+                      borderBottomColor: "gray",
+                      paddingBottom: 10,
+                      paddingTop: 10,
+                      marginHorizontal: 16,
+                    }}
+                  >
+                    <Text style={styles.text}>24 HOUR FORCAST</Text>
+                  </View>
                   <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -149,29 +163,165 @@ const index = () => {
                   </ScrollView>
                 </View>
 
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{
-                    alignContent: "center",
-                    gap: 20,
-                    paddingHorizontal: 16,
+                <View
+                  style={{
+                    backgroundColor: "rgba(0,0,0, 0.7)",
+
+                    padding: 10,
+                    borderRadius: 15,
+                    marginHorizontal: 20,
                   }}
                 >
-                  {currentCity.forecast.forecastday.map((item, index) => (
-                    <TouchableOpacity key={index}>
-                      <Text>{item.date}</Text>
-                      <Text>{item.day.maxtemp_c}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+
+                      borderBottomColor: "gray",
+                      paddingBottom: 10,
+                      paddingTop: 10,
+                      marginHorizontal: 16,
+                    }}
+                  >
+                    <Text style={styles.text}>3-DAY FORCAST</Text>
+                  </View>
+
+                  {/*****************************3 DAY FORCAST*******************************************/}
+                  <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                      alignContent: "center",
+                      gap: 20,
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    {currentCity.forecast.forecastday.map((item, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        style={{
+                          borderBottomWidth:
+                            index !==
+                            currentCity.forecast.forecastday.length - 1
+                              ? 1
+                              : 0, // Adding border except for the last item
+                          borderBottomColor: "gray",
+                          paddingBottom: 10,
+                          paddingTop: 10,
+                          flexDirection: "row",
+
+                          alignItems: "center",
+                        }}
+                      >
+                        {index === 0 ? (
+                          <>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <View style={{ width: "40%" }}>
+                                <Text style={styles.threeDay}>Today</Text>
+                              </View>
+
+                              <Image
+                                source={{
+                                  uri: `https:${item.day.condition.icon}`,
+                                }}
+                                style={{ width: "20%", height: 50 }}
+                              />
+                            </View>
+
+                            <View
+                              style={{ flexDirection: "row", width: "40%" }}
+                            >
+                              <View
+                                style={{
+                                  marginRight: 10,
+                                  flexDirection: "row",
+                                }}
+                              >
+                                <FontAwesome6
+                                  name="temperature-arrow-up"
+                                  size={24}
+                                  color="white"
+                                />
+                                <Text style={styles.threeDay}>
+                                  {item.day.maxtemp_c}
+                                </Text>
+                              </View>
+
+                              <FontAwesome6
+                                name="temperature-arrow-down"
+                                size={24}
+                                color="white"
+                              />
+                              <Text style={styles.threeDay}>
+                                {item.day.mintemp_c}
+                              </Text>
+                            </View>
+                          </>
+                        ) : (
+                          <>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                flex: 1,
+                              }}
+                            >
+                              <View style={{ width: "40%" }}>
+                                <Text style={styles.threeDay}>
+                                  {coverttoDay(item.date)}
+                                </Text>
+                              </View>
+                              <Image
+                                source={{
+                                  uri: `https:${item.day.condition.icon}`,
+                                }}
+                                style={{ width: "20%", height: 50 }}
+                              />
+                            </View>
+
+                            <View
+                              style={{ flexDirection: "row", width: "40%" }}
+                            >
+                              <View
+                                style={{
+                                  marginRight: 10,
+                                  flexDirection: "row",
+                                }}
+                              >
+                                <FontAwesome6
+                                  name="temperature-arrow-up"
+                                  size={24}
+                                  color="white"
+                                />
+                                <Text style={styles.threeDay}>
+                                  {item.day.maxtemp_c}
+                                </Text>
+                              </View>
+                              <FontAwesome6
+                                name="temperature-arrow-down"
+                                size={24}
+                                color="white"
+                              />
+                              <Text style={styles.threeDay}>
+                                {item.day.mintemp_c}
+                              </Text>
+                            </View>
+                          </>
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
               </View>
-            </ImageBackground>
-          </ScrollView>
-        )}
-        {errorMsg && <Text>{errorMsg}</Text>}
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            </ScrollView>
+          )}
+          {errorMsg && <Text>{errorMsg}</Text>}
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
@@ -180,8 +330,14 @@ export default index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
-    marginBottom: 20,
+  },
+  main: {
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  threeDay: {
+    color: "#fff",
+    fontSize: 18,
   },
   currentCond: {
     color: "#fff",
@@ -209,6 +365,7 @@ const styles = StyleSheet.create({
   },
   temp: {
     alignItems: "center",
+    marginBottom: 30,
   },
   text: {
     color: "#fff",
