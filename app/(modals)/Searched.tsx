@@ -23,13 +23,15 @@ interface SearchedProps {
   data: WeatherData; // Accept the data as props
 }
 
+// searched city's weather data is passed to this page from explore.tsx
 const Searched: React.FC<SearchedProps> = ({ data }) => {
-  const { addSearchedCityToList } = useHandleCityList();
+  const { addSearchedCityToList } = useHandleCityList(); // importing the function for adding city to fire store if user wants
 
-  const [cast, setCast] = useState([]); // to store 24 hour cast
+  const [cast, setCast] = useState([]); // to store 24 hour forcast
   const { isActive, setTrue, setFalse } = useBooleanStore(); // to hide or show city list page
-  const { isExist, setTrue2, setFalse2 } = useIsExist();
+  const { isExist, setTrue2, setFalse2 } = useIsExist(); // if city already exists in firestore hide the add city button
 
+  // as soon as the page load, extract 24 hour forcast and store in cast
   useEffect(() => {
     if (data && data.forecast && data.forecast.forecastday[0]) {
       console.log("searchedCity", data.location.name);
