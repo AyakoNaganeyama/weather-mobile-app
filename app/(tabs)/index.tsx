@@ -99,6 +99,20 @@ const index = () => {
       return "Clear";
     }
   };
+
+  const checkFeelsLike = (n: number) => {
+    if (n <= 0) {
+      return "Feels freezing";
+    } else if (n <= 9.9) {
+      return "Feels chilly";
+    } else if (n <= 19.9) {
+      return "Feels cool";
+    } else if (n <= 29.9) {
+      return "Feels warm and comfortable";
+    } else {
+      return "Feels hot";
+    }
+  };
   const [loading, setLoading] = useState(true);
   if (loading) {
     return (
@@ -523,6 +537,9 @@ const index = () => {
                         }}
                       >
                         {currentCity.current.feelslike_f}°
+                      </Text>
+                      <Text style={styles.threeDay}>
+                        {checkFeelsLike(currentCity.current.feelslike_c)}
                       </Text>
                     </View>
                   </TouchableOpacity>
