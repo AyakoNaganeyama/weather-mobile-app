@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import React, { useEffect } from "react";
 import { Link } from "expo-router";
 import useCityStore from "../stores/cityStore";
@@ -19,7 +25,7 @@ const Explore = () => {
     errorMsg,
     handleSearch,
     setCityText, // So users can type the city name
-    addSearchedCityToList,
+
     searchedCity,
     todayCast2,
     setSearchedCity,
@@ -68,27 +74,47 @@ const Explore = () => {
         <Searched data={searchedCity} />
       ) : /* If searchedCity is null, show the list of cities */
       cities.length > 0 ? (
-        cities
-          .filter((city) => city.location)
-          .map((city, index) => (
-            <View key={index}>
-              <Link
-                href={`/Listings/${city.location.lat},${city.location.lon}`}
+        <ScrollView>
+          {cities
+            .filter((city) => city.location)
+            .map((city, index) => (
+              <View
+                key={index}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginHorizontal: 20,
+                  backgroundColor: "rgba(0,0,0, 0.7)",
+
+                  padding: 10,
+                  borderRadius: 15,
+                  height: 100,
+                  marginVertical: 10,
+                  alignItems: "center",
+                }}
               >
-                <Text>
-                  {city.location.name} - {city.location.country}
-                </Text>
-              </Link>
-              <TouchableOpacity
-                onPress={() =>
-                  handleDelete(city.location.name, city.location.country)
-                }
-                style={{ marginLeft: 10 }}
-              >
-                <Text>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          ))
+                <View>
+                  <Link
+                    href={`/Listings/${city.location.lat},${city.location.lon}`}
+                  >
+                    <Text style={styles.threeDay}>
+                      {city.location.name} - {city.location.country}
+                    </Text>
+                  </Link>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      handleDelete(city.location.name, city.location.country)
+                    }
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Text style={styles.threeDay}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+        </ScrollView>
       ) : (
         <Text>No cities found.</Text>
       )}
@@ -136,5 +162,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  threeDay: {
+    color: "#fff",
+    fontSize: 18,
   },
 });

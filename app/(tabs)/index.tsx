@@ -113,6 +113,43 @@ const index = () => {
       return "Feels hot";
     }
   };
+
+  const checkHumidity = (n: number) => {
+    if (n < 30) {
+      return "Dry";
+    } else if (n <= 59.9) {
+      return "Comfortable";
+    } else if (n <= 79.9) {
+      return "Noticeable Humidity";
+    } else {
+      return "Very Humid";
+    }
+  };
+
+  const checkWind = (n: number) => {
+    if (n < 15) {
+      return "Light and Calm";
+    } else if (n <= 29.9) {
+      return "Gentle Breeze";
+    } else if (n <= 49.9) {
+      return "Breezy";
+    } else {
+      return "Strong Wind";
+    }
+  };
+
+  const checkCloud = (n: number) => {
+    if (n < 20) {
+      return "Clear";
+    } else if (n <= 49.9) {
+      return "Some Cloud";
+    } else if (n <= 79.9) {
+      return "Partly Cloudy";
+    } else {
+      return "Overcast";
+    }
+  };
+
   const [loading, setLoading] = useState(true);
   if (loading) {
     return (
@@ -419,7 +456,14 @@ const index = () => {
                     }}
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-                      <View style={{ height: "30%" }}>
+                      <View
+                        style={{
+                          height: "30%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Feather name="sun" style={styles.text} />
                         <Text style={styles.text}>UV index</Text>
                       </View>
                     </View>
@@ -466,6 +510,9 @@ const index = () => {
                       >
                         {currentCity.current.humidity}%
                       </Text>
+                      <Text style={styles.threeDay}>
+                        {checkHumidity(currentCity.current.humidity)}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -506,6 +553,9 @@ const index = () => {
                         }}
                       >
                         {currentCity.current.wind_kph}km/h
+                      </Text>
+                      <Text style={styles.threeDay}>
+                        {checkWind(currentCity.current.wind_kph)}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -568,7 +618,7 @@ const index = () => {
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
                       <View style={{ height: "30%" }}>
-                        <Text style={styles.text}>cloud</Text>
+                        <Text style={styles.text}>Cloud</Text>
                       </View>
                     </View>
                     <View style={{ height: "50%" }}>
@@ -580,6 +630,9 @@ const index = () => {
                         }}
                       >
                         {currentCity.current.cloud}%
+                      </Text>
+                      <Text style={styles.threeDay}>
+                        {checkCloud(currentCity.current.cloud)}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -670,6 +723,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "rgba(255, 255, 255, 0.7)",
+    fontSize: 20,
   },
   more: {
     flexDirection: "row",
