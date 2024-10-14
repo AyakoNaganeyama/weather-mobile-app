@@ -5,6 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
+  Image,
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { WeatherData } from "../types/forcastType";
@@ -27,44 +29,39 @@ interface SearchedProps {
 const Searched: React.FC<SearchedProps> = ({ data }) => {
   const { addSearchedCityToList } = useHandleCityList(); // importing the function for adding city to fire store if user wants
 
-  const [cast, setCast] = useState([]); // to store 24 hour forcast
-  const { isActive, setTrue, setFalse } = useBooleanStore(); // to hide or show city list page
-  const { isExist, setTrue2, setFalse2 } = useIsExist(); // if city already exists in firestore hide the add city button
+  const [cast, setCast] = useState([]); // to store 24-hour forecast
+  const { isActive, setTrue } = useBooleanStore(); // to hide or show city list page
+  const { isExist } = useIsExist(); // if city already exists in firestore hide the add city button
 
   // as soon as the page load, extract 24 hour forcast and store in cast
   useEffect(() => {
     if (data && data.forecast && data.forecast.forecastday[0]) {
-      console.log("searchedCity", data.location.name);
       const forecastHours = data.forecast.forecastday[0].hour;
+      const currentEpoch = Math.floor(Date.now() / 1000);
+      let forcast24 = [];
+      let index = 0;
+      const hourInSeconds = 3600;
 
-      // Proceed only if forecastHours exist
-      if (forecastHours && forecastHours.length > 0) {
-        const currentEpoch = Math.floor(Date.now() / 1000);
-        let forcast24 = [];
-        let index = 0;
-        const hourInSeconds = 3600;
-
-        for (let i = 0; i < forecastHours.length; i++) {
-          let hour = forecastHours[i];
-          if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
-            index = i;
-            break;
-          }
+      for (let i = 0; i < forecastHours.length; i++) {
+        let hour = forecastHours[i];
+        if (Math.abs(hour.time_epoch - currentEpoch) <= hourInSeconds) {
+          index = i;
+          break;
         }
-
-        for (let j = index; j < forecastHours.length; j++) {
-          forcast24.push(forecastHours[j]);
-        }
-
-        let tomorrowForcast = 24 - forcast24.length;
-        if (tomorrowForcast > 0) {
-          for (let i = 0; i < tomorrowForcast; i++) {
-            forcast24.push(data.forecast.forecastday[1].hour[i]);
-          }
-        }
-
-        setCast(forcast24); // Updates the state
       }
+
+      for (let j = index; j < forecastHours.length; j++) {
+        forcast24.push(forecastHours[j]);
+      }
+
+      let tomorrowForcast = 24 - forcast24.length;
+      if (tomorrowForcast > 0) {
+        for (let i = 0; i < tomorrowForcast; i++) {
+          forcast24.push(data.forecast.forecastday[1].hour[i]);
+        }
+      }
+
+      setCast(forcast24); // Updates the state
     }
   }, [data]);
 
@@ -124,45 +121,72 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
           </View>
 
           {/* 24 Hour Forecast ScrollView */}
-          <Text style={{ fontSize: 24 }}>24-hour forecast</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              alignContent: "center",
-              gap: 20,
-              paddingHorizontal: 16,
+          <View
+            style={{
+              backgroundColor: "rgba(0,0,0, 0.7)",
+              padding: 10,
+              borderRadius: 15,
+              marginVertical: 20,
             }}
           >
-            {cast.length > 0 ? (
-              cast.map((i, ind) => (
-                <TouchableOpacity key={ind}>
-                  <Text>{i.time}</Text>
-                  <Text>{i.temp_c}°C</Text>
-                </TouchableOpacity>
-              ))
-            ) : (
-              <Text>No forecast available.</Text>
-            )}
-          </ScrollView>
+            <Text style={styles.text}>24-Hour Forecast</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                alignContent: "center",
+                gap: 20,
+                paddingHorizontal: 16,
+              }}
+            >
+              {cast.length > 0 ? (
+                cast.map((i, ind) => (
+                  <TouchableOpacity key={ind} style={styles.info}>
+                    <Text style={{ color: "white" }}>{i.time}</Text>
+                    <Image
+                      source={{ uri: `https:${i.condition.icon}` }}
+                      style={{ width: 50, height: 50 }} // Adjust size as needed
+                    />
+                    <Text style={{ color: "white" }}>{i.temp_c}°C</Text>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <Text style={styles.text}>No forecast available.</Text>
+              )}
+            </ScrollView>
+          </View>
 
           {/* 3 Day Forecast ScrollView */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              alignContent: "center",
-              gap: 20,
-              paddingHorizontal: 16,
+          <View
+            style={{
+              backgroundColor: "rgba(0,0,0, 0.7)",
+              padding: 10,
+              borderRadius: 15,
+              marginVertical: 20,
             }}
           >
-            {data.forecast.forecastday.map((item, index) => (
-              <TouchableOpacity key={index}>
-                <Text>{item.date}</Text>
-                <Text>{item.day.maxtemp_c}°C</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+            <Text style={styles.text}>3-Day Forecast</Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                alignContent: "center",
+                gap: 20,
+                paddingHorizontal: 16,
+              }}
+            >
+              {data.forecast.forecastday.map((item, index) => (
+                <TouchableOpacity key={index} style={styles.info}>
+                  <Text style={styles.text}>{item.date}</Text>
+                  <Image
+                    source={{ uri: `https:${item.day.condition.icon}` }}
+                    style={{ width: 50, height: 50 }} // Adjust size as needed
+                  />
+                  <Text style={styles.text}>{item.day.maxtemp_c}°C</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
 
           {/* Additional Weather Info */}
           <View style={styles.more}>
@@ -195,15 +219,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   tempShown: {
-    fontSize: 150,
+    fontSize: 100,
     fontWeight: "800",
     color: "#fff",
   },
   temp: {
     alignItems: "center",
+    marginBottom: 30,
   },
   text: {
-    color: "#fff",
+    color: "rgba(255, 255, 255, 0.7)",
+    fontSize: 20,
   },
   more: {
     flexDirection: "row",
@@ -215,5 +241,13 @@ const styles = StyleSheet.create({
   backgroundImage: {
     width: "100%",
     flex: 1,
+  },
+  info: {
+    width: Dimensions.get("screen").width / 5,
+    padding: 10,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
 });
