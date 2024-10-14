@@ -27,6 +27,7 @@ import { WeatherData } from "../types/forcastType";
 import useBooleanStore from "../stores/isSearched";
 import useIsExist from "../stores/isExist";
 import useHandleCityList from "./useHandleCityList";
+import useAucklandWeather from "../stores/aucklandImageStore";
 
 interface HourForecast {
   time_epoch: number | string; // time_epoch will be converted to string
@@ -86,6 +87,9 @@ const useHandleSearch = () => {
   const { handleDelete, cities, fetchCityList, addSearchedCityToList } =
     useHandleCityList();
 
+  const { storedAuckland, setStoredAuckland, clearStoredAuckland } =
+    useAucklandWeather();
+
   const initialSearch = async () => {
     // Ask for permission to access location
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -126,6 +130,7 @@ const useHandleSearch = () => {
           const result = await response.json();
           addSearchedCityToList(result);
           setCurrentCity(result);
+          setStoredAuckland(result);
           console.log("Current", result);
 
           //for 7 day forcast
