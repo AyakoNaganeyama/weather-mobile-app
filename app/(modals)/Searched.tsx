@@ -86,6 +86,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              marginTop: 30,
             }}
           >
             <TouchableOpacity onPress={() => hidePage()}>
@@ -102,22 +103,45 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
           </View>
 
           {/* Current Weather Display */}
-          <View style={styles.temp}>
-            <Text style={styles.tempShown}>{data.current.temp_c}°C</Text>
-            <Text style={styles.tempShown}>{data.location.name}</Text>
-            <Text style={styles.text}>{data.current.condition.text}</Text>
-            <Text style={styles.text}>{data.forecast.forecastday[0].date}</Text>
-            <Text style={styles.text}>
-              Max Temp: {data.forecast.forecastday[0].day.maxtemp_c}°C
-            </Text>
-            <Text style={styles.text}>
-              Day 2: {data.forecast.forecastday[1].date} - Max Temp:{" "}
-              {data.forecast.forecastday[1].day.maxtemp_c}°C
-            </Text>
-            <Text style={styles.text}>
-              Day 3: {data.forecast.forecastday[2].date} - Max Temp:{" "}
-              {data.forecast.forecastday[2].day.maxtemp_c}°C
-            </Text>
+          <View
+            style={{
+              backgroundColor: "rgba(0,0,0, 0.7)",
+
+              padding: 10,
+              borderRadius: 15,
+              marginHorizontal: 20,
+              marginBottom: 20,
+            }}
+          >
+            <View style={styles.main}>
+              <Text style={styles.heading}>{data.location.name}</Text>
+              <View style={styles.temp}>
+                <Text style={styles.tempShown}>{data.current.temp_f}°</Text>
+
+                <Text style={styles.currentCond}>
+                  {data.current.condition.text}
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 5,
+                  }}
+                >
+                  <View style={{ marginRight: 5 }}>
+                    <Text style={styles.currentCond}>
+                      L:
+                      {data.forecast.forecastday[0].day.mintemp_f}°
+                    </Text>
+                  </View>
+                  <Text style={styles.currentCond}>
+                    H:
+                    {data.forecast.forecastday[0].day.maxtemp_f}°
+                  </Text>
+                </View>
+              </View>
+            </View>
           </View>
 
           {/* 24 Hour Forecast ScrollView */}
@@ -207,20 +231,39 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 export default Searched;
 
 const styles = StyleSheet.create({
-  AddButton: {
-    backgroundColor: "#6c7cac",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
+  container: {
+    flex: 1,
   },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+  main: {
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  threeDay: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  currentCond: {
+    color: "#fff",
+    fontSize: 30,
+  },
+
+  backgroundImage: {
+    width: "100%",
+    flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  heading: {
+    color: "#fff",
+    fontSize: 60,
+    textAlign: "center",
   },
   tempShown: {
     fontSize: 100,
-    fontWeight: "800",
+    fontWeight: 800,
     color: "#fff",
   },
   temp: {
@@ -238,12 +281,79 @@ const styles = StyleSheet.create({
     gap: 32,
     marginTop: 32,
   },
-  backgroundImage: {
-    width: "100%",
+  con2: {
+    paddingTop: 16,
+    paddingBottom: 100,
+    paddingHorizontal: 16,
+    justifyContent: "space-between",
     flex: 1,
+  },
+  inputHead: {
+    flexDirection: "row",
+    marginTop: 30,
+    justifyContent: "space-between",
+    height: 50,
+    marginBottom: 30,
+  },
+  input: {
+    width: "70%",
+    padding: 15,
+    borderWidth: 2,
+    borderColor: "#51606b",
+    borderRadius: 10,
+
+    fontWeight: "bold",
+  },
+  AddButton: {
+    backgroundColor: "#6c7cac",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonDisabled: {
+    backgroundColor: "#8e979e",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  infoText: {
+    color: "#fff",
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  container2: {
+    padding: 10,
+  },
+  searchContainer2: {
+    flexDirection: "row", // Align input and button in a row
+    alignItems: "center",
+  },
+  input2: {
+    flex: 1,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingLeft: 10,
+    borderRadius: 5,
+  },
+  searchButton2: {
+    backgroundColor: "#007AFF",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginLeft: 10,
+    borderRadius: 5,
+  },
+  buttonText2: {
+    color: "white",
+    fontSize: 16,
   },
   info: {
     width: Dimensions.get("screen").width / 5,
+
     padding: 10,
     borderRadius: 15,
     justifyContent: "center",
