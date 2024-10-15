@@ -19,6 +19,7 @@ import useIsExist from "../stores/isExist";
 const { getImage } = useGetImage();
 import useHandleCityList from "../hooks/useHandleCityList";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import useFrontEndLogic from "../hooks/useFrontEndLogic";
 
 // this page shows searched city's weather
 
@@ -33,6 +34,14 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
   const [cast, setCast] = useState([]); // to store 24-hour forecast
   const { isActive, setTrue } = useBooleanStore(); // to hide or show city list page
   const { isExist } = useIsExist(); // if city already exists in firestore hide the add city button
+  const {
+    checkUV,
+    checkVisibility,
+    checkFeelsLike,
+    checkHumidity,
+    checkWind,
+    checkCloud,
+  } = useFrontEndLogic();
 
   // as soon as the page load, extract 24 hour forcast and store in cast
   useEffect(() => {
@@ -291,6 +300,241 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               <Feather name="wind" size={24} color="white" />{" "}
               {data.current.wind_kph} kph
             </Text>
+          </View>
+        </View>
+
+        {/**************************row1**********************************************/}
+        <View style={{ marginHorizontal: 20, marginVertical: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              height: 200,
+            }}
+          >
+            {/***********************UV****************************************************/}
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                width: "48%",
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+                <View
+                  style={{
+                    height: "30%",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Feather name="sun" style={styles.text} />
+                  <Text style={styles.text}>UV index</Text>
+                </View>
+              </View>
+
+              <View style={{ height: "50%" }}>
+                <Text
+                  style={{
+                    color: "white",
+
+                    fontSize: 40,
+                  }}
+                >
+                  {data.current.uv}
+                </Text>
+                <Text style={styles.threeDay}>{checkUV(data.current.uv)}</Text>
+              </View>
+            </TouchableOpacity>
+            {/***********************Humidity****************************************************/}
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                width: "48%",
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+                <View style={{ height: "30%" }}>
+                  <Text style={styles.text}>Humidity</Text>
+                </View>
+              </View>
+              <View style={{ height: "50%" }}>
+                <Text
+                  style={{
+                    color: "white",
+
+                    fontSize: 40,
+                  }}
+                >
+                  {data.current.humidity}%
+                </Text>
+                <Text style={styles.threeDay}>
+                  {checkHumidity(data.current.humidity)}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/**************row2****************/}
+        <View style={{ marginHorizontal: 20, marginVertical: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              height: 200,
+            }}
+          >
+            {/******************wind*********************************/}
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                width: "48%",
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+                <View style={{ height: "30%" }}>
+                  <Text style={styles.text}>Wind</Text>
+                </View>
+              </View>
+              <View style={{ height: "50%" }}>
+                <Text
+                  style={{
+                    color: "white",
+
+                    fontSize: 40,
+                  }}
+                >
+                  {data.current.wind_kph}km/h
+                </Text>
+                <Text style={styles.threeDay}>
+                  {checkWind(data.current.wind_kph)}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            {/*******************Feels like****************************************/}
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                width: "48%",
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+                <View style={{ height: "30%" }}>
+                  <Text style={styles.text}>Feels like</Text>
+                </View>
+              </View>
+              <View style={{ height: "50%" }}>
+                <Text
+                  style={{
+                    color: "white",
+
+                    fontSize: 40,
+                  }}
+                >
+                  {data.current.feelslike_f}°
+                </Text>
+                <Text style={styles.threeDay}>
+                  {checkFeelsLike(data.current.feelslike_c)}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/**************row3****************/}
+        <View style={{ marginHorizontal: 20, marginVertical: 20 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              height: 200,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                width: "48%",
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+                <View style={{ height: "30%" }}>
+                  <Text style={styles.text}>Cloud</Text>
+                </View>
+              </View>
+              <View style={{ height: "50%" }}>
+                <Text
+                  style={{
+                    color: "white",
+
+                    fontSize: 40,
+                  }}
+                >
+                  {data.current.cloud}%
+                </Text>
+                <Text style={styles.threeDay}>
+                  {checkCloud(data.current.cloud)}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                width: "48%",
+                height: "100%",
+                flexDirection: "column",
+              }}
+            >
+              <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+                <View style={{ height: "30%" }}>
+                  <Text style={styles.text}>Visibility</Text>
+                </View>
+              </View>
+              <View style={{ height: "50%" }}>
+                <Text
+                  style={{
+                    color: "white",
+
+                    fontSize: 40,
+                  }}
+                >
+                  {data.current.vis_km}km
+                </Text>
+                <Text style={styles.threeDay}>
+                  {checkVisibility(data.current.vis_km)}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>
