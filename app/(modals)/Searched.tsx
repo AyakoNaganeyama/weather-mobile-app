@@ -99,8 +99,18 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               marginTop: 30,
             }}
           >
-            <TouchableOpacity onPress={() => hidePage()}>
-              <Entypo name="cross" size={24} color="black" />
+            <TouchableOpacity
+              onPress={() => hidePage()}
+              style={{
+                backgroundColor: "rgba(0,0,0, 0.7)",
+
+                padding: 10,
+                borderRadius: 15,
+                marginHorizontal: 20,
+                marginBottom: 20,
+              }}
+            >
+              <Entypo name="cross" size={24} color="white" />
             </TouchableOpacity>
             {!isExist && (
               <TouchableOpacity

@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   ImageBackground,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect } from "react";
 import { Link } from "expo-router";
@@ -53,89 +54,94 @@ const Explore = () => {
       )}
       style={styles.backgroundImage}
     >
-      <View>
-        {/* Search Bar */}
-        <View style={styles.container2}>
-          <View style={styles.searchContainer2}>
-            <GooglePlacesAutocomplete
-              placeholder="Search City"
-              fetchDetails={true}
-              onPress={(data) => {
-                const cityName = data.description;
-                setCityText(cityName);
-              }}
-              query={{
-                key: "AIzaSyAMn-oW3pnCbuyRFnGmLX8a0NNEnWOPuhM",
-                language: "en",
-                types: "(cities)",
-              }}
-              textInputProps={{
-                style: styles.input2,
-              }}
-            />
-            <TouchableOpacity
-              onPress={handleSearch} // Call the hook's search function
-              disabled={cityText === ""}
-              style={[
-                styles.AddButton,
-                cityText === "" && styles.buttonDisabled,
-              ]}
-            >
-              <Text style={styles.buttonText}>Search</Text>
-            </TouchableOpacity>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ marginTop: 20 }}>
+          {/* Search Bar */}
+          <View style={styles.container2}>
+            <View style={styles.searchContainer2}>
+              <GooglePlacesAutocomplete
+                placeholder="Search City"
+                fetchDetails={true}
+                onPress={(data) => {
+                  const cityName = data.description;
+                  setCityText(cityName);
+                }}
+                query={{
+                  key: "AIzaSyAMn-oW3pnCbuyRFnGmLX8a0NNEnWOPuhM",
+                  language: "en",
+                  types: "(cities)",
+                }}
+                textInputProps={{
+                  style: styles.input2,
+                }}
+              />
+              <TouchableOpacity
+                onPress={handleSearch} // Call the hook's search function
+                disabled={cityText === ""}
+                style={[
+                  styles.AddButton,
+                  cityText === "" && styles.buttonDisabled,
+                ]}
+              >
+                <Text style={styles.buttonText}>Search</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+
+          {/* If searchedCity exists, show the searched city's details */}
+          {!isActive && searchedCity ? (
+            <Searched data={searchedCity} />
+          ) : /* If searchedCity is null, show the list of cities */
+          cities.length > 0 ? (
+            <ScrollView>
+              {cities
+                .filter((city) => city.location)
+                .map((city, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginHorizontal: 20,
+                      backgroundColor: "rgba(0,0,0, 0.7)",
+
+                      padding: 10,
+                      borderRadius: 15,
+                      height: 100,
+                      marginVertical: 10,
+                      alignItems: "center",
+                    }}
+                  >
+                    <View>
+                      <Link
+                        href={`/Listings/${city.location.lat},${city.location.lon}`}
+                      >
+                        <Text style={styles.threeDay}>
+                          {city.location.name}
+                        </Text>
+                      </Link>
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleDelete(
+                            city.location.name,
+                            city.location.country
+                          )
+                        }
+                        style={{ marginLeft: 10 }}
+                      >
+                        <Text style={styles.threeDay}>Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
+            </ScrollView>
+          ) : (
+            <Text>No cities found.</Text>
+          )}
         </View>
-
-        {/* If searchedCity exists, show the searched city's details */}
-        {!isActive && searchedCity ? (
-          <Searched data={searchedCity} />
-        ) : /* If searchedCity is null, show the list of cities */
-        cities.length > 0 ? (
-          <ScrollView>
-            {cities
-              .filter((city) => city.location)
-              .map((city, index) => (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    marginHorizontal: 20,
-                    backgroundColor: "rgba(0,0,0, 0.7)",
-
-                    padding: 10,
-                    borderRadius: 15,
-                    height: 100,
-                    marginVertical: 10,
-                    alignItems: "center",
-                  }}
-                >
-                  <View>
-                    <Link
-                      href={`/Listings/${city.location.lat},${city.location.lon}`}
-                    >
-                      <Text style={styles.threeDay}>
-                        {city.location.name} - {city.location.country}
-                      </Text>
-                    </Link>
-                  </View>
-                  <View>
-                    <TouchableOpacity
-                      onPress={() =>
-                        handleDelete(city.location.name, city.location.country)
-                      }
-                      style={{ marginLeft: 10 }}
-                    >
-                      <Text style={styles.threeDay}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-          </ScrollView>
-        ) : (
-          <Text>No cities found.</Text>
-        )}
-      </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -156,14 +162,16 @@ const styles = StyleSheet.create({
   searchContainer2: {
     flexDirection: "row",
     alignItems: "center",
+    marginHorizontal: 20,
   },
   input2: {
     flex: 1,
-    height: 40,
+    height: 60,
     borderColor: "gray",
     borderWidth: 1,
     paddingLeft: 10,
     borderRadius: 5,
+    backgroundColor: "white",
   },
   AddButton: {
     backgroundColor: "#6c7cac",
@@ -172,6 +180,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    height: 60,
+    marginLeft: 10,
   },
   buttonDisabled: {
     backgroundColor: "#8e979e",

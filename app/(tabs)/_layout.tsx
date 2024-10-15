@@ -7,7 +7,10 @@ const Layout = () => {
     //
     <Tabs>
       <Tabs.Screen name="index" options={{ headerShown: false }}></Tabs.Screen>
-      <Tabs.Screen name="explore"></Tabs.Screen>
+      <Tabs.Screen
+        name="explore"
+        options={{ headerShown: false }}
+      ></Tabs.Screen>
     </Tabs>
   );
 };
