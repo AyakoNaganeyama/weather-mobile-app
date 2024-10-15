@@ -18,6 +18,7 @@ import useGetImage from "../hooks/useGetImage";
 import useIsExist from "../stores/isExist";
 const { getImage } = useGetImage();
 import useHandleCityList from "../hooks/useHandleCityList";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 // this page shows searched city's weather
 
@@ -151,9 +152,21 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               padding: 10,
               borderRadius: 15,
               marginVertical: 20,
+              marginHorizontal: 20,
             }}
           >
-            <Text style={styles.text}>24-Hour Forecast</Text>
+            <View
+              style={{
+                borderBottomWidth: 1,
+
+                borderBottomColor: "gray",
+                paddingBottom: 10,
+                paddingTop: 10,
+                marginHorizontal: 16,
+              }}
+            >
+              <Text style={styles.text}>24 HOUR FORCAST</Text>
+            </View>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -171,7 +184,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
                       source={{ uri: `https:${i.condition.icon}` }}
                       style={{ width: 50, height: 50 }} // Adjust size as needed
                     />
-                    <Text style={{ color: "white" }}>{i.temp_c}°C</Text>
+                    <Text style={{ color: "white" }}>{i.temp_f}°</Text>
                   </TouchableOpacity>
                 ))
               ) : (
@@ -187,11 +200,23 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               padding: 10,
               borderRadius: 15,
               marginVertical: 20,
+              marginHorizontal: 20,
             }}
           >
-            <Text style={styles.text}>3-Day Forecast</Text>
+            <View
+              style={{
+                borderBottomWidth: 1,
+
+                borderBottomColor: "gray",
+                paddingBottom: 10,
+                paddingTop: 10,
+                marginHorizontal: 16,
+              }}
+            >
+              <Text style={styles.text}>3-DAY FORCAST</Text>
+            </View>
+
             <ScrollView
-              horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 alignContent: "center",
@@ -200,13 +225,58 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               }}
             >
               {data.forecast.forecastday.map((item, index) => (
-                <TouchableOpacity key={index} style={styles.info}>
-                  <Text style={styles.text}>{item.date}</Text>
-                  <Image
-                    source={{ uri: `https:${item.day.condition.icon}` }}
-                    style={{ width: 50, height: 50 }} // Adjust size as needed
-                  />
-                  <Text style={styles.text}>{item.day.maxtemp_c}°C</Text>
+                <TouchableOpacity
+                  key={index}
+                  style={{
+                    borderBottomWidth:
+                      index !== data.forecast.forecastday.length - 1 ? 1 : 0, // Adding border except for the last item
+                    borderBottomColor: "gray",
+                    paddingBottom: 10,
+                    paddingTop: 10,
+                    flexDirection: "row",
+
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flex: 1,
+                    }}
+                  >
+                    <View style={{ width: "40%" }}>
+                      <Text style={styles.threeDay}>{item.date}</Text>
+                    </View>
+                    <Image
+                      source={{
+                        uri: `https:${item.day.condition.icon}`,
+                      }}
+                      style={{ width: "20%", height: 50 }}
+                    />
+                  </View>
+
+                  <View style={{ flexDirection: "row", width: "40%" }}>
+                    <View
+                      style={{
+                        marginRight: 10,
+                        flexDirection: "row",
+                      }}
+                    >
+                      <FontAwesome6
+                        name="temperature-arrow-up"
+                        size={24}
+                        color="white"
+                      />
+                      <Text style={styles.threeDay}>{item.day.maxtemp_c}</Text>
+                    </View>
+                    <FontAwesome6
+                      name="temperature-arrow-down"
+                      size={24}
+                      color="white"
+                    />
+                    <Text style={styles.threeDay}>{item.day.mintemp_c}</Text>
+                  </View>
                 </TouchableOpacity>
               ))}
             </ScrollView>
