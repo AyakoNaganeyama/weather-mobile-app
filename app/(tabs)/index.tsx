@@ -657,7 +657,8 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "rgba(255, 255, 255, 0.7)",
-    fontSize: 20,
+    fontSize: 15,
+    paddingBottom: 20,
   },
   more: {
     flexDirection: "row",

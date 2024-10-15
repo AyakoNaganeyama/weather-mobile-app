@@ -47,13 +47,7 @@ const Explore = () => {
   }, [storedCity]);
 
   return (
-    <ImageBackground
-      source={getImage(
-        storedAuckland?.current?.condition?.text || "Unknown",
-        storedAuckland?.current?.is_day ?? 0
-      )}
-      style={styles.backgroundImage}
-    >
+    <View style={{ flex: 1, backgroundColor: "black" }}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ marginTop: 20 }}>
           {/* Search Bar */}
@@ -103,7 +97,7 @@ const Explore = () => {
                       flexDirection: "row",
                       justifyContent: "space-between",
                       marginHorizontal: 20,
-                      backgroundColor: "rgba(0,0,0, 0.7)",
+                      backgroundColor: "rgba(80,80,80, 0.7)",
 
                       padding: 10,
                       borderRadius: 15,
@@ -142,7 +136,7 @@ const Explore = () => {
           )}
         </View>
       </SafeAreaView>
-    </ImageBackground>
+    </View>
   );
 };
 
