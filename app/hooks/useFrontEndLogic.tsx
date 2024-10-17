@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-
+// those functions are to display text info for detail weather info
 const useFrontEndLogic = () => {
   const checkUV = (n: number) => {
     if (n <= 2) {

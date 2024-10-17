@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-// Define the CityState interface with location, current, and forecast data
+// this store may be used for displaying current auckland weather background image in explore.tsx
 interface CityState {
   storedAuckland: {
     location: {

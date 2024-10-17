@@ -16,11 +16,13 @@ import useIsExist from "../stores/isExist";
 import useCityStore from "../stores/cityStore";
 import useBooleanStore from "../stores/isSearched";
 
+// those functions are CRUD for firestore (no update because dont need )
+
 const useHandleCityList = () => {
   const [cities, setCities] = useState<WeatherData[]>([]);
   const { isExist, setTrue2, setFalse2 } = useIsExist(); // for hiding and showing add city button
-  const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
-  const { isActive, setTrue, setFalse } = useBooleanStore();
+  const { storedCity, setStoredCity, clearStoredCity } = useCityStore(); // for rendering city list in explore.tsx
+  const { isActive, setTrue, setFalse } = useBooleanStore(); //to show or not show <Searched>.tsx (searched city) in explore.tsx
 
   //CRUD for firebase (don't think need update so did not add update)
 
@@ -74,15 +76,16 @@ const useHandleCityList = () => {
 
         const weatherDataRef = collection(firestore, "weatherData2");
 
-        // Create a query with multiple where conditions
+        // check if the city searched is already in firestore
         const q = query(
           weatherDataRef,
           where("location.name", "==", cityName),
           where("location.country", "==", countryName)
         );
 
-        // Execute the query and get the results
         const querySnapshot = await getDocs(q);
+
+        // if city does not exist in firestore already add
 
         if (querySnapshot.empty) {
           // Store the weather and forecast data into Firestore
@@ -139,6 +142,8 @@ const useHandleCityList = () => {
           // Reset searchedCity after the city is added
 
           setStoredCity(data);
+
+          //global state for showing the Searched page or not in exlore.tsx
           setTrue();
         } else {
           console.log("City already exists");

@@ -28,47 +28,8 @@ import useBooleanStore from "../stores/isSearched";
 import useIsExist from "../stores/isExist";
 import useHandleCityList from "./useHandleCityList";
 import useAucklandWeather from "../stores/aucklandImageStore";
-
-interface HourForecast {
-  time_epoch: number | string; // time_epoch will be converted to string
-  time: string; // The time in the "YYYY-MM-DD HH:MM" format
-  temp_c: number;
-  temp_f: number;
-  is_day: number;
-  condition: {
-    text: string;
-    icon: string;
-    code: number;
-  };
-  wind_mph: number;
-  wind_kph: number;
-  wind_degree: number;
-  wind_dir: string;
-  pressure_mb: number;
-  pressure_in: number;
-  precip_mm: number;
-  precip_in: number;
-  snow_cm: number;
-  humidity: number;
-  cloud: number;
-  feelslike_c: number;
-  feelslike_f: number;
-  windchill_c: number;
-  windchill_f: number;
-  heatindex_c: number;
-  heatindex_f: number;
-  dewpoint_c: number;
-  dewpoint_f: number;
-  will_it_rain: number;
-  chance_of_rain: number;
-  will_it_snow: number;
-  chance_of_snow: number;
-  vis_km: number;
-  vis_miles: number;
-  gust_mph: number;
-  gust_kph: number;
-  uv: number;
-}
+import { HourForecast } from "../types/HourForecast";
+// this contains inital search (current location weather ) and search for other cities functions
 
 const useHandleSearch = () => {
   const { storedCity, setStoredCity, clearStoredCity } = useCityStore();
@@ -82,13 +43,13 @@ const useHandleSearch = () => {
   const [formatted, setFormatted] = useState([]);
   const [todayCast2, setTodayCast2] = useState([]);
   const [isS, setIsS] = useState(false);
-  const { isActive, setTrue, setFalse } = useBooleanStore();
+  const { isActive, setTrue, setFalse } = useBooleanStore(); // when city is added to fire store, change global state to false for not showing <Searched>.tsx in explore.tsx
   const { isExist, setTrue2, setFalse2 } = useIsExist(); // for hiding and showing add city button
   const { handleDelete, cities, fetchCityList, addSearchedCityToList } =
     useHandleCityList();
 
   const { storedAuckland, setStoredAuckland, clearStoredAuckland } =
-    useAucklandWeather();
+    useAucklandWeather(); // this might be used for explore.tsx to show current weather background image but currently blakc background
 
   const initialSearch = async () => {
     // Ask for permission to access location
@@ -106,7 +67,7 @@ const useHandleSearch = () => {
       latitude: location.coords.latitude, // Fixed the variable name
       longitude: location.coords.longitude,
     });
-
+    // search by city name, could have been by lon and lat
     if (reverseGeocode.length > 0) {
       // Set the city name
       let cityName = reverseGeocode[0].city;
@@ -162,10 +123,10 @@ const useHandleSearch = () => {
           for (let j = index; j < forecastHours.length; j++) {
             forcast24.push(forecastHours[j]);
           }
-
+          // how many empty array is left
           let tomorrowForcast = 24 - forcast24.length;
           console.log(forcast24.length, tomorrowForcast);
-
+          // fill the rest of empty array with tomorrow's forcast
           if (tomorrowForcast > 0) {
             for (let i = 0; i < tomorrowForcast; i++) {
               forcast24.push(result.forecast.forecastday[1].hour[i]);
@@ -189,9 +150,8 @@ const useHandleSearch = () => {
       getWeather();
     }
   };
-
+  // this is helper for converting to am and pm format
   const convertHours = (forecasts: HourForecast[]): HourForecast[] => {
-    // Helper function to convert epoch to 12-hour AM/PM format
     const convertEpochTo12Hour = (epoch: number): string => {
       const date = new Date(epoch * 1000); // Convert from seconds to milliseconds
       let hours = date.getHours(); // Get the hour in 24-hour format
@@ -215,7 +175,7 @@ const useHandleSearch = () => {
 
   const handleSearch = async () => {
     console.log("city text", cityText);
-    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityText}&days=3`; // Change to forecast API with 3 days
+    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityText}&days=3`; // Change to forecast API with 3 days (they only have 3 days anyway)
     const options = {
       method: "GET",
       headers: {
@@ -228,7 +188,7 @@ const useHandleSearch = () => {
       const response = await fetch(url, options);
       if (response.ok) {
         const result = await response.json();
-        console.log("Search result: ", result); // Log the result
+        console.log("Search result: ", result);
         setSearchedCity(result);
         checkIfCityAlreadyExists(result);
         setFalse();
@@ -240,7 +200,7 @@ const useHandleSearch = () => {
     }
   };
 
-  // Log the updated todayCast2 in a separate useEffect
+  // This is used in handleSearch function to check if city already exists in firebase
 
   const checkIfCityAlreadyExists = async (result: WeatherData) => {
     try {

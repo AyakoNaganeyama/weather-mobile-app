@@ -1,13 +1,12 @@
 import { create } from "zustand";
 
-// Define the type for the store state
+// this is for weather to display or not display <Searched>.tsx in explore
 interface BooleanStoreState {
   isActive: boolean;
   setTrue: () => void;
   setFalse: () => void;
 }
 
-// Create the Zustand store
 const useBooleanStore = create<BooleanStoreState>((set) => ({
   isActive: false, // Initial state is false
   setTrue: () => set({ isActive: true }), // Set to true

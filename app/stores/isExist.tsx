@@ -1,13 +1,12 @@
 import { create } from "zustand";
 
-// Define the type for the store state
+// This is for show or not show add button to firebase in Searched page
 interface BooleanStoreState {
   isExist: boolean;
   setTrue2: () => void;
   setFalse2: () => void;
 }
 
-// Create the Zustand store
 const useIsExist = create<BooleanStoreState>((set) => ({
   isExist: false, // Initial state is false
   setTrue2: () => set({ isExist: true }), // Set to true

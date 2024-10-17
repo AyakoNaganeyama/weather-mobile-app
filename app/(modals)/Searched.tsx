@@ -21,7 +21,7 @@ import useHandleCityList from "../hooks/useHandleCityList";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useFrontEndLogic from "../hooks/useFrontEndLogic";
 
-// this page shows searched city's weather
+// this page shows searched city's weather result
 
 interface SearchedProps {
   data: WeatherData; // Accept the data as props
@@ -89,7 +89,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
         style={styles.backgroundImage}
       >
         <View style={{ marginHorizontal: 10 }}>
-          {/* Add City Button */}
+          {/* hide page and Add City Button */}
 
           <View
             style={{
@@ -112,6 +112,8 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
             >
               <Entypo name="cross" size={24} color="white" />
             </TouchableOpacity>
+
+            {/*if searched city does not exist in firestore, show add button*/}
             {!isExist && (
               <TouchableOpacity
                 style={styles.AddButton}

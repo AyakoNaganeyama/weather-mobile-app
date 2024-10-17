@@ -30,7 +30,10 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useFrontEndLogic from "../hooks/useFrontEndLogic";
 
+//this page shows current user's location's weather
+
 const index = () => {
+  //importing business logic for accessing weather data as well as state management
   const {
     initialSearch,
 
@@ -43,8 +46,10 @@ const index = () => {
 
     formatted,
   } = useHandleSearch();
-
+  // this function gets background image based on current weather in the city
   const { getImage } = useGetImage();
+
+  // as soon as the page load, call the function initialSearch() for fetching current locaiton data
   useEffect(() => {
     initialSearch().then(() => {
       setLoading(false);
@@ -74,7 +79,7 @@ const index = () => {
       return dayOfWeek;
     }
   };
-
+  // these functions are frontend function that returns string for weather details
   const {
     checkUV,
     checkVisibility,
@@ -83,8 +88,10 @@ const index = () => {
     checkWind,
     checkCloud,
   } = useFrontEndLogic();
-
+  // to loading state to make sure to display after all the operations in InitislSearch() are done, used inside useEffect here
   const [loading, setLoading] = useState(true);
+
+  // if loading state is true, show loading text
   if (loading) {
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
@@ -92,6 +99,8 @@ const index = () => {
       </View>
     );
   }
+
+  // if loading state is false, show the weather info
   return (
     <ImageBackground
       source={getImage(
@@ -366,7 +375,7 @@ const index = () => {
                 </View>
               </View>
 
-              {/**************************************other extra information*******************************************/}
+              {/**************************************other extra information, frontend funciotns are used*******************************************/}
 
               {/**************************row1**********************************************/}
               <View style={{ marginHorizontal: 20, marginVertical: 20 }}>

@@ -15,6 +15,8 @@ import { firestore } from "../firebaseConfig";
 import useGetImage from "../hooks/useGetImage";
 import useShare from "../hooks/useShare";
 
+//this page is only if we want detail page for each information of the city (each information desplayed is touchableOpacity but maybe we dont need that far)
+
 const Page = () => {
   const { id } = useLocalSearchParams<{ id: any }>();
   return (

@@ -22,6 +22,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Feather } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
 
+// this page is shown when user click city from city list by passing lon and lat from explore.tsx
+
 const Page = () => {
   const { id } = useLocalSearchParams();
   const { getImage } = useGetImage();

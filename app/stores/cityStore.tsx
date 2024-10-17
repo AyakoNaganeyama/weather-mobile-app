@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-// Define the CityState interface with location, current, and forecast data
+// UserEffect in explore.tsx is dependent on this store
 interface CityState {
   storedCity: {
     location: {

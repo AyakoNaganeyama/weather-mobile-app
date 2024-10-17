@@ -18,6 +18,8 @@ import useBooleanStore from "../stores/isSearched";
 import useGetImage from "../hooks/useGetImage";
 import useAucklandWeather from "../stores/aucklandImageStore";
 
+// this page shows list of cities added to fire store by user, and renders searched city's weather information <Searched>.tsx
+
 const Explore = () => {
   const { handleDelete, cities, fetchCityList } = useHandleCityList();
   const {
@@ -50,7 +52,7 @@ const Explore = () => {
     <View style={{ flex: 1, backgroundColor: "black" }}>
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ marginTop: 20 }}>
-          {/* Search Bar */}
+          {/* Search Bar connected to google places */}
           <View style={styles.container2}>
             <View style={styles.searchContainer2}>
               <GooglePlacesAutocomplete
@@ -85,7 +87,7 @@ const Explore = () => {
           {/* If searchedCity exists, show the searched city's details */}
           {!isActive && searchedCity ? (
             <Searched data={searchedCity} />
-          ) : /* If searchedCity is null, show the list of cities */
+          ) : /* If searchedCity is null, show the list of cities user already added to fire store previsouly */
           cities.length > 0 ? (
             <ScrollView>
               {cities

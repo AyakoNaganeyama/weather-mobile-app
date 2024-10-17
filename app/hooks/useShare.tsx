@@ -1,18 +1,18 @@
 // useShare.ts
 import React from "react";
 import { Alert, Share } from "react-native";
-
+// sharing service
 const useShare = () => {
   const onShare = async (city: any) => {
     try {
-      // Ensure city and its necessary fields are available
+      // to ensure city and its necessary fields are available
       if (!city || !city.location || !city.current) {
         Alert.alert("City data is not available for sharing.");
         return;
       }
 
       const mapLink = `https://www.google.com/maps/@${city.location.lat},${city.location.lon},12z`;
-      // Format the message with the city details
+      // Formatting the message with the city details
       const message = `
       React Native | A framework for building native apps using React.
       Current location details:
