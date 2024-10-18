@@ -200,16 +200,27 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
               }}
             >
               {cast.length > 0 ? (
-                cast.map((i, ind) => (
-                  <TouchableOpacity key={ind} style={styles.info}>
-                    <Text style={{ color: "white" }}>{i.time}</Text>
-                    <Image
-                      source={{ uri: `https:${i.condition.icon}` }}
-                      style={{ width: 50, height: 50 }} // Adjust size as needed
-                    />
-                    <Text style={{ color: "white" }}>{i.temp_f}°</Text>
-                  </TouchableOpacity>
-                ))
+                cast.map((i, ind) =>
+                  ind === 0 ? (
+                    <TouchableOpacity key={ind} style={styles.info}>
+                      <Text style={{ color: "white" }}>Now</Text>
+                      <Image
+                        source={{ uri: `https:${i.condition.icon}` }}
+                        style={{ width: 50, height: 50 }} // Adjust size as needed
+                      />
+                      <Text style={{ color: "white" }}>{i.temp_f}°</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity key={ind} style={styles.info}>
+                      <Text style={{ color: "white" }}>{i.time}</Text>
+                      <Image
+                        source={{ uri: `https:${i.condition.icon}` }}
+                        style={{ width: 50, height: 50 }} // Adjust size as needed
+                      />
+                      <Text style={{ color: "white" }}>{i.temp_f}°</Text>
+                    </TouchableOpacity>
+                  )
+                )
               ) : (
                 <Text style={styles.text}>No forecast available.</Text>
               )}
@@ -306,15 +317,6 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
           </View>
 
           {/* Additional Weather Info */}
-          <View style={styles.more}>
-            <Text style={styles.text}>
-              Feels like {data.current.feelslike_c}°C
-            </Text>
-            <Text style={styles.text}>
-              <Feather name="wind" size={24} color="white" />{" "}
-              {data.current.wind_kph} kph
-            </Text>
-          </View>
         </View>
 
         {/**************************row1**********************************************/}

@@ -207,16 +207,27 @@ const Page = () => {
                     }}
                   >
                     {todayCast.length > 0 ? (
-                      todayCast.map((i, ind) => (
-                        <TouchableOpacity key={ind} style={styles.info}>
-                          <Text style={{ color: "white" }}>{i.time}</Text>
-                          <Image
-                            source={{ uri: `https:${i.condition.icon}` }}
-                            style={{ width: 50, height: 50 }} // Adjust size as needed
-                          />
-                          <Text style={{ color: "white" }}>{i.temp_f}°</Text>
-                        </TouchableOpacity>
-                      ))
+                      todayCast.map((i, ind) =>
+                        ind === 0 ? (
+                          <TouchableOpacity key={ind} style={styles.info}>
+                            <Text style={{ color: "white" }}>Now</Text>
+                            <Image
+                              source={{ uri: `https:${i.condition.icon}` }}
+                              style={{ width: 50, height: 50 }} // Adjust size as needed
+                            />
+                            <Text style={{ color: "white" }}>{i.temp_f}°</Text>
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity key={ind} style={styles.info}>
+                            <Text style={{ color: "white" }}>{i.time}</Text>
+                            <Image
+                              source={{ uri: `https:${i.condition.icon}` }}
+                              style={{ width: 50, height: 50 }} // Adjust size as needed
+                            />
+                            <Text style={{ color: "white" }}>{i.temp_f}°</Text>
+                          </TouchableOpacity>
+                        )
+                      )
                     ) : (
                       <Text style={styles.text}>No forecast available.</Text>
                     )}
@@ -319,15 +330,6 @@ const Page = () => {
                 </View>
 
                 {/* Additional Weather Info */}
-                <View style={styles.more}>
-                  <Text style={styles.text}>
-                    Feels like {city.current.feelslike_c}°C
-                  </Text>
-                  <Text style={styles.text}>
-                    <Feather name="wind" size={24} color="white" />{" "}
-                    {city.current.wind_kph} kph
-                  </Text>
-                </View>
               </View>
 
               {/**************************row1**********************************************/}
