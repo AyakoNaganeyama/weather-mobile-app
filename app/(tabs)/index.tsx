@@ -31,6 +31,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useFrontEndLogic from "../hooks/useFrontEndLogic";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
+import useShare from "../hooks/useShare";
 
 //this page shows current user's location's weather
 
@@ -50,6 +52,7 @@ const index = () => {
   } = useHandleSearch();
   // this function gets background image based on current weather in the city
   const { getImage } = useGetImage();
+  const { onShare } = useShare();
 
   // as soon as the page load, call the function initialSearch() for fetching current locaiton data
   useEffect(() => {
@@ -119,6 +122,23 @@ const index = () => {
           {currentCity && (
             <ScrollView>
               <View style={styles.container}>
+                <TouchableOpacity
+                  onPress={() => onShare(currentCity)}
+                  style={{
+                    backgroundColor: "rgba(0,0,0, 0.7)",
+
+                    padding: 10,
+                    borderRadius: 15,
+                    marginHorizontal: 20,
+                    marginBottom: 20,
+                    width: 50,
+                    height: 50,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Entypo name="share-alternative" size={24} color="white" />
+                </TouchableOpacity>
                 {/*******************************main current city information************************************/}
                 <View
                   style={{
