@@ -52,6 +52,7 @@ const useHandleSearch = () => {
   const { storedAuckland, setStoredAuckland, clearStoredAuckland } =
     useAucklandWeather(); // this might be used for explore.tsx to show current weather background image but currently blakc background
 
+  // as soon as user open the app useEffect this function in index.tsx
   const initialSearch = async () => {
     // Ask for permission to access location
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -151,6 +152,7 @@ const useHandleSearch = () => {
       getWeather();
     }
   };
+
   // this is helper for converting to am and pm format
   const convertHours = (forecasts: HourForecast[]): HourForecast[] => {
     const convertEpochTo12Hour = (epoch: number): string => {
@@ -174,6 +176,7 @@ const useHandleSearch = () => {
     }));
   };
 
+  // connected to search button in explore.tsx
   const handleSearch = async () => {
     console.log("city text", cityText);
     const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityText}&days=3`; // Change to forecast API with 3 days (they only have 3 days anyway)
