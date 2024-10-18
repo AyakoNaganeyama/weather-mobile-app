@@ -29,6 +29,7 @@ import useIsExist from "../stores/isExist";
 import useHandleCityList from "./useHandleCityList";
 import useAucklandWeather from "../stores/aucklandImageStore";
 import { HourForecast } from "../types/HourForecast";
+
 // this contains inital search (current location weather ) and search for other cities functions
 
 const useHandleSearch = () => {
@@ -39,7 +40,7 @@ const useHandleSearch = () => {
 
   const [errorMsg, setErrorMsg] = useState(null);
   const [cityText, setCityText] = useState("");
-  const [todayCast, setTodayCast] = useState([]);
+  const [todayCast, setTodayCast] = useState<HourForecast[]>([]);
   const [formatted, setFormatted] = useState([]);
   const [todayCast2, setTodayCast2] = useState([]);
   const [isS, setIsS] = useState(false);

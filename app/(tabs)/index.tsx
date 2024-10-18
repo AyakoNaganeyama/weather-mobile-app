@@ -33,6 +33,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import useShare from "../hooks/useShare";
+import { HourForecast } from "../types/HourForecast";
 
 //this page shows current user's location's weather
 

@@ -21,6 +21,7 @@ import { WeatherData } from "../types/forcastType";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Feather } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
+import { HourForecast } from "../types/HourForecast";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -33,7 +34,7 @@ const Page = () => {
   const { onShare } = useShare();
 
   const [city, setCity] = useState<WeatherData | null>(null);
-  const [todayCast, setTodayCast] = useState([]);
+  const [todayCast, setTodayCast] = useState<HourForecast[]>([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const {
     checkUV,

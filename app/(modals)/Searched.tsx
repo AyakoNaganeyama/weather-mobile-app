@@ -22,7 +22,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useFrontEndLogic from "../hooks/useFrontEndLogic";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
-
+import { HourForecast } from "../types/HourForecast";
 // this page shows searched city's weather result
 
 interface SearchedProps {
@@ -33,7 +33,7 @@ interface SearchedProps {
 const Searched: React.FC<SearchedProps> = ({ data }) => {
   const { addSearchedCityToList } = useHandleCityList(); // importing the function for adding city to fire store if user wants
 
-  const [cast, setCast] = useState([]); // to store 24-hour forecast
+  const [cast, setCast] = useState<HourForecast[]>([]); // to store 24-hour forecast
   const { isActive, setTrue } = useBooleanStore(); // to hide or show city list page
   const { isExist } = useIsExist(); // if city already exists in firestore hide the add city button
   const {
