@@ -29,6 +29,8 @@ import useHandleSearch from "../hooks/useHandleSearch";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import useFrontEndLogic from "../hooks/useFrontEndLogic";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 //this page shows current user's location's weather
 
@@ -439,7 +441,17 @@ const index = () => {
                     }}
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-                      <View style={{ height: "30%" }}>
+                      <View
+                        style={{
+                          height: "30%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <MaterialCommunityIcons
+                          name="air-humidifier"
+                          style={styles.text}
+                        />
                         <Text style={styles.text}>Humidity</Text>
                       </View>
                     </View>
@@ -483,7 +495,14 @@ const index = () => {
                     }}
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-                      <View style={{ height: "30%" }}>
+                      <View
+                        style={{
+                          height: "30%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Feather name="wind" style={styles.text} />
                         <Text style={styles.text}>Wind</Text>
                       </View>
                     </View>
@@ -517,7 +536,17 @@ const index = () => {
                     }}
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-                      <View style={{ height: "30%" }}>
+                      <View
+                        style={{
+                          height: "30%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <FontAwesome6
+                          name="temperature-empty"
+                          style={styles.text}
+                        />
                         <Text style={styles.text}>Feels like</Text>
                       </View>
                     </View>
@@ -560,7 +589,14 @@ const index = () => {
                     }}
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-                      <View style={{ height: "30%" }}>
+                      <View
+                        style={{
+                          height: "30%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AntDesign name="cloudo" style={styles.text} />
                         <Text style={styles.text}>Cloud</Text>
                       </View>
                     </View>
@@ -592,7 +628,14 @@ const index = () => {
                     }}
                   >
                     <View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-                      <View style={{ height: "30%" }}>
+                      <View
+                        style={{
+                          height: "30%",
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <AntDesign name="eyeo" style={styles.text} />
                         <Text style={styles.text}>Visibility</Text>
                       </View>
                     </View>
