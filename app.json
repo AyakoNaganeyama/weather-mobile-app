@@ -16,7 +16,8 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Allow weatherApp to access your location to show local weather."
-      }
+      },
+      "bundleIdentifier": "com.multiahfoon.weatherupdated"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,8 +26,11 @@
       },
       "permissions": [
         "ACCESS_FINE_LOCATION",
-        "FOREGROUND_SERVICE"
-      ]
+        "FOREGROUND_SERVICE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.multiahfoon.weatherupdated"
     },
     "web": {
       "bundler": "metro",
@@ -44,6 +48,17 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f2d92a47-7cd2-4b25-9e6f-3729cf8f31bb"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f2d92a47-7cd2-4b25-9e6f-3729cf8f31bb"
     }
   }
 }
