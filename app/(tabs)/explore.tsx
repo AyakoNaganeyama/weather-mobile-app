@@ -4,7 +4,6 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	ScrollView,
-	ImageBackground,
 	SafeAreaView,
 } from 'react-native'
 import React, { useEffect } from 'react'
@@ -19,19 +18,16 @@ import useGetImage from '../hooks/useGetImage'
 import useAucklandWeather from '../stores/aucklandImageStore'
 
 // this page shows list of cities added to fire store by user, and renders searched city's weather information <Searched>.tsx
-
-const Explore = () => {
+export default function Explore() {
 	const { handleDelete, cities, fetchCityList } = useHandleCityList()
 	const {
 		initialSearch,
-
 		currentCity,
 		cityText,
 		todayCast,
 		errorMsg,
 		handleSearch,
 		setCityText, // So users can type the city name
-
 		searchedCity,
 		todayCast2,
 		setSearchedCity,
@@ -141,8 +137,6 @@ const Explore = () => {
 		</View>
 	)
 }
-
-export default Explore
 
 const styles = StyleSheet.create({
 	container: {
