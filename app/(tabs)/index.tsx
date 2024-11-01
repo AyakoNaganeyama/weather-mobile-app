@@ -22,11 +22,30 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
 import useShare from '../hooks/useShare'
+import * as Updates from 'expo-updates'
 
 //this page shows current user's location's weather
 
 const index = () => {
-	//importing business logic for accessing weather data as well as state management
+	// will fetch updates so dont need to re-scan QR code
+	async function onFetchUpdateAsync() {
+		try {
+			const update = await Updates.checkForUpdateAsync()
+
+			if (update.isAvailable) {
+				await Updates.fetchUpdateAsync()
+				await Updates.reloadAsync()
+			}
+		} catch (error) {
+			// You can also add an alert() to see the error message in case of an error when fetching updates.
+			alert(`Error fetching latest Expo update: ${error}`)
+		}
+	}
+
+	useEffect(() => {
+		onFetchUpdateAsync()
+	}, [])
+
 	const {
 		initialSearch,
 		currentCity,
