@@ -222,7 +222,9 @@ const index = () => {
 														source={{ uri: `https:${i.condition.icon}` }}
 														style={{ width: 50, height: 50 }} // Adjust size as needed
 													/>
-													<Text style={{ color: 'white' }}>{i.temp_c}°C</Text>
+													<Text style={{ color: 'white' }}>
+														{Math.round(i.temp_c)}°C
+													</Text>
 												</TouchableOpacity>
 											) : (
 												<TouchableOpacity key={ind} style={styles.info}>
@@ -231,7 +233,9 @@ const index = () => {
 														source={{ uri: `https:${i.condition.icon}` }}
 														style={{ width: 50, height: 50 }} // Adjust size as needed
 													/>
-													<Text style={{ color: 'white' }}>{i.temp_c}°C</Text>
+													<Text style={{ color: 'white' }}>
+														{Math.round(i.temp_c)}°C
+													</Text>
 												</TouchableOpacity>
 											)
 										)}
@@ -572,7 +576,7 @@ const index = () => {
 													fontSize: 40,
 												}}
 											>
-												{currentCity.current.feelslike_f}°
+												{Math.round(currentCity.current.feelslike_f)}°
 											</Text>
 											<Text style={styles.threeDay}>
 												{checkFeelsLike(currentCity.current.feelslike_c)}
