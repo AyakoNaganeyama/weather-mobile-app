@@ -112,16 +112,15 @@ const index = () => {
 								<TouchableOpacity
 									onPress={() => onShare(currentCity)}
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
-
+										marginTop: 10,
 										padding: 10,
-										borderRadius: 15,
 										marginHorizontal: 20,
 										marginBottom: 20,
 										width: 50,
 										height: 50,
 										alignItems: 'center',
 										justifyContent: 'center',
+										alignSelf: 'flex-end',
 									}}
 								>
 									<Entypo name='share-alternative' size={24} color='white' />
@@ -129,12 +128,16 @@ const index = () => {
 								{/*******************************main current city information************************************/}
 								<View
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
-
 										padding: 10,
 										borderRadius: 15,
 										marginHorizontal: 20,
 										marginBottom: 20,
+
+										shadowColor: '#000',
+										shadowOffset: { width: 0, height: 2 },
+										shadowOpacity: 0.2,
+										shadowRadius: 4,
+										elevation: 5,
 									}}
 								>
 									<View style={styles.main}>
@@ -143,7 +146,7 @@ const index = () => {
 										</Text>
 										<View style={styles.temp}>
 											<Text style={styles.tempShown}>
-												{currentCity.current.temp_f}°
+												{Math.round(currentCity.current.temp_f)}°
 											</Text>
 
 											<Text style={styles.currentCond}>
@@ -160,12 +163,18 @@ const index = () => {
 												<View style={{ marginRight: 5 }}>
 													<Text style={styles.currentCond}>
 														L:
-														{currentCity.forecast.forecastday[0].day.mintemp_f}°
+														{Math.round(
+															currentCity.forecast.forecastday[0].day.mintemp_f
+														)}
+														°
 													</Text>
 												</View>
 												<Text style={styles.currentCond}>
 													H:
-													{currentCity.forecast.forecastday[0].day.maxtemp_f}°
+													{Math.round(
+														currentCity.forecast.forecastday[0].day.maxtemp_f
+													)}
+													°
 												</Text>
 											</View>
 										</View>
@@ -176,7 +185,7 @@ const index = () => {
 
 								<View
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
 
 										padding: 10,
 										borderRadius: 15,
@@ -233,7 +242,7 @@ const index = () => {
 								{/*****************************3 DAY FORCAST*******************************************/}
 								<View
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
 
 										padding: 10,
 										borderRadius: 15,
@@ -398,7 +407,7 @@ const index = () => {
 									{/***********************UV****************************************************/}
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -438,7 +447,7 @@ const index = () => {
 									{/***********************Humidity****************************************************/}
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -492,7 +501,7 @@ const index = () => {
 									{/******************wind*********************************/}
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -533,7 +542,7 @@ const index = () => {
 
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -586,7 +595,7 @@ const index = () => {
 								>
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -625,7 +634,7 @@ const index = () => {
 
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -679,8 +688,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	main: {
-		marginTop: 50,
-		marginBottom: 50,
+		marginTop: 10,
+		marginBottom: 10,
 	},
 	threeDay: {
 		color: '#fff',
@@ -688,7 +697,7 @@ const styles = StyleSheet.create({
 	},
 	currentCond: {
 		color: '#fff',
-		fontSize: 30,
+		fontSize: 20,
 	},
 
 	backgroundImage: {
@@ -702,17 +711,16 @@ const styles = StyleSheet.create({
 	},
 	heading: {
 		color: '#fff',
-		fontSize: 60,
+		fontSize: 30,
 		textAlign: 'center',
 	},
 	tempShown: {
-		fontSize: 100,
+		fontSize: 70,
 		fontWeight: 800,
 		color: '#fff',
 	},
 	temp: {
 		alignItems: 'center',
-		marginBottom: 30,
 	},
 	text: {
 		color: 'rgba(255, 255, 255, 0.7)',
