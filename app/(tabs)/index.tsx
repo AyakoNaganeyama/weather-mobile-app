@@ -22,6 +22,8 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
 import useShare from '../hooks/useShare'
 
+import { covertToDay } from '../../util/convertToDay'
+
 //this page shows current user's location's weather
 
 const index = () => {
@@ -46,29 +48,6 @@ const index = () => {
 		})
 	}, [])
 
-	// function for converting into days e.g. mon, tue
-	const coverttoDay = (d: any) => {
-		const date = new Date(d)
-		const options: Intl.DateTimeFormatOptions = { weekday: 'long' } // Correct type for 'weekday'
-		const dayOfWeek = date.toLocaleDateString('en-US', options)
-		if (dayOfWeek.toLowerCase() == 'monday') {
-			return 'Mon'
-		} else if (dayOfWeek.toLowerCase() == 'tuesday') {
-			return 'Tue'
-		} else if (dayOfWeek.toLowerCase() == 'wednesday') {
-			return 'Wed'
-		} else if (dayOfWeek.toLowerCase() == 'thursday') {
-			return 'Thu'
-		} else if (dayOfWeek.toLowerCase() == 'friday') {
-			return 'Fri'
-		} else if (dayOfWeek.toLowerCase() == 'saturday') {
-			return 'Sat'
-		} else if (dayOfWeek.toLowerCase() == 'sunday') {
-			return 'Sun'
-		} else {
-			return dayOfWeek
-		}
-	}
 	// these functions are frontend function that returns string for weather details
 	const {
 		checkUV,
@@ -349,7 +328,7 @@ const index = () => {
 														>
 															<View style={{ width: '40%' }}>
 																<Text style={styles.threeDay}>
-																	{coverttoDay(item.date)}
+																	{covertToDay(item.date)}
 																</Text>
 															</View>
 															<Image
