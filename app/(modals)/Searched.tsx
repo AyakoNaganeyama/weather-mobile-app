@@ -215,7 +215,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 										</TouchableOpacity>
 									) : (
 										<TouchableOpacity key={ind} style={styles.info}>
-											<Text style={{ color: 'white' }}>{i.time}</Text>
+											<Text style={{ color: 'white' }}>{i.time_epoch}</Text>
 											<Image
 												source={{ uri: `https:${i.condition.icon}` }}
 												style={{ width: 50, height: 50 }} // Adjust size as needed
