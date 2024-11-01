@@ -13,7 +13,7 @@ const useGetImage = () => {
 				lowerCaseCondition.includes('sunny') ||
 				lowerCaseCondition.includes('clear')
 			) {
-				return require('../img/noon-sunny.webp') // Daytime sunny image
+				return require('../img/noon-sunny.jpg') // Daytime sunny image
 			} else if (
 				lowerCaseCondition.includes('cloudy') ||
 				lowerCaseCondition.includes('overcast')
@@ -25,14 +25,14 @@ const useGetImage = () => {
 			) {
 				return require('../img/noon-rain.jpg') // Noon rain
 			} else {
-				return require('../img/noon-sunny.webp') // Default
+				return require('../img/noon-sunny.jpg') // Default
 			}
 		} else {
 			if (
 				lowerCaseCondition.includes('sunny') ||
 				lowerCaseCondition.includes('clear')
 			) {
-				return require('../img/night-sunny.jpeg') // night sunny
+				return require('../img/night-sunny.jpg') // night sunny
 			} else if (
 				lowerCaseCondition.includes('cloudy') ||
 				lowerCaseCondition.includes('overcast')
@@ -44,30 +44,9 @@ const useGetImage = () => {
 			) {
 				return require('../img/night-rain.jpg') // Night rain
 			} else {
-				return require('../img/night-sunny.jpeg') //default
+				return require('../img/night-sunny.jpg') //default
 			}
 		}
-
-		// if (lowerCaseCondition.includes("sunny")) {
-		//   if (isDay) {
-
-		//     return require("../img/weather-noon-good.webp"); // Daytime sunny image
-		//   } else {
-		//     return require("../img/weather-night-good.jpeg"); // Nighttime sunny image
-		//   }
-		// } else if (
-		//   lowerCaseCondition.includes("cloudy") ||
-		//   lowerCaseCondition.includes("overcast")
-		// ) {
-		//   return require("../img/weather-cloudy.jpg"); // Cloudy or overcast image
-		// } else if (
-		//   lowerCaseCondition.includes("rain") ||
-		//   lowerCaseCondition.includes("drizzle")
-		// ) {
-		//   return require("../img/weather-noon-rain.jpg"); // Rainy image
-		// }
-
-		// Default image if no match
 	}
 	return { getImage }
 }
