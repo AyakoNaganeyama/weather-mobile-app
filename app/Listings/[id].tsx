@@ -82,7 +82,7 @@ const Page = () => {
 						}
 					}
 
-					setTodayCast(forcast24)
+					setTodayCast(convertHours(forcast24))
 				} else {
 					console.log('Failed to fetch weather data. Please try again later.')
 				}
@@ -93,6 +93,29 @@ const Page = () => {
 
 		fetchData()
 	}, [id])
+
+	// this is helper for converting to am and pm format
+	const convertHours = (forecasts: HourForecast[]): HourForecast[] => {
+		const convertEpochTo12Hour = (epoch: number): string => {
+			const date = new Date(epoch * 1000) // Convert from seconds to milliseconds
+			let hours = date.getHours() // Get the hour in 24-hour format
+			const minutes = date.getMinutes() // Get the minutes
+			const ampm = hours >= 12 ? 'PM' : 'AM' // Determine AM or PM
+			hours = hours % 12 // Convert to 12-hour format
+			hours = hours ? hours : 12 // If hours is 0 (midnight), make it 12
+
+			// Format minutes with leading zero if needed
+			const minutesStr = minutes < 10 ? '0' + minutes : minutes
+
+			return `${hours}:${minutesStr} ${ampm}`
+		}
+
+		// Return a new array with only `time_epoch` converted
+		return forecasts.map((forecast) => ({
+			...forecast, // Keep all other properties the same
+			time_epoch: convertEpochTo12Hour(forecast.time_epoch as number), // Convert `time_epoch` to 12-hour AM/PM format
+		}))
+	}
 
 	return (
 		<>
@@ -140,7 +163,7 @@ const Page = () => {
 										<Text style={styles.heading}>{city.location.name}</Text>
 										<View style={styles.temp}>
 											<Text style={styles.tempShown}>
-												{Math.round(city.current.temp_f)}°
+												{Math.round(city.current.temp_c)}°
 											</Text>
 
 											<Text style={styles.currentCond}>
@@ -158,7 +181,7 @@ const Page = () => {
 													<Text style={styles.currentCond}>
 														L:
 														{Math.round(
-															city.forecast.forecastday[0].day.mintemp_f
+															city.forecast.forecastday[0].day.mintemp_c
 														)}
 														°
 													</Text>
@@ -166,7 +189,7 @@ const Page = () => {
 												<Text style={styles.currentCond}>
 													H:
 													{Math.round(
-														city.forecast.forecastday[0].day.maxtemp_f
+														city.forecast.forecastday[0].day.maxtemp_c
 													)}
 													°
 												</Text>
@@ -215,18 +238,20 @@ const Page = () => {
 															style={{ width: 50, height: 50 }} // Adjust size as needed
 														/>
 														<Text style={{ color: 'white' }}>
-															{Math.round(i.temp_f)}°
+															{Math.round(i.temp_c)}°
 														</Text>
 													</TouchableOpacity>
 												) : (
 													<TouchableOpacity key={ind} style={styles.info}>
-														<Text style={{ color: 'white' }}>{i.time}</Text>
+														<Text style={{ color: 'white' }}>
+															{i.time_epoch}
+														</Text>
 														<Image
 															source={{ uri: `https:${i.condition.icon}` }}
 															style={{ width: 50, height: 50 }} // Adjust size as needed
 														/>
 														<Text style={{ color: 'white' }}>
-															{Math.round(i.temp_f)}°
+															{Math.round(i.temp_c)}°
 														</Text>
 													</TouchableOpacity>
 												)
