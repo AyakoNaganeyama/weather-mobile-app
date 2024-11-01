@@ -11,9 +11,6 @@ import {
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { collection, query, where, getDocs } from 'firebase/firestore'
-import { firestore } from '../firebaseConfig'
 import useGetImage from '../hooks/useGetImage'
 import useShare from '../hooks/useShare'
 import useFrontEndLogic from '../hooks/useFrontEndLogic'
@@ -112,7 +109,7 @@ const Page = () => {
 							<TouchableOpacity
 								onPress={() => onShare(city)}
 								style={{
-									backgroundColor: 'rgba(0,0,0, 0.7)',
+									backgroundColor: 'rgba(0,0,0, 0.2)',
 
 									padding: 10,
 									borderRadius: 15,
@@ -131,7 +128,7 @@ const Page = () => {
 								{/* Current Weather Display */}
 								<View
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
 
 										padding: 10,
 										borderRadius: 15,
@@ -143,7 +140,7 @@ const Page = () => {
 										<Text style={styles.heading}>{city.location.name}</Text>
 										<View style={styles.temp}>
 											<Text style={styles.tempShown}>
-												{city.current.temp_f}°
+												{Math.round(city.current.temp_f)}°
 											</Text>
 
 											<Text style={styles.currentCond}>
@@ -160,12 +157,18 @@ const Page = () => {
 												<View style={{ marginRight: 5 }}>
 													<Text style={styles.currentCond}>
 														L:
-														{city.forecast.forecastday[0].day.mintemp_f}°
+														{Math.round(
+															city.forecast.forecastday[0].day.mintemp_f
+														)}
+														°
 													</Text>
 												</View>
 												<Text style={styles.currentCond}>
 													H:
-													{city.forecast.forecastday[0].day.maxtemp_f}°
+													{Math.round(
+														city.forecast.forecastday[0].day.maxtemp_f
+													)}
+													°
 												</Text>
 											</View>
 										</View>
@@ -174,7 +177,7 @@ const Page = () => {
 								{/* 24 Hour Forecast ScrollView */}
 								<View
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
 										padding: 10,
 										borderRadius: 15,
 										marginVertical: 20,
@@ -211,7 +214,9 @@ const Page = () => {
 															source={{ uri: `https:${i.condition.icon}` }}
 															style={{ width: 50, height: 50 }} // Adjust size as needed
 														/>
-														<Text style={{ color: 'white' }}>{i.temp_f}°</Text>
+														<Text style={{ color: 'white' }}>
+															{Math.round(i.temp_f)}°
+														</Text>
 													</TouchableOpacity>
 												) : (
 													<TouchableOpacity key={ind} style={styles.info}>
@@ -220,7 +225,9 @@ const Page = () => {
 															source={{ uri: `https:${i.condition.icon}` }}
 															style={{ width: 50, height: 50 }} // Adjust size as needed
 														/>
-														<Text style={{ color: 'white' }}>{i.temp_f}°</Text>
+														<Text style={{ color: 'white' }}>
+															{Math.round(i.temp_f)}°
+														</Text>
 													</TouchableOpacity>
 												)
 											)
@@ -233,7 +240,7 @@ const Page = () => {
 								{/* 3 Day Forecast ScrollView */}
 								<View
 									style={{
-										backgroundColor: 'rgba(0,0,0, 0.7)',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
 										padding: 10,
 										borderRadius: 15,
 										marginVertical: 20,
@@ -340,7 +347,7 @@ const Page = () => {
 									{/***********************UV****************************************************/}
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -380,7 +387,7 @@ const Page = () => {
 									{/***********************Humidity****************************************************/}
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -434,7 +441,7 @@ const Page = () => {
 									{/******************wind*********************************/}
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -475,7 +482,7 @@ const Page = () => {
 
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -507,7 +514,7 @@ const Page = () => {
 													fontSize: 40,
 												}}
 											>
-												{city.current.feelslike_f}°
+												{Math.round(city.current.feelslike_f)}°
 											</Text>
 											<Text style={styles.threeDay}>
 												{checkFeelsLike(city.current.feelslike_c)}
@@ -528,7 +535,7 @@ const Page = () => {
 								>
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
@@ -567,7 +574,7 @@ const Page = () => {
 
 									<TouchableOpacity
 										style={{
-											backgroundColor: 'rgba(0,0,0, 0.7)',
+											backgroundColor: 'rgba(0,0,0, 0.2)',
 
 											padding: 10,
 											borderRadius: 15,
