@@ -80,13 +80,16 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 		setTrue()
 	}
 
+	// preload image here so faster once called in view
+	const backGroundImageSrc = getImage(
+		data?.current?.condition?.text || 'Unknown',
+		data?.current?.is_day ?? 0
+	)
+
 	return (
 		<ScrollView>
 			<ImageBackground
-				source={getImage(
-					data?.current?.condition?.text || 'Unknown',
-					data?.current?.is_day ?? 0
-				)}
+				source={backGroundImageSrc}
 				style={styles.backgroundImage}
 			>
 				<View style={{ marginHorizontal: 10 }}>

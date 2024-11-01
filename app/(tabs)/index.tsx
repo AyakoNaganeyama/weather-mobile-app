@@ -69,15 +69,15 @@ const index = () => {
 		)
 	}
 
+	// preload image here so faster once called in view
+	const backGroundImageSrc = getImage(
+		currentCity?.current?.condition?.text || 'Unknown',
+		currentCity?.current?.is_day ?? 0
+	)
+
 	// if loading state is false, show the weather info
 	return (
-		<ImageBackground
-			source={getImage(
-				currentCity?.current?.condition?.text || 'Unknown',
-				currentCity?.current?.is_day ?? 0
-			)}
-			style={styles.backgroundImage}
-		>
+		<ImageBackground source={backGroundImageSrc} style={styles.backgroundImage}>
 			<SafeAreaView style={styles.container}>
 				<KeyboardAvoidingView
 					style={styles.container}

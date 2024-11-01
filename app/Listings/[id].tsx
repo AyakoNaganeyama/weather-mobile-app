@@ -96,15 +96,18 @@ const Page = () => {
 		fetchData()
 	}, [id])
 
+	// preload image here so faster once called in view
+	const backGroundImageSrc = getImage(
+		city?.current?.condition?.text || 'Unknown',
+		city?.current?.is_day ?? 0
+	)
+
 	return (
 		<>
 			{city && (
 				<ScrollView>
 					<ImageBackground
-						source={getImage(
-							city?.current?.condition?.text || 'Unknown',
-							city?.current?.is_day ?? 0
-						)}
+						source={backGroundImageSrc}
 						style={styles.backgroundImage}
 					>
 						<View style={{ marginVertical: 40 }}>
