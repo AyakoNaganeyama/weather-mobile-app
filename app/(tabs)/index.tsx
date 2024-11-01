@@ -144,7 +144,7 @@ const index = () => {
 										</Text>
 										<View style={styles.temp}>
 											<Text style={styles.tempShown}>
-												{Math.round(currentCity.current.temp_f)}°
+												{Math.round(currentCity.current.temp_c)}°
 											</Text>
 
 											<Text style={styles.currentCond}>
@@ -162,7 +162,7 @@ const index = () => {
 													<Text style={styles.currentCond}>
 														L:
 														{Math.round(
-															currentCity.forecast.forecastday[0].day.mintemp_f
+															currentCity.forecast.forecastday[0].day.mintemp_c
 														)}
 														°
 													</Text>
@@ -170,7 +170,7 @@ const index = () => {
 												<Text style={styles.currentCond}>
 													H:
 													{Math.round(
-														currentCity.forecast.forecastday[0].day.maxtemp_f
+														currentCity.forecast.forecastday[0].day.maxtemp_c
 													)}
 													°
 												</Text>

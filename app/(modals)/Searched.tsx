@@ -140,7 +140,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 							<Text style={styles.heading}>{data.location.name}</Text>
 							<View style={styles.temp}>
 								<Text style={styles.tempShown}>
-									{Math.round(data.current.temp_f)}°
+									{Math.round(data.current.temp_c)}°
 								</Text>
 
 								<Text style={styles.currentCond}>
@@ -157,12 +157,12 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 									<View style={{ marginRight: 5 }}>
 										<Text style={styles.currentCond}>
 											L:
-											{Math.round(data.forecast.forecastday[0].day.mintemp_f)}°
+											{Math.round(data.forecast.forecastday[0].day.mintemp_c)}°
 										</Text>
 									</View>
 									<Text style={styles.currentCond}>
 										H:
-										{Math.round(data.forecast.forecastday[0].day.maxtemp_f)}°
+										{Math.round(data.forecast.forecastday[0].day.maxtemp_c)}°
 									</Text>
 								</View>
 							</View>
@@ -210,7 +210,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 												style={{ width: 50, height: 50 }} // Adjust size as needed
 											/>
 											<Text style={{ color: 'white' }}>
-												{Math.round(i.temp_f)}°
+												{Math.round(i.temp_c)}°
 											</Text>
 										</TouchableOpacity>
 									) : (
@@ -221,7 +221,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 												style={{ width: 50, height: 50 }} // Adjust size as needed
 											/>
 											<Text style={{ color: 'white' }}>
-												{Math.round(i.temp_f)}°
+												{Math.round(i.temp_c)}°
 											</Text>
 										</TouchableOpacity>
 									)
