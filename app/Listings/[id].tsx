@@ -22,6 +22,8 @@ import { HourForecast } from '../types/HourForecast'
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { covertToDay } from '@/util/convertToDay'
+import { convertHours } from '@/util/convertHours'
 
 // this page is shown when user click city from city list by passing lon and lat from explore.tsx
 
@@ -93,29 +95,6 @@ const Page = () => {
 
 		fetchData()
 	}, [id])
-
-	// this is helper for converting to am and pm format
-	const convertHours = (forecasts: HourForecast[]): HourForecast[] => {
-		const convertEpochTo12Hour = (epoch: number): string => {
-			const date = new Date(epoch * 1000) // Convert from seconds to milliseconds
-			let hours = date.getHours() // Get the hour in 24-hour format
-			const minutes = date.getMinutes() // Get the minutes
-			const ampm = hours >= 12 ? 'PM' : 'AM' // Determine AM or PM
-			hours = hours % 12 // Convert to 12-hour format
-			hours = hours ? hours : 12 // If hours is 0 (midnight), make it 12
-
-			// Format minutes with leading zero if needed
-			const minutesStr = minutes < 10 ? '0' + minutes : minutes
-
-			return `${hours}:${minutesStr} ${ampm}`
-		}
-
-		// Return a new array with only `time_epoch` converted
-		return forecasts.map((forecast) => ({
-			...forecast, // Keep all other properties the same
-			time_epoch: convertEpochTo12Hour(forecast.time_epoch as number), // Convert `time_epoch` to 12-hour AM/PM format
-		}))
-	}
 
 	return (
 		<>
@@ -309,49 +288,106 @@ const Page = () => {
 													alignItems: 'center',
 												}}
 											>
-												<View
-													style={{
-														flexDirection: 'row',
-														alignItems: 'center',
-														flex: 1,
-													}}
-												>
-													<View style={{ width: '40%' }}>
-														<Text style={styles.threeDay}>{item.date}</Text>
-													</View>
-													<Image
-														source={{
-															uri: `https:${item.day.condition.icon}`,
-														}}
-														style={{ width: '20%', height: 50 }}
-													/>
-												</View>
+												{index === 0 ? (
+													<>
+														<View
+															style={{
+																flexDirection: 'row',
+																alignItems: 'center',
+															}}
+														>
+															<View style={{ width: '40%' }}>
+																<Text style={styles.threeDay}>Today</Text>
+															</View>
 
-												<View style={{ flexDirection: 'row', width: '40%' }}>
-													<View
-														style={{
-															marginRight: 10,
-															flexDirection: 'row',
-														}}
-													>
-														<FontAwesome6
-															name='temperature-arrow-up'
-															size={24}
-															color='white'
-														/>
-														<Text style={styles.threeDay}>
-															{item.day.maxtemp_c}
-														</Text>
-													</View>
-													<FontAwesome6
-														name='temperature-arrow-down'
-														size={24}
-														color='white'
-													/>
-													<Text style={styles.threeDay}>
-														{item.day.mintemp_c}
-													</Text>
-												</View>
+															<Image
+																source={{
+																	uri: `https:${item.day.condition.icon}`,
+																}}
+																style={{ width: '20%', height: 50 }}
+															/>
+														</View>
+
+														<View
+															style={{ flexDirection: 'row', width: '40%' }}
+														>
+															<View
+																style={{
+																	marginRight: 10,
+																	flexDirection: 'row',
+																}}
+															>
+																<FontAwesome6
+																	name='temperature-arrow-up'
+																	size={24}
+																	color='white'
+																/>
+																<Text style={styles.threeDay}>
+																	{item.day.maxtemp_c}
+																</Text>
+															</View>
+
+															<FontAwesome6
+																name='temperature-arrow-down'
+																size={24}
+																color='white'
+															/>
+															<Text style={styles.threeDay}>
+																{item.day.mintemp_c}
+															</Text>
+														</View>
+													</>
+												) : (
+													<>
+														<View
+															style={{
+																flexDirection: 'row',
+																alignItems: 'center',
+																flex: 1,
+															}}
+														>
+															<View style={{ width: '40%' }}>
+																<Text style={styles.threeDay}>
+																	{covertToDay(item.date)}
+																</Text>
+															</View>
+															<Image
+																source={{
+																	uri: `https:${item.day.condition.icon}`,
+																}}
+																style={{ width: '20%', height: 50 }}
+															/>
+														</View>
+
+														<View
+															style={{ flexDirection: 'row', width: '40%' }}
+														>
+															<View
+																style={{
+																	marginRight: 10,
+																	flexDirection: 'row',
+																}}
+															>
+																<FontAwesome6
+																	name='temperature-arrow-up'
+																	size={24}
+																	color='white'
+																/>
+																<Text style={styles.threeDay}>
+																	{item.day.maxtemp_c}
+																</Text>
+															</View>
+															<FontAwesome6
+																name='temperature-arrow-down'
+																size={24}
+																color='white'
+															/>
+															<Text style={styles.threeDay}>
+																{item.day.mintemp_c}
+															</Text>
+														</View>
+													</>
+												)}
 											</TouchableOpacity>
 										))}
 									</ScrollView>
