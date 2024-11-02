@@ -1,26 +1,26 @@
-import {
-	View,
-	Text,
-	StyleSheet,
-	ScrollView,
-	TouchableOpacity,
-	ImageBackground,
-	Image,
-	Dimensions,
-} from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { WeatherData } from '../types/forcastType'
+import {
+	Dimensions,
+	Image,
+	ImageBackground,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import { Feather } from '@expo/vector-icons'
-import Entypo from '@expo/vector-icons/Entypo'
-import useBooleanStore from '../stores/isSearched'
-import useGetImage from '../hooks/useGetImage'
-import useIsExist from '../stores/isExist'
-import useHandleCityList from '../hooks/useHandleCityList'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import AntDesign from '@expo/vector-icons/AntDesign'
 import { HourForecast } from '../types/HourForecast'
+import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
+import { useGetImage } from '../hooks/useGetImage'
+import { useHandleCityList } from '../hooks/useHandleCityList'
+import { WeatherData } from '../types/forcastType'
+import AntDesign from '@expo/vector-icons/AntDesign'
+import Entypo from '@expo/vector-icons/Entypo'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import useBooleanStore from '../stores/isSearched'
+import useIsExist from '../stores/isExist'
 // this page shows searched city's weather result
 
 interface SearchedProps {

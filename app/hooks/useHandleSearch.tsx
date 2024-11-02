@@ -1,39 +1,19 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import useCityStore from '../stores/cityStore'
-import { Link } from 'expo-router'
+import { useState } from 'react'
 
-import { StatusBar } from 'expo-status-bar'
-import {
-	ImageBackground,
-	SafeAreaView,
-	StyleSheet,
-	Text,
-	View,
-	TouchableOpacity,
-	TextInput,
-	ScrollView,
-	Share,
-} from 'react-native'
-import { Feather } from '@expo/vector-icons'
-import * as Location from 'expo-location'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-import { addDoc, collection, getDocs, where, query } from 'firebase/firestore'
-import { Firestore } from 'firebase/firestore'
-import { firestore } from '../firebaseConfig'
-import useGetImage from '../hooks/useGetImage'
-import { WeatherData } from '../types/forcastType'
-import useBooleanStore from '../stores/isSearched'
-import useIsExist from '../stores/isExist'
-import useHandleCityList from './useHandleCityList'
-import useAucklandWeather from '../stores/aucklandImageStore'
-import { HourForecast } from '../types/HourForecast'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { convertHours } from '@/util/convertHours'
+import { firestore } from '../firebaseConfig'
+import { HourForecast } from '../types/HourForecast'
+import { useHandleCityList } from './useHandleCityList'
+import { WeatherData } from '../types/forcastType'
+import * as Location from 'expo-location'
+import useAucklandWeather from '../stores/aucklandImageStore'
+import useBooleanStore from '../stores/isSearched'
+import useCityStore from '../stores/cityStore'
+import useIsExist from '../stores/isExist'
 
 // this contains inital search (current location weather ) and search for other cities functions
-
-const useHandleSearch = () => {
+export function useHandleSearch() {
 	const { storedCity, setStoredCity, clearStoredCity } = useCityStore()
 	const [location, setLocation] = useState(null)
 	const [currentCity, setCurrentCity] = useState<WeatherData | null>(null)
@@ -219,5 +199,3 @@ const useHandleSearch = () => {
 		formatted,
 	}
 }
-
-export default useHandleSearch

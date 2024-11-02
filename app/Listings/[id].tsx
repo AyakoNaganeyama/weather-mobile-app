@@ -1,27 +1,28 @@
-import {
-	View,
-	Text,
-	ScrollView,
-	ImageBackground,
-	StyleSheet,
-	Button,
-	TouchableOpacity,
-	Image,
-	Dimensions,
-} from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { useLocalSearchParams } from 'expo-router'
-import useGetImage from '../hooks/useGetImage'
-import useShare from '../hooks/useShare'
-import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
-import { WeatherData } from '../types/forcastType'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import { Feather } from '@expo/vector-icons'
-import Entypo from '@expo/vector-icons/Entypo'
-import { HourForecast } from '../types/HourForecast'
+import {
+	Button,
+	Dimensions,
+	Image,
+	ImageBackground,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { Feather } from '@expo/vector-icons'
+import { HourForecast } from '../types/HourForecast'
+import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
+import { useGetImage } from '../hooks/useGetImage'
+import { useLocalSearchParams } from 'expo-router'
+import { useShare } from '../hooks/useShare'
+import { WeatherData } from '../types/forcastType'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import Entypo from '@expo/vector-icons/Entypo'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+
 import { covertToDay } from '@/util/convertToDay'
 import { convertHours } from '@/util/convertHours'
 

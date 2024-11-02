@@ -1,21 +1,21 @@
+import React, { useEffect } from 'react'
 import {
-	View,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
 	Text,
 	TouchableOpacity,
-	StyleSheet,
-	ScrollView,
-	SafeAreaView,
+	View,
 } from 'react-native'
-import React, { useEffect } from 'react'
 import { Link } from 'expo-router'
-import useCityStore from '../stores/cityStore'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import useHandleSearch from '../hooks/useHandleSearch'
+import { useGetImage } from '../hooks/useGetImage'
+import { useHandleCityList } from '../hooks/useHandleCityList'
+import { useHandleSearch } from '../hooks/useHandleSearch'
 import Searched from '../(modals)/Searched'
-import useHandleCityList from '../hooks/useHandleCityList'
-import useBooleanStore from '../stores/isSearched'
-import useGetImage from '../hooks/useGetImage'
 import useAucklandWeather from '../stores/aucklandImageStore'
+import useBooleanStore from '../stores/isSearched'
+import useCityStore from '../stores/cityStore'
 
 // this page shows list of cities added to fire store by user, and renders searched city's weather information <Searched>.tsx
 export default function Explore() {

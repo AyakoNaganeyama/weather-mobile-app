@@ -1,28 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import {
-	ImageBackground,
-	SafeAreaView,
-	StyleSheet,
-	Text,
-	View,
-	TouchableOpacity,
-	ScrollView,
-	KeyboardAvoidingView,
-	Platform,
 	Dimensions,
 	Image,
+	ImageBackground,
+	KeyboardAvoidingView,
+	Platform,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
 } from 'react-native'
+import { covertToDay } from '../../util/convertToDay'
 import { Feather } from '@expo/vector-icons'
-import useGetImage from '../hooks/useGetImage'
-import useHandleSearch from '../hooks/useHandleSearch'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import { useGetImage } from '../hooks/useGetImage'
+import { useHandleSearch } from '../hooks/useHandleSearch'
+import { useShare } from '../hooks/useShare'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
-import useShare from '../hooks/useShare'
-
-import { covertToDay } from '../../util/convertToDay'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 
 //this page shows current user's location's weather
 

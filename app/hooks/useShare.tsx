@@ -1,8 +1,6 @@
-// useShare.ts
-import React from 'react'
 import { Alert, Share } from 'react-native'
 // sharing service
-const useShare = () => {
+export function useShare() {
 	const onShare = async (city: any) => {
 		try {
 			// to ensure city and its necessary fields are available
@@ -47,5 +45,3 @@ const useShare = () => {
 
 	return { onShare }
 }
-
-export default useShare

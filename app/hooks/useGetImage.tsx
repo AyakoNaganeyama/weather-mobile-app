@@ -1,7 +1,5 @@
-import { View, Text } from 'react-native'
-import React from 'react'
 // this function is to display background image depending on current weather condition
-const useGetImage = () => {
+export function useGetImage() {
 	const getImage = (conditionText: string, isDay: number) => {
 		// lowercase the condition
 		const lowerCaseCondition = conditionText.toLowerCase()
@@ -50,5 +48,3 @@ const useGetImage = () => {
 	}
 	return { getImage }
 }
-
-export default useGetImage

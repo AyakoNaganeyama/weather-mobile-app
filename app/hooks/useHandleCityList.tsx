@@ -1,24 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { WeatherData } from '../types/forcastType'
 import { useState } from 'react'
 import {
-	getDocs,
+	addDoc,
 	collection,
-	doc,
 	deleteDoc,
+	doc,
+	getDocs,
 	query,
 	where,
-	addDoc,
 } from 'firebase/firestore'
 import { firestore } from '../firebaseConfig'
-import useIsExist from '../stores/isExist'
-import useCityStore from '../stores/cityStore'
+import { WeatherData } from '../types/forcastType'
 import useBooleanStore from '../stores/isSearched'
+import useCityStore from '../stores/cityStore'
+import useIsExist from '../stores/isExist'
 
 // those functions are CRUD for firestore (no update because dont need )
-
-const useHandleCityList = () => {
+export function useHandleCityList() {
 	const [cities, setCities] = useState<WeatherData[]>([])
 	const { isExist, setTrue2, setFalse2 } = useIsExist() // for hiding and showing add city button
 	const { storedCity, setStoredCity, clearStoredCity } = useCityStore() // for rendering city list in explore.tsx
@@ -156,5 +153,3 @@ const useHandleCityList = () => {
 
 	return { handleDelete, cities, fetchCityList, addSearchedCityToList }
 }
-
-export default useHandleCityList
