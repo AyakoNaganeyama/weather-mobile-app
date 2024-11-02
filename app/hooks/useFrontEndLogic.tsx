@@ -1,5 +1,5 @@
 // those functions are to display text info for detail weather info
-const useFrontEndLogic = () => {
+export function useFrontEndLogic() {
 	const checkUV = (n: number) => {
 		if (n <= 2) {
 			return 'Low'
@@ -85,5 +85,3 @@ const useFrontEndLogic = () => {
 		checkCloud,
 	}
 }
-
-export default useFrontEndLogic
