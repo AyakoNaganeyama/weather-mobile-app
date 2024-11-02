@@ -14,6 +14,7 @@ import {
 } from 'react-native'
 import { covertToDay } from '../../util/convertToDay'
 import { Feather } from '@expo/vector-icons'
+import { Loader } from '@/components/Loader'
 import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
 import { useGetImage } from '../hooks/useGetImage'
 import { useHandleSearch } from '../hooks/useHandleSearch'
@@ -22,7 +23,6 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import { Loader } from '@/components/Loader'
 
 //this page shows current user's location's weather
 
