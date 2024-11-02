@@ -11,38 +11,38 @@ export function useGetImage() {
 				lowerCaseCondition.includes('sunny') ||
 				lowerCaseCondition.includes('clear')
 			) {
-				return require('../img/noon-sunny.jpg') // Daytime sunny image
+				return require('../../assets/images/weatherBackground/noon-sunny.jpg') // Daytime sunny image
 			} else if (
 				lowerCaseCondition.includes('cloudy') ||
 				lowerCaseCondition.includes('overcast')
 			) {
-				return require('../img/noon-cloudy.jpg') // Noon cloudy
+				return require('../../assets/images/weatherBackground/noon-cloudy.jpg') // Noon cloudy
 			} else if (
 				lowerCaseCondition.includes('rain') ||
 				lowerCaseCondition.includes('drizzle')
 			) {
-				return require('../img/noon-rain.jpg') // Noon rain
+				return require('../../assets/images/weatherBackground/noon-rain.jpg') // Noon rain
 			} else {
-				return require('../img/noon-sunny.jpg') // Default
+				return require('../../assets/images/weatherBackground/noon-sunny.jpg') // Default
 			}
 		} else {
 			if (
 				lowerCaseCondition.includes('sunny') ||
 				lowerCaseCondition.includes('clear')
 			) {
-				return require('../img/night-sunny.jpg') // night sunny
+				return require('../../assets/images/weatherBackground/night-sunny.jpg') // night sunny
 			} else if (
 				lowerCaseCondition.includes('cloudy') ||
 				lowerCaseCondition.includes('overcast')
 			) {
-				return require('../img/night-cloudy.jpg') // Night cloudy
+				return require('../../assets/images/weatherBackground/night-cloudy.jpg') // Night cloudy
 			} else if (
 				lowerCaseCondition.includes('rain') ||
 				lowerCaseCondition.includes('drizzle')
 			) {
-				return require('../img/night-rain.jpg') // Night rain
+				return require('../../assets/images/weatherBackground/night-rain.jpg') // Night rain
 			} else {
-				return require('../img/night-sunny.jpg') //default
+				return require('../../assets/images/weatherBackground/night-sunny.jpg') //default
 			}
 		}
 	}
