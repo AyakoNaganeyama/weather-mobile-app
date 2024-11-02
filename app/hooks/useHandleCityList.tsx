@@ -53,15 +53,19 @@ export function useHandleCityList() {
 			const querySnapshot = await getDocs(weatherDataRef)
 
 			// Convert `querySnapshot` to an array of objects, ensuring it's typed correctly
-			const storedCities: WeatherData[] = querySnapshot.docs.map((doc) => ({
-				...doc.data(),
-			})) as WeatherData[]
+			const storedCities: WeatherData[] = (await querySnapshot.docs.map(
+				(doc) => ({
+					...doc.data(),
+				})
+			)) as WeatherData[]
 
 			// Update state with the fetched cities
 			setCities(storedCities)
 			console.log('Stored cities from Firestore:', storedCities)
+			if (storedCities) return true
 		} catch (error) {
 			console.error('Failed to load cities from Firestore:', error)
+			return false
 		}
 	}
 
