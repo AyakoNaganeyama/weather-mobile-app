@@ -66,7 +66,7 @@ function RootLayoutNav() {
 			<Stack.Screen
 				name='listings/[id]'
 				options={{
-					headerTitle: '',
+					headerTitle: 'Details',
 					headerLeft: () => (
 						<TouchableOpacity onPress={() => router.back()}>
 							<Ionicons name='close-outline' size={28} />
