@@ -74,7 +74,11 @@ export default function Explore() {
 										cityText === '' && styles.buttonDisabled,
 									]}
 								>
-									<Text style={styles.buttonText}>Search</Text>
+									<Text
+										style={{ ...styles.buttonText, justifyContent: 'flex-end' }}
+									>
+										Search
+									</Text>
 								</TouchableOpacity>
 							</View>
 						</View>
@@ -151,7 +155,6 @@ const styles = StyleSheet.create({
 	},
 	searchContainer2: {
 		flexDirection: 'row',
-		alignItems: 'center',
 		marginHorizontal: 20,
 	},
 	input2: {
