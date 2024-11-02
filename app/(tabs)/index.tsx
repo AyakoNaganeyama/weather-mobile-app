@@ -25,33 +25,23 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 
 //this page shows current user's location's weather
-
 const index = () => {
 	// to loading state to make sure to display after all the operations in InitislSearch() are done, used inside useEffect here
-	const [loading, setLoading] = useState(true)
 	const [backgroundLoading, setBackgroundLoading] = useState(true)
+	const [loading, setLoading] = useState(true)
 
 	// this function gets background image based on current weather in the city
 	const { getImage } = useGetImage()
 	const { onShare } = useShare()
-	const {
-		initialSearch,
-		currentCity,
-		cityText,
-		todayCast,
-		errorMsg,
-		handleSearch,
-		setCityText,
-		formatted,
-	} = useHandleSearch()
+	const { currentCity, errorMsg, initialSearch, todayCast } = useHandleSearch()
 	// these functions are frontend function that returns string for weather details
 	const {
-		checkUV,
-		checkVisibility,
+		checkCloud,
 		checkFeelsLike,
 		checkHumidity,
+		checkUV,
+		checkVisibility,
 		checkWind,
-		checkCloud,
 	} = useFrontEndLogic()
 
 	// as soon as the page load, call the function initialSearch() for fetching current locaiton data
