@@ -21,6 +21,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import useBooleanStore from '../stores/isSearched'
 import useIsExist from '../stores/isExist'
+import { Loader } from '@/components/Loader'
 // this page shows searched city's weather result
 
 interface SearchedProps {
@@ -28,8 +29,9 @@ interface SearchedProps {
 }
 
 // searched city's weather data is passed to this page from explore.tsx
-const Searched: React.FC<SearchedProps> = ({ data }) => {
+export default function Searched({ data }: SearchedProps) {
 	const { addSearchedCityToList } = useHandleCityList() // importing the function for adding city to fire store if user wants
+	const [backgroundLoading, setBackgroundLoading] = useState(true)
 
 	const [cast, setCast] = useState<HourForecast[]>([]) // to store 24-hour forecast
 	const { isActive, setTrue } = useBooleanStore() // to hide or show city list page
@@ -87,524 +89,539 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 	)
 
 	return (
-		<ScrollView>
+		<ScrollView style={{ display: 'flex' }}>
 			<ImageBackground
 				source={backGroundImageSrc}
 				style={styles.backgroundImage}
+				onLoadEnd={() => setBackgroundLoading(false)}
 			>
-				<View style={{ marginHorizontal: 10 }}>
-					{/* hide page and Add City Button */}
+				{backgroundLoading ? (
+					<Loader />
+				) : (
+					<>
+						<View style={{ marginHorizontal: 10 }}>
+							{/* hide page and Add City Button */}
 
-					<View
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							alignItems: 'center',
-							marginTop: 30,
-						}}
-					>
-						<TouchableOpacity
-							onPress={() => hidePage()}
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								marginHorizontal: 20,
-								marginBottom: 20,
-							}}
-						>
-							<Entypo name='cross' size={24} color='white' />
-						</TouchableOpacity>
-
-						{/*if searched city does not exist in firestore, show add button*/}
-						{!isExist && (
-							<TouchableOpacity
-								style={styles.AddButton}
-								onPress={() => addSearchedCityToList(data)}
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									alignItems: 'center',
+									marginTop: 30,
+								}}
 							>
-								<Text style={styles.buttonText}>Add City</Text>
-							</TouchableOpacity>
-						)}
-					</View>
-
-					{/* Current Weather Display */}
-					<View
-						style={{
-							backgroundColor: 'rgba(0,0,0, 0.2)',
-
-							padding: 10,
-							borderRadius: 15,
-							marginHorizontal: 20,
-							marginBottom: 20,
-						}}
-					>
-						<View style={styles.main}>
-							<Text style={styles.heading}>{data.location.name}</Text>
-							<View style={styles.temp}>
-								<Text style={styles.tempShown}>
-									{Math.round(data.current.temp_c)}°
-								</Text>
-
-								<Text style={styles.currentCond}>
-									{data.current.condition.text}
-								</Text>
-
-								<View
+								<TouchableOpacity
+									onPress={() => hidePage()}
 									style={{
-										flexDirection: 'row',
-										justifyContent: 'space-between',
-										marginTop: 5,
+										backgroundColor: 'rgba(0,0,0, 0.2)',
+
+										padding: 10,
+										borderRadius: 15,
+										marginHorizontal: 20,
+										marginBottom: 20,
 									}}
 								>
-									<View style={{ marginRight: 5 }}>
-										<Text style={styles.currentCond}>
-											L:
-											{Math.round(data.forecast.forecastday[0].day.mintemp_c)}°
+									<Entypo name='cross' size={24} color='white' />
+								</TouchableOpacity>
+
+								{/*if searched city does not exist in firestore, show add button*/}
+								{!isExist && (
+									<TouchableOpacity
+										style={styles.AddButton}
+										onPress={() => addSearchedCityToList(data)}
+									>
+										<Text style={styles.buttonText}>Add City</Text>
+									</TouchableOpacity>
+								)}
+							</View>
+
+							{/* Current Weather Display */}
+							<View
+								style={{
+									backgroundColor: 'rgba(0,0,0, 0.2)',
+
+									padding: 10,
+									borderRadius: 15,
+									marginHorizontal: 20,
+									marginBottom: 20,
+								}}
+							>
+								<View style={styles.main}>
+									<Text style={styles.heading}>{data.location.name}</Text>
+									<View style={styles.temp}>
+										<Text style={styles.tempShown}>
+											{Math.round(data.current.temp_c)}°
 										</Text>
+
+										<Text style={styles.currentCond}>
+											{data.current.condition.text}
+										</Text>
+
+										<View
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'space-between',
+												marginTop: 5,
+											}}
+										>
+											<View style={{ marginRight: 5 }}>
+												<Text style={styles.currentCond}>
+													L:
+													{Math.round(
+														data.forecast.forecastday[0].day.mintemp_c
+													)}
+													°
+												</Text>
+											</View>
+											<Text style={styles.currentCond}>
+												H:
+												{Math.round(data.forecast.forecastday[0].day.maxtemp_c)}
+												°
+											</Text>
+										</View>
 									</View>
-									<Text style={styles.currentCond}>
-										H:
-										{Math.round(data.forecast.forecastday[0].day.maxtemp_c)}°
-									</Text>
 								</View>
 							</View>
-						</View>
-					</View>
 
-					{/* 24 Hour Forecast ScrollView */}
-					<View
-						style={{
-							backgroundColor: 'rgba(0,0,0, 0.2)',
-							padding: 10,
-							borderRadius: 15,
-							marginVertical: 20,
-							marginHorizontal: 20,
-						}}
-					>
-						<View
-							style={{
-								borderBottomWidth: 1,
-
-								borderBottomColor: 'gray',
-								paddingBottom: 10,
-								paddingTop: 10,
-								marginHorizontal: 16,
-							}}
-						>
-							<Text style={styles.text}>24 HOUR FORCAST</Text>
-						</View>
-						<ScrollView
-							horizontal
-							showsHorizontalScrollIndicator={false}
-							contentContainerStyle={{
-								alignContent: 'center',
-								gap: 20,
-								paddingHorizontal: 16,
-							}}
-						>
-							{cast.length > 0 ? (
-								cast.map((i, ind) =>
-									ind === 0 ? (
-										<TouchableOpacity key={ind} style={styles.info}>
-											<Text style={{ color: 'white' }}>Now</Text>
-											<Image
-												source={{ uri: `https:${i.condition.icon}` }}
-												style={{ width: 50, height: 50 }} // Adjust size as needed
-											/>
-											<Text style={{ color: 'white' }}>
-												{Math.round(i.temp_c)}°
-											</Text>
-										</TouchableOpacity>
-									) : (
-										<TouchableOpacity key={ind} style={styles.info}>
-											<Text style={{ color: 'white' }}>{i.time_epoch}</Text>
-											<Image
-												source={{ uri: `https:${i.condition.icon}` }}
-												style={{ width: 50, height: 50 }} // Adjust size as needed
-											/>
-											<Text style={{ color: 'white' }}>
-												{Math.round(i.temp_c)}°
-											</Text>
-										</TouchableOpacity>
-									)
-								)
-							) : (
-								<Text style={styles.text}>No forecast available.</Text>
-							)}
-						</ScrollView>
-					</View>
-
-					{/* 3 Day Forecast ScrollView */}
-					<View
-						style={{
-							backgroundColor: 'rgba(0,0,0, 0.2)',
-							padding: 10,
-							borderRadius: 15,
-							marginVertical: 20,
-							marginHorizontal: 20,
-						}}
-					>
-						<View
-							style={{
-								borderBottomWidth: 1,
-
-								borderBottomColor: 'gray',
-								paddingBottom: 10,
-								paddingTop: 10,
-								marginHorizontal: 16,
-							}}
-						>
-							<Text style={styles.text}>3-DAY FORCAST</Text>
-						</View>
-
-						<ScrollView
-							showsHorizontalScrollIndicator={false}
-							contentContainerStyle={{
-								alignContent: 'center',
-								gap: 20,
-								paddingHorizontal: 16,
-							}}
-						>
-							{data.forecast.forecastday.map((item, index) => (
-								<TouchableOpacity
-									key={index}
+							{/* 24 Hour Forecast ScrollView */}
+							<View
+								style={{
+									backgroundColor: 'rgba(0,0,0, 0.2)',
+									padding: 10,
+									borderRadius: 15,
+									marginVertical: 20,
+									marginHorizontal: 20,
+								}}
+							>
+								<View
 									style={{
-										borderBottomWidth:
-											index !== data.forecast.forecastday.length - 1 ? 1 : 0, // Adding border except for the last item
+										borderBottomWidth: 1,
+
 										borderBottomColor: 'gray',
 										paddingBottom: 10,
 										paddingTop: 10,
-										flexDirection: 'row',
-
-										alignItems: 'center',
+										marginHorizontal: 16,
 									}}
 								>
-									<View
-										style={{
-											flexDirection: 'row',
-											alignItems: 'center',
-											flex: 1,
-										}}
-									>
-										<View style={{ width: '40%' }}>
-											<Text style={styles.threeDay}>{item.date}</Text>
-										</View>
-										<Image
-											source={{
-												uri: `https:${item.day.condition.icon}`,
-											}}
-											style={{ width: '20%', height: 50 }}
-										/>
-									</View>
+									<Text style={styles.text}>24 HOUR FORCAST</Text>
+								</View>
+								<ScrollView
+									horizontal
+									showsHorizontalScrollIndicator={false}
+									contentContainerStyle={{
+										alignContent: 'center',
+										gap: 20,
+										paddingHorizontal: 16,
+									}}
+								>
+									{cast.length > 0 ? (
+										cast.map((i, ind) =>
+											ind === 0 ? (
+												<TouchableOpacity key={ind} style={styles.info}>
+													<Text style={{ color: 'white' }}>Now</Text>
+													<Image
+														source={{ uri: `https:${i.condition.icon}` }}
+														style={{ width: 50, height: 50 }} // Adjust size as needed
+													/>
+													<Text style={{ color: 'white' }}>
+														{Math.round(i.temp_c)}°
+													</Text>
+												</TouchableOpacity>
+											) : (
+												<TouchableOpacity key={ind} style={styles.info}>
+													<Text style={{ color: 'white' }}>{i.time_epoch}</Text>
+													<Image
+														source={{ uri: `https:${i.condition.icon}` }}
+														style={{ width: 50, height: 50 }} // Adjust size as needed
+													/>
+													<Text style={{ color: 'white' }}>
+														{Math.round(i.temp_c)}°
+													</Text>
+												</TouchableOpacity>
+											)
+										)
+									) : (
+										<Text style={styles.text}>No forecast available.</Text>
+									)}
+								</ScrollView>
+							</View>
 
-									<View style={{ flexDirection: 'row', width: '40%' }}>
+							{/* 3 Day Forecast ScrollView */}
+							<View
+								style={{
+									backgroundColor: 'rgba(0,0,0, 0.2)',
+									padding: 10,
+									borderRadius: 15,
+									marginVertical: 20,
+									marginHorizontal: 20,
+								}}
+							>
+								<View
+									style={{
+										borderBottomWidth: 1,
+
+										borderBottomColor: 'gray',
+										paddingBottom: 10,
+										paddingTop: 10,
+										marginHorizontal: 16,
+									}}
+								>
+									<Text style={styles.text}>3-DAY FORCAST</Text>
+								</View>
+
+								<ScrollView
+									showsHorizontalScrollIndicator={false}
+									contentContainerStyle={{
+										alignContent: 'center',
+										gap: 20,
+										paddingHorizontal: 16,
+									}}
+								>
+									{data.forecast.forecastday.map((item, index) => (
+										<TouchableOpacity
+											key={index}
+											style={{
+												borderBottomWidth:
+													index !== data.forecast.forecastday.length - 1
+														? 1
+														: 0, // Adding border except for the last item
+												borderBottomColor: 'gray',
+												paddingBottom: 10,
+												paddingTop: 10,
+												flexDirection: 'row',
+
+												alignItems: 'center',
+											}}
+										>
+											<View
+												style={{
+													flexDirection: 'row',
+													alignItems: 'center',
+													flex: 1,
+												}}
+											>
+												<View style={{ width: '40%' }}>
+													<Text style={styles.threeDay}>{item.date}</Text>
+												</View>
+												<Image
+													source={{
+														uri: `https:${item.day.condition.icon}`,
+													}}
+													style={{ width: '20%', height: 50 }}
+												/>
+											</View>
+
+											<View style={{ flexDirection: 'row', width: '40%' }}>
+												<View
+													style={{
+														marginRight: 10,
+														flexDirection: 'row',
+													}}
+												>
+													<FontAwesome6
+														name='temperature-arrow-up'
+														size={24}
+														color='white'
+													/>
+													<Text style={styles.threeDay}>
+														{item.day.maxtemp_c}
+													</Text>
+												</View>
+												<FontAwesome6
+													name='temperature-arrow-down'
+													size={24}
+													color='white'
+												/>
+												<Text style={styles.threeDay}>
+													{item.day.mintemp_c}
+												</Text>
+											</View>
+										</TouchableOpacity>
+									))}
+								</ScrollView>
+							</View>
+
+							{/* Additional Weather Info */}
+						</View>
+						<View style={{ marginHorizontal: 20, marginVertical: 20 }}>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									height: 200,
+								}}
+							>
+								{/***********************UV****************************************************/}
+								<TouchableOpacity
+									style={{
+										backgroundColor: 'rgba(0,0,0, 0.2)',
+
+										padding: 10,
+										borderRadius: 15,
+										width: '48%',
+										height: '100%',
+										flexDirection: 'column',
+									}}
+								>
+									<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
 										<View
 											style={{
-												marginRight: 10,
+												height: '30%',
 												flexDirection: 'row',
+												alignItems: 'center',
+											}}
+										>
+											<Feather name='sun' style={styles.text} />
+											<Text style={styles.text}>UV index</Text>
+										</View>
+									</View>
+
+									<View style={{ height: '50%' }}>
+										<Text
+											style={{
+												color: 'white',
+
+												fontSize: 40,
+											}}
+										>
+											{data.current.uv}
+										</Text>
+										<Text style={styles.threeDay}>
+											{checkUV(data.current.uv)}
+										</Text>
+									</View>
+								</TouchableOpacity>
+								{/***********************Humidity****************************************************/}
+								<TouchableOpacity
+									style={{
+										backgroundColor: 'rgba(0,0,0, 0.2)',
+
+										padding: 10,
+										borderRadius: 15,
+										width: '48%',
+										height: '100%',
+										flexDirection: 'column',
+									}}
+								>
+									<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+										<View
+											style={{
+												height: '30%',
+												flexDirection: 'row',
+												alignItems: 'center',
+											}}
+										>
+											<MaterialCommunityIcons
+												name='air-humidifier'
+												style={styles.text}
+											/>
+											<Text style={styles.text}>Humidity</Text>
+										</View>
+									</View>
+									<View style={{ height: '50%' }}>
+										<Text
+											style={{
+												color: 'white',
+
+												fontSize: 40,
+											}}
+										>
+											{data.current.humidity}%
+										</Text>
+										<Text style={styles.threeDay}>
+											{checkHumidity(data.current.humidity)}
+										</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+						</View>
+
+						<View style={{ marginHorizontal: 20, marginVertical: 20 }}>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									height: 200,
+								}}
+							>
+								{/******************wind*********************************/}
+								<TouchableOpacity
+									style={{
+										backgroundColor: 'rgba(0,0,0, 0.2)',
+
+										padding: 10,
+										borderRadius: 15,
+										width: '48%',
+										height: '100%',
+										flexDirection: 'column',
+									}}
+								>
+									<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+										<View
+											style={{
+												height: '30%',
+												flexDirection: 'row',
+												alignItems: 'center',
+											}}
+										>
+											<Feather name='wind' style={styles.text} />
+											<Text style={styles.text}>Wind</Text>
+										</View>
+									</View>
+									<View style={{ height: '50%' }}>
+										<Text
+											style={{
+												color: 'white',
+
+												fontSize: 40,
+											}}
+										>
+											{data.current.wind_kph}km/h
+										</Text>
+										<Text style={styles.threeDay}>
+											{checkWind(data.current.wind_kph)}
+										</Text>
+									</View>
+								</TouchableOpacity>
+
+								{/*******************Feels like****************************************/}
+
+								<TouchableOpacity
+									style={{
+										backgroundColor: 'rgba(0,0,0, 0.2)',
+
+										padding: 10,
+										borderRadius: 15,
+										width: '48%',
+										height: '100%',
+										flexDirection: 'column',
+									}}
+								>
+									<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+										<View
+											style={{
+												height: '30%',
+												flexDirection: 'row',
+												alignItems: 'center',
 											}}
 										>
 											<FontAwesome6
-												name='temperature-arrow-up'
-												size={24}
-												color='white'
+												name='temperature-empty'
+												style={styles.text}
 											/>
-											<Text style={styles.threeDay}>{item.day.maxtemp_c}</Text>
+											<Text style={styles.text}>Feels like</Text>
 										</View>
-										<FontAwesome6
-											name='temperature-arrow-down'
-											size={24}
-											color='white'
-										/>
-										<Text style={styles.threeDay}>{item.day.mintemp_c}</Text>
+									</View>
+									<View style={{ height: '50%' }}>
+										<Text
+											style={{
+												color: 'white',
+
+												fontSize: 40,
+											}}
+										>
+											{Math.round(data.current.feelslike_f)}°
+										</Text>
+										<Text style={styles.threeDay}>
+											{checkFeelsLike(data.current.feelslike_c)}
+										</Text>
 									</View>
 								</TouchableOpacity>
-							))}
-						</ScrollView>
-					</View>
-
-					{/* Additional Weather Info */}
-				</View>
-
-				{/**************************row1**********************************************/}
-				<View style={{ marginHorizontal: 20, marginVertical: 20 }}>
-					<View
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							height: 200,
-						}}
-					>
-						{/***********************UV****************************************************/}
-						<TouchableOpacity
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								width: '48%',
-								height: '100%',
-								flexDirection: 'column',
-							}}
-						>
-							<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-								<View
+							</View>
+						</View>
+						<View style={{ marginHorizontal: 20, marginVertical: 20 }}>
+							<View
+								style={{
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									height: 200,
+								}}
+							>
+								<TouchableOpacity
 									style={{
-										height: '30%',
-										flexDirection: 'row',
-										alignItems: 'center',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
+
+										padding: 10,
+										borderRadius: 15,
+										width: '48%',
+										height: '100%',
+										flexDirection: 'column',
 									}}
 								>
-									<Feather name='sun' style={styles.text} />
-									<Text style={styles.text}>UV index</Text>
-								</View>
-							</View>
+									<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+										<View
+											style={{
+												height: '30%',
+												flexDirection: 'row',
+												alignItems: 'center',
+											}}
+										>
+											<AntDesign name='cloudo' style={styles.text} />
+											<Text style={styles.text}>Cloud</Text>
+										</View>
+									</View>
+									<View style={{ height: '50%' }}>
+										<Text
+											style={{
+												color: 'white',
 
-							<View style={{ height: '50%' }}>
-								<Text
+												fontSize: 40,
+											}}
+										>
+											{data.current.cloud}%
+										</Text>
+										<Text style={styles.threeDay}>
+											{checkCloud(data.current.cloud)}
+										</Text>
+									</View>
+								</TouchableOpacity>
+
+								<TouchableOpacity
 									style={{
-										color: 'white',
+										backgroundColor: 'rgba(0,0,0, 0.2)',
 
-										fontSize: 40,
+										padding: 10,
+										borderRadius: 15,
+										width: '48%',
+										height: '100%',
+										flexDirection: 'column',
 									}}
 								>
-									{data.current.uv}
-								</Text>
-								<Text style={styles.threeDay}>{checkUV(data.current.uv)}</Text>
+									<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
+										<View
+											style={{
+												height: '30%',
+												flexDirection: 'row',
+												alignItems: 'center',
+											}}
+										>
+											<AntDesign name='eyeo' style={styles.text} />
+											<Text style={styles.text}>Visibility</Text>
+										</View>
+									</View>
+									<View style={{ height: '50%' }}>
+										<Text
+											style={{
+												color: 'white',
+
+												fontSize: 40,
+											}}
+										>
+											{data.current.vis_km}km
+										</Text>
+										<Text style={styles.threeDay}>
+											{checkVisibility(data.current.vis_km)}
+										</Text>
+									</View>
+								</TouchableOpacity>
 							</View>
-						</TouchableOpacity>
-						{/***********************Humidity****************************************************/}
-						<TouchableOpacity
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								width: '48%',
-								height: '100%',
-								flexDirection: 'column',
-							}}
-						>
-							<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-								<View
-									style={{
-										height: '30%',
-										flexDirection: 'row',
-										alignItems: 'center',
-									}}
-								>
-									<MaterialCommunityIcons
-										name='air-humidifier'
-										style={styles.text}
-									/>
-									<Text style={styles.text}>Humidity</Text>
-								</View>
-							</View>
-							<View style={{ height: '50%' }}>
-								<Text
-									style={{
-										color: 'white',
-
-										fontSize: 40,
-									}}
-								>
-									{data.current.humidity}%
-								</Text>
-								<Text style={styles.threeDay}>
-									{checkHumidity(data.current.humidity)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-					</View>
-				</View>
-
-				{/**************row2****************/}
-				<View style={{ marginHorizontal: 20, marginVertical: 20 }}>
-					<View
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							height: 200,
-						}}
-					>
-						{/******************wind*********************************/}
-						<TouchableOpacity
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								width: '48%',
-								height: '100%',
-								flexDirection: 'column',
-							}}
-						>
-							<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-								<View
-									style={{
-										height: '30%',
-										flexDirection: 'row',
-										alignItems: 'center',
-									}}
-								>
-									<Feather name='wind' style={styles.text} />
-									<Text style={styles.text}>Wind</Text>
-								</View>
-							</View>
-							<View style={{ height: '50%' }}>
-								<Text
-									style={{
-										color: 'white',
-
-										fontSize: 40,
-									}}
-								>
-									{data.current.wind_kph}km/h
-								</Text>
-								<Text style={styles.threeDay}>
-									{checkWind(data.current.wind_kph)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-
-						{/*******************Feels like****************************************/}
-
-						<TouchableOpacity
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								width: '48%',
-								height: '100%',
-								flexDirection: 'column',
-							}}
-						>
-							<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-								<View
-									style={{
-										height: '30%',
-										flexDirection: 'row',
-										alignItems: 'center',
-									}}
-								>
-									<FontAwesome6 name='temperature-empty' style={styles.text} />
-									<Text style={styles.text}>Feels like</Text>
-								</View>
-							</View>
-							<View style={{ height: '50%' }}>
-								<Text
-									style={{
-										color: 'white',
-
-										fontSize: 40,
-									}}
-								>
-									{Math.round(data.current.feelslike_f)}°
-								</Text>
-								<Text style={styles.threeDay}>
-									{checkFeelsLike(data.current.feelslike_c)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-					</View>
-				</View>
-
-				{/**************row3****************/}
-				<View style={{ marginHorizontal: 20, marginVertical: 20 }}>
-					<View
-						style={{
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							height: 200,
-						}}
-					>
-						<TouchableOpacity
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								width: '48%',
-								height: '100%',
-								flexDirection: 'column',
-							}}
-						>
-							<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-								<View
-									style={{
-										height: '30%',
-										flexDirection: 'row',
-										alignItems: 'center',
-									}}
-								>
-									<AntDesign name='cloudo' style={styles.text} />
-									<Text style={styles.text}>Cloud</Text>
-								</View>
-							</View>
-							<View style={{ height: '50%' }}>
-								<Text
-									style={{
-										color: 'white',
-
-										fontSize: 40,
-									}}
-								>
-									{data.current.cloud}%
-								</Text>
-								<Text style={styles.threeDay}>
-									{checkCloud(data.current.cloud)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							style={{
-								backgroundColor: 'rgba(0,0,0, 0.2)',
-
-								padding: 10,
-								borderRadius: 15,
-								width: '48%',
-								height: '100%',
-								flexDirection: 'column',
-							}}
-						>
-							<View style={{ marginHorizontal: 10, marginVertical: 10 }}>
-								<View
-									style={{
-										height: '30%',
-										flexDirection: 'row',
-										alignItems: 'center',
-									}}
-								>
-									<AntDesign name='eyeo' style={styles.text} />
-									<Text style={styles.text}>Visibility</Text>
-								</View>
-							</View>
-							<View style={{ height: '50%' }}>
-								<Text
-									style={{
-										color: 'white',
-
-										fontSize: 40,
-									}}
-								>
-									{data.current.vis_km}km
-								</Text>
-								<Text style={styles.threeDay}>
-									{checkVisibility(data.current.vis_km)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-					</View>
-				</View>
+						</View>
+					</>
+				)}
 			</ImageBackground>
 		</ScrollView>
 	)
 }
-
-export default Searched
 
 const styles = StyleSheet.create({
 	container: {
@@ -624,9 +641,10 @@ const styles = StyleSheet.create({
 	},
 
 	backgroundImage: {
-		width: '100%',
 		flex: 1,
+		height: '100%',
 		paddingBottom: 100,
+		resizeMode: 'center',
 	},
 	header: {
 		flexDirection: 'row',
