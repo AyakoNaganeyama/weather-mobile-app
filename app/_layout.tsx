@@ -64,7 +64,7 @@ function RootLayoutNav() {
 			/>
 
 			<Stack.Screen
-				name='Listings/[id]'
+				name='listings/[id]'
 				options={{
 					headerTitle: '',
 					headerLeft: () => (
