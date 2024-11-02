@@ -28,7 +28,7 @@ import { convertHours } from '@/util/convertHours'
 
 // this page is shown when user click city from city list by passing lon and lat from explore.tsx
 
-const Page = () => {
+export default function Page() {
 	const { id } = useLocalSearchParams()
 	const { getImage } = useGetImage()
 	const { onShare } = useShare()
@@ -686,8 +686,6 @@ const Page = () => {
 		</>
 	)
 }
-
-export default Page
 
 const styles = StyleSheet.create({
 	container: {
