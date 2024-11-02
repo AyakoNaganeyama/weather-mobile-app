@@ -15,7 +15,6 @@ import Entypo from '@expo/vector-icons/Entypo'
 import useBooleanStore from '../stores/isSearched'
 import useGetImage from '../hooks/useGetImage'
 import useIsExist from '../stores/isExist'
-const { getImage } = useGetImage()
 import useHandleCityList from '../hooks/useHandleCityList'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
@@ -43,6 +42,7 @@ const Searched: React.FC<SearchedProps> = ({ data }) => {
 		checkWind,
 		checkCloud,
 	} = useFrontEndLogic()
+	const { getImage } = useGetImage()
 
 	// as soon as the page load, extract 24 hour forcast and store in cast
 	useEffect(() => {
