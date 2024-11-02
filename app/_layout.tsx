@@ -1,12 +1,11 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { useFonts } from 'expo-font'
-import { Stack, useRouter } from 'expo-router'
-import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
 import 'react-native-reanimated'
-
-import { TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { Stack, useRouter } from 'expo-router'
+import { TouchableOpacity } from 'react-native'
+import { useEffect } from 'react'
+import { useFonts } from 'expo-font'
+import * as SplashScreen from 'expo-splash-screen'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 export {
 	// Catch any errors thrown by the Layout component.
