@@ -1,3 +1,4 @@
+// export as non default, prevents miss spell and allows auto importing
 // those functions are to display text info for detail weather info
 export function useFrontEndLogic() {
 	const checkUV = (n: number) => {
