@@ -18,7 +18,7 @@ import useIsExist from '../stores/isExist'
 const { getImage } = useGetImage()
 import useHandleCityList from '../hooks/useHandleCityList'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
-import useFrontEndLogic from '../hooks/useFrontEndLogic'
+import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { HourForecast } from '../types/HourForecast'
