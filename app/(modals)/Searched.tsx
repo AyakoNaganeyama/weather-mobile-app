@@ -22,6 +22,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import useBooleanStore from '../stores/isSearched'
 import useIsExist from '../stores/isExist'
 import { Loader } from '@/components/Loader'
+import { covertToDay } from '@/util/convertToDay'
+import { convertHours } from '@/util/convertHours'
 // this page shows searched city's weather result
 
 interface SearchedProps {
@@ -74,7 +76,7 @@ export default function Searched({ data }: SearchedProps) {
 				}
 			}
 
-			setCast(forcast24) // Updates the state
+			setCast(convertHours(forcast24)) // Updates the state
 		}
 	}, [data])
 
@@ -301,7 +303,9 @@ export default function Searched({ data }: SearchedProps) {
 												}}
 											>
 												<View style={{ width: '40%' }}>
-													<Text style={styles.threeDay}>{item.date}</Text>
+													<Text style={styles.threeDay}>
+														{covertToDay(item.date)}
+													</Text>
 												</View>
 												<Image
 													source={{
