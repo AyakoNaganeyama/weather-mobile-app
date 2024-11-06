@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
 	},
 	tempShown: {
 		fontSize: 100,
-		fontweight: 'bold',
+		fontWeight: 'bold',
 		color: '#fff',
 	},
 	temp: {

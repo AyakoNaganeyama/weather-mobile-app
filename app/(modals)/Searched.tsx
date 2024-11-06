@@ -718,7 +718,7 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: 'white',
 		fontSize: 16,
-		fontweight: 'bold',
+		fontWeight: 'bold',
 	},
 	infoText: {
 		color: '#fff',

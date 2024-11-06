@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
 	},
 	tempShown: {
 		fontSize: 70,
-		fontweight: 'bold',
+		fontWeight: 'bold',
 		color: '#fff',
 	},
 	temp: {
