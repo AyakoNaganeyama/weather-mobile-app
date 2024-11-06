@@ -2,15 +2,15 @@ import { useState } from 'react'
 
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { convertHours } from '@/util/convertHours'
-import { firestore } from '../app/firebaseConfig'
-import { HourForecast } from '../types/HourForecast'
+import { firestore } from '@/firebaseConfig'
+import { HourForecast } from '@/types/HourForecast'
 import { useHandleCityList } from './useHandleCityList'
-import { WeatherData } from '../types/forcastType'
+import { WeatherData } from '@/types/forcastType'
 import * as Location from 'expo-location'
-import useAucklandWeather from '../app/stores/aucklandImageStore'
-import useBooleanStore from '../app/stores/isSearched'
-import useCityStore from '../app/stores/cityStore'
-import useIsExist from '../app/stores/isExist'
+import useAucklandWeather from '@/stores/aucklandImageStore'
+import useBooleanStore from '@/stores/isSearched'
+import useCityStore from '@/stores/cityStore'
+import useIsExist from '@/stores/isExist'
 
 // this contains inital search (current location weather ) and search for other cities functions
 export function useHandleSearch() {

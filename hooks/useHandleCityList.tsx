@@ -8,11 +8,11 @@ import {
 	query,
 	where,
 } from 'firebase/firestore'
-import { firestore } from '../app/firebaseConfig'
-import { WeatherData } from '../types/forcastType'
-import useBooleanStore from '../app/stores/isSearched'
-import useCityStore from '../app/stores/cityStore'
-import useIsExist from '../app/stores/isExist'
+import { firestore } from '@/firebaseConfig'
+import { WeatherData } from '@/types/forcastType'
+import useBooleanStore from '@/stores/isSearched'
+import useCityStore from '@/stores/cityStore'
+import useIsExist from '@/stores/isExist'
 
 // those functions are CRUD for firestore (no update because dont need )
 export function useHandleCityList() {
