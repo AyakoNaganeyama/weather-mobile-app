@@ -1,6 +1,6 @@
 import { covertToDay } from '../convertToDay'
 
-describe('covertToDay', () => {
+describe('covertToDay unit test', () => {
 	test('convert date format into day of the week example Mon', () => {
 		expect(covertToDay('2024-11-04')).toBe('Mon')
 		expect(covertToDay('2024-11-05')).toBe('Tue')
