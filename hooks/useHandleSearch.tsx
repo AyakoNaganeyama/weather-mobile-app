@@ -2,15 +2,15 @@ import { useState } from 'react'
 
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { convertHours } from '@/util/convertHours'
-import { firestore } from '../firebaseConfig'
+import { firestore } from '../app/firebaseConfig'
 import { HourForecast } from '../types/HourForecast'
 import { useHandleCityList } from './useHandleCityList'
 import { WeatherData } from '../types/forcastType'
 import * as Location from 'expo-location'
-import useAucklandWeather from '../stores/aucklandImageStore'
-import useBooleanStore from '../stores/isSearched'
-import useCityStore from '../stores/cityStore'
-import useIsExist from '../stores/isExist'
+import useAucklandWeather from '../app/stores/aucklandImageStore'
+import useBooleanStore from '../app/stores/isSearched'
+import useCityStore from '../app/stores/cityStore'
+import useIsExist from '../app/stores/isExist'
 
 // this contains inital search (current location weather ) and search for other cities functions
 export function useHandleSearch() {
@@ -37,19 +37,29 @@ export function useHandleSearch() {
 	const initialSearch = async () => {
 		// Ask for permission to access location
 		let { status } = await Location.requestForegroundPermissionsAsync()
+
+		console.log('status:', status)
 		if (status !== 'granted') {
 			setErrorMsg('Permission to access location was denied')
 			return
 		}
 
+		console.log('fetching location')
 		// Get the current location
-		let location = await Location.getCurrentPositionAsync({})
+		let location = await Location.getCurrentPositionAsync({
+			accuracy: Location.Accuracy.Highest,
+			maximumAge: 10000,
+		})
+
+		console.log('location', location)
 		setLocation(location)
 
+		console.log('reversing geo code')
 		let reverseGeocode = await Location.reverseGeocodeAsync({
 			latitude: location.coords.latitude, // Fixed the variable name
 			longitude: location.coords.longitude,
 		})
+		console.log('reverseGeocode:', reverseGeocode)
 		// search by city name, could have been by lon and lat
 		if (reverseGeocode.length > 0) {
 			// Set the city name

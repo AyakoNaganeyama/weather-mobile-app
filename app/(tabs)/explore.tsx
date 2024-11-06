@@ -9,13 +9,13 @@ import {
 } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { Link } from 'expo-router'
-import { useHandleCityList } from '../hooks/useHandleCityList'
-import { useHandleSearch } from '../hooks/useHandleSearch'
+import { useHandleCityList } from '@/hooks/useHandleCityList'
+import { useHandleSearch } from '@/hooks/useHandleSearch'
 import Searched from '../(modals)/Searched'
-import useBooleanStore from '../stores/isSearched'
-import useCityStore from '../stores/cityStore'
+import useBooleanStore from '@/stores/isSearched'
+import useCityStore from '@/stores/cityStore'
 
-import { Loader } from '../../components/Loader'
+import { Loader } from '@/components/Loader'
 
 // this page shows list of cities added to fire store by user, and renders searched city's weather information <Searched>.tsx
 export default function Explore() {

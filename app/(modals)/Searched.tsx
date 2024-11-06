@@ -10,17 +10,17 @@ import {
 	View,
 } from 'react-native'
 import { Feather } from '@expo/vector-icons'
-import { HourForecast } from '../types/HourForecast'
-import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
-import { useGetImage } from '../hooks/useGetImage'
-import { useHandleCityList } from '../hooks/useHandleCityList'
-import { WeatherData } from '../types/forcastType'
+import { HourForecast } from '@/types/HourForecast'
+import { useFrontEndLogic } from '@/hooks/useFrontEndLogic'
+import { useGetImage } from '@/hooks/useGetImage'
+import { useHandleCityList } from '@/hooks/useHandleCityList'
+import { WeatherData } from '@/types/forcastType'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import useBooleanStore from '../stores/isSearched'
-import useIsExist from '../stores/isExist'
+import useBooleanStore from '@/stores/isSearched'
+import useIsExist from '@/stores/isExist'
 import { Loader } from '@/components/Loader'
 import { covertToDay } from '@/util/convertToDay'
 import { convertHours } from '@/util/convertHours'
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
 	},
 	tempShown: {
 		fontSize: 100,
-		fontWeight: 800,
+		fontWeight: 'bold',
 		color: '#fff',
 	},
 	temp: {
@@ -718,7 +718,7 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: 'white',
 		fontSize: 16,
-		fontWeight: 'bold',
+		fontweight: 'bold',
 	},
 	infoText: {
 		color: '#fff',

@@ -1,4 +1,4 @@
-import { HourForecast } from '@/app/types/HourForecast'
+import { HourForecast } from '@/types/HourForecast'
 
 // this is helper for converting to am and pm format
 export function convertHours(forecasts: HourForecast[]): HourForecast[] {

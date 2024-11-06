@@ -12,12 +12,12 @@ import {
 } from 'react-native'
 
 import { Feather } from '@expo/vector-icons'
-import { HourForecast } from '../types/HourForecast'
-import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
-import { useGetImage } from '../hooks/useGetImage'
+import { HourForecast } from '@/types/HourForecast'
+import { useFrontEndLogic } from '@/hooks/useFrontEndLogic'
+import { useGetImage } from '@/hooks/useGetImage'
 import { useLocalSearchParams } from 'expo-router'
-import { useShare } from '../hooks/useShare'
-import { WeatherData } from '../types/forcastType'
+import { useShare } from '@/hooks/useShare'
+import { WeatherData } from '@/types/forcastType'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
 	},
 	tempShown: {
 		fontSize: 100,
-		fontWeight: 800,
+		fontweight: 'bold',
 		color: '#fff',
 	},
 	temp: {

@@ -12,13 +12,13 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native'
-import { covertToDay } from '../../util/convertToDay'
+import { covertToDay } from '@/util/convertToDay'
 import { Feather } from '@expo/vector-icons'
 import { Loader } from '@/components/Loader'
-import { useFrontEndLogic } from '../hooks/useFrontEndLogic'
-import { useGetImage } from '../hooks/useGetImage'
-import { useHandleSearch } from '../hooks/useHandleSearch'
-import { useShare } from '../hooks/useShare'
+import { useFrontEndLogic } from '@/hooks/useFrontEndLogic'
+import { useGetImage } from '@/hooks/useGetImage'
+import { useHandleSearch } from '@/hooks/useHandleSearch'
+import { useShare } from '@/hooks/useShare'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import Entypo from '@expo/vector-icons/Entypo'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
@@ -46,7 +46,14 @@ const index = () => {
 
 	// as soon as the page load, call the function initialSearch() for fetching current locaiton data
 	useEffect(() => {
+		console.log('=====================================')
+		console.log('fetching initial search data')
+		console.log('=====================================')
 		initialSearch().then(() => {
+			console.log('=====================================')
+			console.log('search data completed')
+			console.log('=====================================')
+
 			setLoading(false)
 		})
 	}, [])
@@ -708,7 +715,7 @@ const styles = StyleSheet.create({
 	},
 	tempShown: {
 		fontSize: 70,
-		fontWeight: 800,
+		fontweight: 'bold',
 		color: '#fff',
 	},
 	temp: {

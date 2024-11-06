@@ -1,5 +1,5 @@
 import { convertHours } from '../convertHours'
-import { HourForecast } from '@/app/types/HourForecast'
+import { HourForecast } from '@/types/HourForecast'
 
 describe('convertHours unit test', () => {
 	it('should convert time_epoch to AM/PM format', () => {
