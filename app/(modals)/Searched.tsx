@@ -76,7 +76,7 @@ export default function Searched({ data }: SearchedProps) {
 				}
 			}
 
-			setCast(convertHours(forcast24)) // Updates the state
+			setCast(convertHours(forcast24, data.location.tz_id)) // Updates the state
 		}
 	}, [data])
 

@@ -87,7 +87,7 @@ export default function Page() {
 						}
 					}
 
-					setTodayCast(convertHours(forcast24))
+					setTodayCast(convertHours(forcast24, result.location.tz_id))
 				} else {
 					console.log('Failed to fetch weather data. Please try again later.')
 				}

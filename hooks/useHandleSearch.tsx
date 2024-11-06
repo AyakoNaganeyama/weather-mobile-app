@@ -124,7 +124,7 @@ export function useHandleSearch() {
 						console.log(`Time: ${hour.time}, Temperature: ${hour.temp_c}°C`)
 					})
 
-					let formatted = convertHours(forcast24)
+					let formatted = convertHours(forcast24, result.location.tz_id)
 
 					setTodayCast(formatted)
 
