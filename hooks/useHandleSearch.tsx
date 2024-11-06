@@ -15,11 +15,11 @@ import useIsExist from '@/stores/isExist'
 // this contains inital search (current location weather ) and search for other cities functions
 export function useHandleSearch() {
 	const { storedCity, setStoredCity, clearStoredCity } = useCityStore()
-	const [location, setLocation] = useState(null)
+	const [location, setLocation] = useState<any>(null)
 	const [currentCity, setCurrentCity] = useState<WeatherData | null>(null)
 	const [searchedCity, setSearchedCity] = useState<WeatherData | null>(null)
 
-	const [errorMsg, setErrorMsg] = useState(null)
+	const [errorMsg, setErrorMsg] = useState<string | null | undefined>(null)
 	const [cityText, setCityText] = useState('')
 	const [todayCast, setTodayCast] = useState<HourForecast[]>([])
 	const [formatted, setFormatted] = useState([])
@@ -48,7 +48,6 @@ export function useHandleSearch() {
 		// Get the current location
 		let location = await Location.getCurrentPositionAsync({
 			accuracy: Location.Accuracy.Highest,
-			maximumAge: 10000,
 		})
 
 		console.log('location', location)
