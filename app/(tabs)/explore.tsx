@@ -109,7 +109,7 @@ export default function Explore() {
                     >
                       <View>
                         <Link
-                          href={`/listings/${city.location.lat},${city.location.lon}`}
+                          href={`../Listings/${city.location.lat},${city.location.lon}`}
                         >
                           <Text style={styles.threeDay}>
                             {city.location.name}
