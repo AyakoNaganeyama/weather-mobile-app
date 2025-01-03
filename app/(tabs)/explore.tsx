@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { Link } from "expo-router";
@@ -50,22 +51,11 @@ export default function Explore() {
             {/* Search Bar connected to google places */}
             <View style={styles.container2}>
               <View style={styles.searchContainer2}>
-                <GooglePlacesAutocomplete
-                  placeholder="Search City"
-                  fetchDetails={true}
-                  onPress={(data) => {
-                    const cityName = data.description;
-                    setCityText(cityName);
-                  }}
-                  query={{
-                    key: "AIzaSyAMn-oW3pnCbuyRFnGmLX8a0NNEnWOPuhM",
-                    language: "en",
-                    types: "(cities)",
-                  }}
-                  textInputProps={{
-                    style: styles.input2,
-                  }}
+                <TextInput
+                  style={styles.input2}
+                  onChangeText={(text) => setCityText(text)}
                 />
+
                 <TouchableOpacity
                   onPress={handleSearch} // Call the hook's search function
                   disabled={cityText === ""}
