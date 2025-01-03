@@ -66,14 +66,13 @@ export function useHandleSearch() {
       // const today = new Date().toISOString().split('T')[0];
 
       async function getWeather() {
-        const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityName}&days=3`;
+        const url = `${process.env.EXPO_PUBLIC_API_URL}?q=${cityName}&days=3`;
 
         const options = {
           method: "GET",
           headers: {
-            "x-rapidapi-key":
-              "b5ab53305emsh4d78561239fb906p1da757jsne5442cea8267",
-            "x-rapidapi-host": "weatherapi-com.p.rapidapi.com",
+            "x-rapidapi-key": process.env.EXPO_PUBLIC_API_KEY,
+            "x-rapidapi-host": process.env.EXPO_PUBLIC_HOST,
           },
         };
 
@@ -145,12 +144,12 @@ export function useHandleSearch() {
   // connected to search button in explore.tsx
   const handleSearch = async () => {
     console.log("city text", cityText);
-    const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityText}&days=3`; // https://weatherapi-com.p.rapidapi.com/forecast.json?q=${cityName}&days=3 Change to forecast API with 3 days (they only have 3 days anyway)
+    const url = `${process.env.EXPO_PUBLIC_API_URL}?q=${cityText}&days=3`;
     const options = {
       method: "GET",
       headers: {
-        "x-rapidapi-key": "b5ab53305emsh4d78561239fb906p1da757jsne5442cea8267",
-        "x-rapidapi-host": "weatherapi-com.p.rapidapi.com",
+        "x-rapidapi-key": process.env.EXPO_PUBLIC_API_KEY,
+        "x-rapidapi-host": process.env.EXPO_PUBLIC_HOST,
       },
     };
 
