@@ -1,4 +1,6 @@
-{
+import 'dotenv/config';
+export default {
+
   "expo": {
     "name": "weather-updated",
     "slug": "weather-updated",
@@ -29,9 +31,13 @@
         "ACCESS_FINE_LOCATION",
         "FOREGROUND_SERVICE",
         "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "FOREGROUND_SERVICE",
+        "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.multiahfoon.weatherupdated"
+      "package": process.env.EXPO_PUBLIC_BUNDLE_IDENTIFIER
     },
     "web": {
       "bundler": "metro",
@@ -51,16 +57,20 @@
     "experiments": {
       "typedRoutes": true
     },
-    "extra": {
-      "eas": {
-        "projectId": "f2d92a47-7cd2-4b25-9e6f-3729cf8f31bb"
-      }
-    },
     "runtimeVersion": {
       "policy": "appVersion"
     },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": process.env.EXPO_PUBLIC_PROJECT_ID
+      }
+    },
+    "owner": process.env.EXPO_PUBLIC_OWNER,
     "updates": {
-      "url": "https://u.expo.dev/f2d92a47-7cd2-4b25-9e6f-3729cf8f31bb"
+      "url": process.env.EXPO_PUBLIC_URL
     }
-  }
-}
+
+}}
