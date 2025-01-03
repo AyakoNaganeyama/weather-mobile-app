@@ -48,10 +48,11 @@ As seen in the diagram and mentioned in the About section of the document the we
 
 ![alt text](./locationService.jpg)
 
-2. **Weather API**:Once the user gives permission, the application will then use the user's location to fetch data from [weatherapi.com](www.weatherapi.com) related to their current location.
+2. **Weather API**:Once the user gives permission, the application will then use the user's location to fetch data from [weatherapi.com](https://www.weatherapi.com/) related to their current location.
 
 3. **Data management**:There is a large amount of data being fetched sorted and managed, for creating a 24hour forecast list that is arranged by the hour and location, the 3 day forecast and the grouping of extra data at the bottom.
-   ![alt text](./dataManagement.jpg)
+
+![alt text](./dataManagement.jpg)
 
 4. **Firebase database**:On the bottom of the screen, a nav bar can be seen with an arrow and a hamburger icon. If you click the hamburger icon at the bottom of the screen you will be taken to the user's stored locations. These stored cities are saved on a database. As you can see, we already have Auckland and Wellington saved, your location is also saved as a default in the list. From the list you can select your saved cities to see the current temperature and so on for that city
 
