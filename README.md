@@ -46,7 +46,7 @@ As seen in the diagram and mentioned in the About section of the document the we
 
 1. **Location services**:As soon as the application is open a prompt is shown requesting access to the user's device location.
 
-![alt text](./weatherLocationService.jpg)
+![alt text](./location.jpg)
 
 2. **Weather API**:Once the user gives permission, the application will then use the user's location to fetch data from [weatherapi.com](www.weatherapi.com) related to their current location.
 
