@@ -59,7 +59,8 @@ As seen in the diagram and mentioned in the About section of the document the we
 ![alt text](./firebase.jpg)
 
 5. **Google places services API**:You can also use the search tab to look up a city. As you can see below, we are using Google Places API to display auto complete suggestions as you type. You can find more information about it here: [google places api](https://developers.google.com/maps/documentation/places/web-service/overview). Once you click search you will be displayed a preview where you can choose to save the city or click the “x” on the top left to close and go back, in this case, we will save which will also save in the Firebase database using their API and is disabled it already saved.
-   ![alt text](./googleApi.jpg)
+
+![alt text](./googleApi.jpg)
 
 6. **Dynamic UI**:You may have also noticed that the background image will change depending on if it is day or late in the day and depending on the weather of the current city being viewed.
 
