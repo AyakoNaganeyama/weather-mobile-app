@@ -8,7 +8,6 @@ import {
   View,
   TextInput,
 } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { Link } from "expo-router";
 import { useHandleCityList } from "@/hooks/useHandleCityList";
 import { useHandleSearch } from "@/hooks/useHandleSearch";

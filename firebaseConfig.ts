@@ -6,12 +6,12 @@ import { getStorage } from 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-	apiKey: "AIzaSyDwx7RZruIv4C-pFfTDp2MEB-xjGsy7ih8",
-  authDomain: "weather-app-updated.firebaseapp.com",
-  projectId: "weather-app-updated",
-  storageBucket: "weather-app-updated.appspot.com",
-  messagingSenderId: "719386058797",
-  appId: "1:719386058797:web:fb0394a7fa337bde9018a4"
+	apiKey: process.env.EXPO_PUBLIC_FIREAPIKEY,
+  authDomain: process.env.EXPO_PUBLIC_AUTHDIMAIN,
+  projectId: process.env.EXPO_PUBLIC_PROJECTID,
+  storageBucket: process.env.EXPO_PUBLIC_STORAGEB,
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGEID,
+  appId: process.env.EXPO_PUBLIC_APPID,
 }
 
 // Initialize Firebase
