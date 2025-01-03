@@ -51,13 +51,12 @@ export default function Page() {
     const fetchData = async () => {
       try {
         console.log("city id with lon and rat", id);
-        const url = `https://weatherapi-com.p.rapidapi.com/forecast.json?q=${id}&days=3`; // 3-day forecast API
+        const url = `${process.env.EXPO_PUBLIC_API_URL}?q=${id}&days=3`; // 3-day forecast API
         const options = {
           method: "GET",
           headers: {
-            "x-rapidapi-key":
-              "b5ab53305emsh4d78561239fb906p1da757jsne5442cea8267",
-            "x-rapidapi-host": "weatherapi-com.p.rapidapi.com",
+            "x-rapidapi-key": process.env.EXPO_PUBLIC_API_KEY,
+            "x-rapidapi-host": process.env.EXPO_PUBLIC_HOST,
           },
         };
         const response = await fetch(url, options);
