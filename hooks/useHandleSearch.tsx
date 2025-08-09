@@ -65,26 +65,43 @@ export function useHandleSearch() {
       let cityName = reverseGeocode[0].city;
       // const today = new Date().toISOString().split('T')[0];
 
+      console.log(cityName);
+
       async function getWeather() {
-        const url = `${process.env.EXPO_PUBLIC_API_URL}?q=${cityName}&days=3`;
+        const url = `${process.env.EXPO_PUBLIC_API_URL}?q=${location.coords.latitude},${location.coords.longitude}&days=3`;
 
         const options = {
           method: "GET",
           headers: {
-            "x-rapidapi-key": process.env.EXPO_PUBLIC_API_KEY,
-            "x-rapidapi-host": process.env.EXPO_PUBLIC_HOST,
+            "X-RapidAPI-Key": process.env.EXPO_PUBLIC_API_KEY,
+            "X-RapidAPI-Host": process.env.EXPO_PUBLIC_HOST,
           },
         };
 
         try {
           const response = await fetch(url, options);
           const result = await response.json();
+
+          if (result.error) {
+            console.error("API error:", result.error.message);
+            setErrorMsg(result.error.message);
+            return;
+          }
+
+          if (
+            !result.forecast ||
+            !result.forecast.forecastday ||
+            result.forecast.forecastday.length === 0
+          ) {
+            console.warn("No forecast data available");
+            setErrorMsg("No forecast data available");
+            return;
+          }
+
           addSearchedCityToList(result);
           setCurrentCity(result);
+          console.log("Result:", result.location.name);
           setStoredAuckland(result);
-          console.log("Current", result);
-
-          //for 7 day forcast
 
           const currentEpoch = Math.floor(Date.now() / 1000); // Date.now()
           const forecastHours = result.forecast.forecastday[0].hour; // 24 hours forcast
@@ -133,7 +150,8 @@ export function useHandleSearch() {
 
           console.log(result);
         } catch (error) {
-          console.error(error);
+          console.error("Fetch weather error:", error);
+          setErrorMsg("Failed to fetch weather data");
         }
       }
 
