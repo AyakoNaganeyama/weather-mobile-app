@@ -121,7 +121,7 @@ const index = () => {
                   >
                     <View style={styles.main}>
                       <Text style={styles.heading}>
-                        {currentCity.location.region}
+                        {currentCity.location.name}
                       </Text>
                       <View style={styles.temp}>
                         <Text style={styles.tempShown}>
