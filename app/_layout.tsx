@@ -47,7 +47,11 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const router = useRouter();
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShown: false, // hides the top header for all tabs
+      }}
+    >
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
         name="(modals)/Searched"

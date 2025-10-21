@@ -4,10 +4,14 @@ import { TabBar } from "@/components/TabBar";
 
 export default function Layout() {
   return (
-    // passing props for styling for bottom tab bar
-    <Tabs tabBar={(props) => <TabBar {...props} />}>
-      <Tabs.Screen name="index" options={{ headerShown: false }} />
-      <Tabs.Screen name="explore" options={{ headerShown: false }} />
+    <Tabs
+      screenOptions={{
+        headerShown: false, // hides the top header for all tabs
+      }}
+      tabBar={(props) => <TabBar {...props} />} // custom bottom bar
+    >
+      <Tabs.Screen name="index" />
+      <Tabs.Screen name="explore" />
     </Tabs>
   );
 }
