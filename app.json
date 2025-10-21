@@ -1,6 +1,20 @@
 {
+  "name": "weather-updated",
+  "slug": "weather-updated",
+  "scheme": "weatherupdated",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "userInterfaceStyle": "light",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
   "plugins": [
-    "expo-router"
+    "expo-font",
+    "expo-router",
+    "expo-web-browser"
   ],
   "extra": {
     "router": {},
@@ -14,33 +28,13 @@
   "updates": {
     "url": "https://u.expo.dev/66cbf7f4-3f1d-4cb7-b21a-738c6f2c41a8"
   },
-  "android": {},
-  "ios": {},
-  "expo": {
-    "android": {
-      "package": "com.ayakonaganeyama.weatherupdated"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "66cbf7f4-3f1d-4cb7-b21a-738c6f2c41a8"
-      }
-    },
-    "ios": {
-      "bundleIdentifier": "com.ayakonaganeyama.weatherupdated",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/66cbf7f4-3f1d-4cb7-b21a-738c6f2c41a8"
-    },
-    "plugins": [
-      "expo-font",
-      "expo-router",
-      "expo-web-browser"
-    ]
+  "android": {
+    "package": "com.ayakonaganeyama.weatherupdated"
+  },
+  "ios": {
+    "bundleIdentifier": "com.ayakonaganeyama.weatherupdated",
+    "infoPlist": {
+      "ITSAppUsesNonExemptEncryption": false
+    }
   }
 }
