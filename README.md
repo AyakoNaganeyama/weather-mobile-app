@@ -16,11 +16,11 @@ Our application is an IOS and Android mobile weather app, that uses several serv
    - Scan the QR code displayed below using the **Expo Go** app on your phone or by scanning it with your camera.
      The app hosted live and can be viewed by downloading the **Expo Go** app from your app store and scanning the following QR code below:
 
-[Scan this QR code to view the app](https://expo.dev/preview/update?message=trying+to+update+eas&updateRuntimeVersion=1.2.2&createdAt=2025-08-09T09%3A38%3A04.632Z&slug=exp&projectId=66cbf7f4-3f1d-4cb7-b21a-738c6f2c41a8&group=d15685f8-94a0-4b80-a42a-3b510eca1ce1).
+[Scan this QR code to view the app](https://expo.dev/preview/update?message=Updated+Expo+config+and+fixed+root-level+warning&updateRuntimeVersion=1.0.0&createdAt=2025-10-21T23%3A15%3A25.450Z&slug=exp&projectId=66cbf7f4-3f1d-4cb7-b21a-738c6f2c41a8&group=41cd6940-4b23-4ddd-83fa-704952b6beae).
 
 ### If link is not working can scan here
 
-![QR code](./updatedQR.jpg)<br />
+![alt text](image.png)<br />
 
 ## Archtecture Diagram
 
