@@ -1,4 +1,4 @@
-# 🌦️ Weather Updated
+# 🌦️ Weather Mobile App
 
 A modern **iOS and Android mobile weather application** built with **Expo (React Native)** and **TypeScript**.
 The app integrates **multiple cloud services and APIs** including Location Services, Firebase, WeatherAPI, and Google Places to deliver a personalized and dynamic weather experience.
